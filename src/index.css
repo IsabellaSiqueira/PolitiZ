@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Poppins', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+
+  --color-ink: #1F2023;
+  --color-c-orange: #F0531F;
+  --color-c-yellow: #FFCC4A;
+  --color-c-pink: #FF78A5;
+  --color-c-lilac: #C4ACFA;
+  --color-c-teal: #00A2AB;
+  --color-c-surface: #F6F5F2;
+  --color-c-line: #E4E1DC;
+}
+
