@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { LessonNode, QuizQuestion, LeaderboardUser, PoliticianContradiction } from './types';
+import { LessonNode, QuizQuestion, LeaderboardUser, Bill } from './types';
 
 export const LESSONS: LessonNode[] = [
   {
@@ -83,35 +83,65 @@ export const LEADERBOARD: LeaderboardUser[] = [
   { rank: 5, name: "Laura Sabino", role: "Divulgadora de Base", points: 390 }
 ];
 
-export const POLITICIAN_CONTRADICTIONS: PoliticianContradiction[] = [
+export const BILLS: Bill[] = [
   {
-    id: "p1",
-    name: "Deputado Aurélio Da Silva",
-    party: "PLB (Partido do Livre Bolso)",
-    avatarColor: "bg-amber-400",
-    publicClaim: "“O trabalhador é o patrimônio mais sagrado do país. Defendo a liberdade de produzir e a valorização irrestrita da nossa força de trabalho!”",
-    realVotingRecord: "Votou a favor da PEC que permite a jornada diária de até 12 horas e votou contra o aumento real do salário mínimo sob 'risco fiscal'.",
-    contradictionAnalysis: "O deputado defende a santidade do trabalhador nos palanques, mas na calada da noite no Congresso assina o papel que permite que sua jornada se estenda até o limite físico, vigiando o cofre contra um aumento real de poucos reais.",
-    severity: "HIPOCRISIA GRAVE"
+    id: 1,
+    plNumber: "PL 2630/2020",
+    casa: "Senado",
+    tema: "Liberdade & Redes",
+    resumoNeutro: "Regula redes sociais e serviços de mensagens: exige identificação de contas, cria mecanismos de checagem de conteúdo e responsabiliza plataformas por danos causados pela disseminação de desinformação.",
+    autor: "Alessandro Vieira",
+    fotoUrl: "https://legis.senado.leg.br/senadores/fotos-oficiais/5982",
+    partido: "MDB",
+    estado: "SE",
+    curiosidade: "Aprovado no Senado em 2020, ainda espera votação na Câmara. Foi apresentado quando o autor ainda estava no Cidadania — hoje ele está no MDB."
   },
   {
-    id: "p2",
-    name: "Deputada Drª Regina 'Verde' Sampaio",
-    party: "PECO (Partido Eco-Ação)",
-    avatarColor: "bg-emerald-400",
-    publicClaim: "“A nossa bandeira é 100% verde! Transição ecológica Já e punição sem tréguas para indústrias poluidoras!”",
-    realVotingRecord: "Aprovou subsídio de R$ 8,2 bilhões para instalação de termoelétricas movidas a óleo diesel venezuelano e votou pela flexibilização do código florestal para soja.",
-    contradictionAnalysis: "Sua lapela exibe o broche de folha ecológica, mas sua caneta viabilizou o investimento bilionário que joga fumaça preta em combustivel fóssil altamente poluente. O lucro é preto, o discurso é verde.",
-    severity: "ESTELIONATO ELEITORAL DE ELITE"
+    id: 2,
+    plNumber: "PLP 5/2026",
+    casa: "Câmara",
+    tema: "Economia",
+    resumoNeutro: "Institui o Imposto sobre Grandes Fortunas (IGF), cobrando sobre patrimônio líquido acima de um valor mínimo definido em lei, já descontadas dívidas e ônus reais.",
+    autor: "Pedro Uczai",
+    fotoUrl: "https://www.camara.leg.br/internet/deputado/bandep/160604.jpg",
+    partido: "PT",
+    estado: "SC",
+    curiosidade: "O IGF está previsto na Constituição desde 1988, mas nunca foi regulamentado — essa é mais uma tentativa entre várias ao longo de décadas."
   },
   {
-    id: "p3",
-    name: "Vereador Beto 'Austeridade' Costa",
-    party: "PMAC (Partido Menos Estado)",
-    avatarColor: "bg-cyan-400",
-    publicClaim: "“Chega de cabides de emprego! Devemos enxugar os luxos públicos e economizar cada centavo do cidadão pagador de impostos!”",
-    realVotingRecord: "Aprovou em segundo turno a criação de 14 novos cargos comissionados com salário médio de R$ 12 mil e votou pelo reajuste de 33% nos repasses do auxílio-gabinete.",
-    contradictionAnalysis: "A faca do corte orçamentário que ele prescreve para a merenda escolar e o posto de saúde local convenientemente some quando ele precisa de assessores e recursos para azeitamento de sua própria base eleitoral.",
-    severity: "CONTRADIÇÃO LEVE"
+    id: 3,
+    plNumber: "PL 717/2025",
+    casa: "Câmara",
+    tema: "Direitos Humanos",
+    resumoNeutro: "Tipifica como crime qualquer conduta discriminatória, ofensiva, vexatória ou violenta contra pessoas trans e travestis, com pena de 2 a 4 anos de prisão (podendo aumentar em casos de violência física ou morte).",
+    autor: "Max Lemos",
+    fotoUrl: "https://www.camara.leg.br/internet/deputado/bandep/220607.jpg",
+    partido: "UNIÃO",
+    estado: "RJ",
+    curiosidade: "A relatoria na comissão ficou com a deputada Erika Kokay (PT-DF) — parlamentares de partidos diferentes trabalhando juntos nesse tema."
+  },
+  {
+    id: 4,
+    plNumber: "PL 2599/2026",
+    casa: "Câmara",
+    tema: "Saúde",
+    resumoNeutro: "Inclui alerta sanitário obrigatório no rótulo de alimentos ultraprocessados e de produtos com adoçantes, além de aprimorar a rotulagem nutricional frontal (a \"lupa\" que já existe na embalagem).",
+    autor: "Paulo Teixeira",
+    fotoUrl: "https://www.camara.leg.br/internet/deputado/bandep/141488.jpg",
+    partido: "PT",
+    estado: "SP",
+    curiosidade: "A \"lupa\" nos rótulos já é obrigatória desde 2022 — esse projeto quer ir além, com aviso específico pra ultraprocessados."
+  },
+  {
+    id: 5,
+    plNumber: "PL 1936/2026",
+    casa: "Câmara",
+    tema: "Segurança Pública",
+    resumoNeutro: "Reorganiza as regras de aquisição, posse e porte de arma de fogo no país e cria um novo Sistema Nacional de Registro de Armas de Fogo (SINRAF), revogando trechos do Estatuto do Desarmamento atual.",
+    autor: "Capitão Alden",
+    fotoUrl: "https://www.camara.leg.br/internet/deputado/bandep/220690.jpg",
+    partido: "PL",
+    estado: "BA",
+    curiosidade: "O tema porte de armas divide o Congresso desde o Estatuto do Desarmamento de 2003 — o número de propostas sobre o assunto só cresce a cada legislatura."
   }
 ];

@@ -34,7 +34,7 @@ export const VanguardaTab: React.FC<ExtraTabsProps> = ({ points }) => {
       </div>
 
       <p className="font-sans font-medium text-xs text-zinc-700 leading-normal">
-        Quem manja mais de teoria? Ganha ponto fazendo os quizzes da trilha e auditando político no Laboratório.
+        Quem manja mais de teoria? Ganha ponto fazendo os quizzes da trilha e votando no Tinder das Leis.
       </p>
 
       {/* LEADERBOARD LIST CONTAINER */}
@@ -101,7 +101,7 @@ export const PerfilTab: React.FC<ExtraTabsProps> = ({ points, onOpenLab }) => {
   const badges = [
     { id: 1, title: "AUDITOR BÁSICO", desc: "Aprovado na Aula de Introdução ao Estado.", icon: ShieldCheck, unlocked: true, color: 'bg-c-orange' },
     { id: 2, title: "CRÍTICO DA LUTA", desc: "Completou a sabatina de classes do Módulo 1.", icon: Flame, unlocked: points >= 500, color: 'bg-c-pink' },
-    { id: 3, title: "MESTRE DO DIÁRIO", desc: "Gerou relatórios de contradição no Laboratório.", icon: Library, unlocked: points > 450, color: 'bg-c-teal' },
+    { id: 3, title: "MESTRE DO DIÁRIO", desc: "Votou às cegas nas 5 leis do Tinder das Leis.", icon: Library, unlocked: points > 450, color: 'bg-c-teal' },
     { id: 4, title: "VANGUARDISTA", desc: "Figurou no Top 3 do ranking de agitadores.", icon: Star, unlocked: false, color: 'bg-c-lilac' }
   ];
 
@@ -194,7 +194,7 @@ export const PerfilTab: React.FC<ExtraTabsProps> = ({ points, onOpenLab }) => {
         onClick={onOpenLab}
         className="w-full bg-c-orange text-white hover:bg-black font-display font-black text-xs py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer rounded-full"
       >
-        BORA AUDITAR DE NOVO ➜
+        BORA VOTAR DE NOVO ➜
       </button>
     </div>
   );

@@ -16,7 +16,7 @@ export const Header: React.FC<HeaderProps> = ({ points }) => {
       {/* BRAND LOGO */}
       <div className="flex items-center gap-1.5">
         <h1 className="font-display font-black text-3xl tracking-tighter uppercase italic text-black">
-          politi<span className="text-c-orange">Q</span>
+          politi<span className="text-c-orange">Z</span>
         </h1>
         <div style={{ transform: 'rotate(-3deg)' }} className="bg-black text-white px-2 py-0.5 text-[9px] font-display font-black tracking-widest border border-black inline-block uppercase shadow-[1.5px_1.5px_0px_0px_rgba(240,83,31,1)] rounded-sm">
           AUDITOR

@@ -11,7 +11,7 @@ import { BottomNav } from './components/BottomNav';
 import { TopNav } from './components/TopNav';
 import { LessonInfoModal } from './components/LessonInfoModal';
 import { QuizModal } from './components/QuizModal';
-import { LabAuditorModal } from './components/LabAuditorModal';
+import { TinderDasLeisModal } from './components/TinderDasLeisModal';
 import { VanguardaTab, PerfilTab } from './components/ExtraTabs';
 import { LESSONS } from './data';
 import { LessonNode } from './types';
@@ -26,7 +26,7 @@ export default function App() {
   // Modals Visibility Management
   const [isTheoryOpen, setIsTheoryOpen] = useState(false);
   const [isQuizOpen, setIsQuizOpen] = useState(false);
-  const [isLabOpen, setIsLabOpen] = useState(false);
+  const [isTinderOpen, setIsTinderOpen] = useState(false);
   const [isWarningOpen, setIsWarningOpen] = useState(false);
   const [warningMessage, setWarningMessage] = useState('');
 
@@ -70,12 +70,12 @@ export default function App() {
     );
   };
 
-  // Handle minor points increment from and about the contradiction audits
+  // Handle points increment from the Tinder das Leis voting game
   const handleGainPoints = (gainedPoints: number) => {
     setPoints((prev) => prev + gainedPoints);
   };
 
-  const openLab = () => setIsLabOpen(true);
+  const openTinder = () => setIsTinderOpen(true);
 
   return (
     <div className="min-h-screen bg-c-surface font-sans antialiased text-black relative">
@@ -83,17 +83,17 @@ export default function App() {
       <div className="absolute inset-0 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px] opacity-[0.08] pointer-events-none" />
 
       {/* DESKTOP TOP NAVIGATION (hidden below md, renders nothing on mobile) */}
-      <TopNav activeTab={activeTab} setActiveTab={setActiveTab} points={points} onOpenLab={openLab} />
+      <TopNav activeTab={activeTab} setActiveTab={setActiveTab} points={points} onOpenLab={openTinder} />
 
       {/* MOBILE CENTERING WRAPPER / DESKTOP FULL-WIDTH FLOW */}
       <div className="flex items-center justify-center md:block min-h-screen md:min-h-0 md:py-0 relative">
         <div
-          id="politiq-shell"
+          id="politiz-shell"
           className="w-full max-w-md md:max-w-none bg-white md:bg-transparent min-h-screen md:min-h-0 border-[3px] md:border-0 border-black relative flex flex-col shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] md:shadow-none overflow-hidden md:overflow-visible"
         >
           {/* TOP STATUS BAR DECORATOR (ZINE ROUGHCUT SIGHT) — mobile only */}
           <div className="md:hidden bg-black text-white text-[9px] font-mono leading-none py-2.5 px-5 flex justify-between items-center select-none tracking-widest border-b-2 border-black">
-            <span>POLITIQ_MOBILE_V1.1_SYS</span>
+            <span>POLITIZ_MOBILE_V1.1_SYS</span>
             <span className="flex items-center gap-1.5 font-bold">
               <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping" />
               <span className="text-c-yellow">● ACTV_AUDIT</span>
@@ -145,10 +145,10 @@ export default function App() {
 
                       {/* DESKTOP-ONLY QUICK CTA */}
                       <button
-                        onClick={openLab}
+                        onClick={openTinder}
                         className="hidden md:inline-block mt-8 bg-black text-white hover:bg-c-orange font-display font-black text-xs px-7 py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer rounded-full"
                       >
-                        Bora pro laboratório ➜
+                        Vota nas leis ➜
                       </button>
                     </div>
 
@@ -165,7 +165,7 @@ export default function App() {
                         <Zap className="w-8 h-8 text-white stroke-[2.5px] fill-white" />
                       </div>
                       <div style={{ transform: 'rotate(-3deg)' }} className="absolute -bottom-2 right-4 bg-white border-[3px] border-black rounded-full px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-display font-black text-[10px] uppercase">
-                        ✦ Auditoria em tempo real
+                        ✦ Voto às cegas
                       </div>
                     </div>
                   </div>
@@ -180,19 +180,19 @@ export default function App() {
 
                   {/* REWARD CALL WORKBENCH SECTION */}
                   <div className="border-t-4 md:border-t-0 border-black bg-c-orange/5 md:bg-transparent py-4 md:py-0 md:sticky md:top-28">
-                    <RewardSection onOpenLab={openLab} />
+                    <RewardSection onOpenLab={openTinder} />
                   </div>
                 </div>
               </div>
             ) : activeTab === 'vanguarda' ? (
               /* LEADERBOARD VIEW */
               <div className="md:max-w-3xl md:mx-auto md:px-6 md:py-12">
-                <VanguardaTab points={points} onOpenLab={openLab} />
+                <VanguardaTab points={points} onOpenLab={openTinder} />
               </div>
             ) : (
               /* USER RANK PROFILE VIEW */
               <div className="md:max-w-3xl md:mx-auto md:px-6 md:py-12">
-                <PerfilTab points={points} onOpenLab={openLab} />
+                <PerfilTab points={points} onOpenLab={openTinder} />
               </div>
             )}
           </main>
@@ -217,10 +217,10 @@ export default function App() {
             onComplete={handleQuizComplete}
           />
 
-          {/* CONTRADICTION LABORATORY WORKBENCH */}
-          <LabAuditorModal
-            isOpen={isLabOpen}
-            onClose={() => setIsLabOpen(false)}
+          {/* TINDER DAS LEIS — BLIND VOTING GAME */}
+          <TinderDasLeisModal
+            isOpen={isTinderOpen}
+            onClose={() => setIsTinderOpen(false)}
             onGainPoints={handleGainPoints}
           />
 

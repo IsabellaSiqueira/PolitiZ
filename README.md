@@ -1,4 +1,4 @@
-# PolitIQ
+# PolitiZ
 
 Plataforma gamificada de educação política com estética neo-brutalista. Trilhas de aprendizado sobre Estado e poder, quizzes e um Laboratório de Contradições que cruza discurso público com voto real.
 

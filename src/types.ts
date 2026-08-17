@@ -27,13 +27,22 @@ export interface LeaderboardUser {
   isCurrentUser?: boolean;
 }
 
-export interface PoliticianContradiction {
-  id: string;
-  name: string;
-  party: string;
-  avatarColor: string;
-  publicClaim: string; // O que ele diz em público
-  realVotingRecord: string; // O que ele vota ou faz de verdade
-  contradictionAnalysis: string; // Análise mordaz e punk da contradição
-  severity: 'CONTRADIÇÃO LEVE' | 'HIPOCRISIA GRAVE' | 'ESTELIONATO ELEITORAL DE ELITE';
+export interface Bill {
+  id: number;
+  plNumber: string; // Ex: "PL 2630/2020"
+  casa: 'Câmara' | 'Senado';
+  tema: string; // Ex: "Liberdade & Redes"
+  resumoNeutro: string; // Descrição despolarizada focada na proposta prática
+  autor: string; // Nome real do parlamentar
+  fotoUrl: string; // Foto oficial da Câmara/Senado
+  partido: string; // Ex: "PT", "PL", "MDB"
+  estado: string; // Ex: "SP", "RJ", "BA"
+  curiosidade: string; // Contexto de bastidores sobre a tramitação
+}
+
+export type VoteDirection = 'aprovar' | 'rejeitar';
+
+export interface Vote {
+  billId: number;
+  direction: VoteDirection;
 }

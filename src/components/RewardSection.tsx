@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { ShieldAlert, Terminal, Sparkles, AlertCircle } from 'lucide-react';
+import { Scale } from 'lucide-react';
 
 interface RewardSectionProps {
   onOpenLab: () => void;
@@ -24,20 +24,20 @@ export const RewardSection: React.FC<RewardSectionProps> = ({ onOpenLab }) => {
 
         {/* TOP ACTION TAG */}
         <div className="bg-black text-white text-[10px] uppercase font-display font-black tracking-widest px-2.5 py-1 mb-4 inline-block border-2 border-black rotate-[-2deg] shadow-[2px_2px_0px_0px_rgba(255,204,74,1)] rounded-md">
-          LABORATÓRIO DESBLOQUEADO
+          JOGO DESBLOQUEADO
         </div>
 
         {/* REWARD HERO CONTAINER */}
         <div className="mb-4">
           <div className="flex items-center gap-2 mb-1.5">
-            <ShieldAlert className="w-8 h-8 text-c-yellow stroke-[2.5px]" />
+            <Scale className="w-8 h-8 text-c-yellow stroke-[2.5px]" />
             <h2 className="font-display font-black text-[22px] tracking-tight text-white leading-none uppercase">
-              AUDITOR DE CONTRADIÇÕES
+              TINDER DAS LEIS
             </h2>
           </div>
-          
+
           <p className="font-sans font-medium text-xs text-amber-50 leading-relaxed pr-2">
-            Já manja da teoria? Bora usar essa ferramenta pra pegar político no pulo com o Diário Oficial.
+            Já manja da teoria? Bora votar às cegas em 5 leis reais e descobrir quem tá por trás de cada uma.
           </p>
         </div>
 
@@ -45,11 +45,11 @@ export const RewardSection: React.FC<RewardSectionProps> = ({ onOpenLab }) => {
         <div className="bg-black/30 border-2 border-dashed border-white/20 p-3 mb-4 rounded-xl text-xs space-y-1.5 font-sans font-medium">
           <div className="flex items-center gap-1.5 text-c-yellow">
             <span className="text-[14px]">✦</span>
-            <span>Cruza o discurso bonito com o que rolou de verdade na votação</span>
+            <span>Desliza pra aprovar ou rejeitar, sem saber quem propôs</span>
           </div>
           <div className="flex items-center gap-1.5 text-white">
             <span className="text-[14px]">✦</span>
-            <span>Monta um dossiê da incoerência e da hipocrisia</span>
+            <span>No final, monta seu Retrato Parlamentar</span>
           </div>
         </div>
 
@@ -58,7 +58,7 @@ export const RewardSection: React.FC<RewardSectionProps> = ({ onOpenLab }) => {
           onClick={onOpenLab}
           className="w-full bg-black text-white hover:bg-c-yellow hover:text-black hover:scale-[1.01] border-[3px] border-black py-3.5 font-display font-black text-xs text-center uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1.5px_1.5px_0px_0px_rgba(255,255,255,1)] transition-all cursor-pointer rounded-full"
         >
-          BORA PRO LABORATÓRIO
+          BORA VOTAR
         </button>
 
         {/* BRUTALIST GRID DECORATOR */}
