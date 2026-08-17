@@ -28,7 +28,7 @@ export const VanguardaTab: React.FC<ExtraTabsProps> = ({ points }) => {
         <h2 className="font-display font-black text-2xl tracking-tighter uppercase leading-none mb-1">
           VANGUARDA CRÍTICA
         </h2>
-        <p className="font-display font-bold text-xs text-[#FFCC4A] uppercase tracking-wider">
+        <p className="font-display font-bold text-xs text-c-yellow uppercase tracking-wider">
           CLASSIFICAÇÃO GERAL DE FORMADORES DE OPINIÃO
         </p>
       </div>
@@ -47,15 +47,15 @@ export const VanguardaTab: React.FC<ExtraTabsProps> = ({ points }) => {
             <div 
               key={user.name} 
               className={`p-3.5 flex items-center justify-between font-sans transition-colors ${
-                isMe ? 'bg-[#FFCC4A]/20 font-bold' : 'hover:bg-zinc-50'
+                isMe ? 'bg-c-yellow/20 font-bold' : 'hover:bg-zinc-50'
               }`}
             >
               <div className="flex items-center gap-3">
                 {/* RANK BADGE */}
-                <div className={`w-8 h-8 font-display font-black text-xs flex items-center justify-center border-2 border-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] rounded-xl ${
-                  displayRank === 1 ? 'bg-[#FFCC4A] rotate-[-4deg]' :
-                  displayRank === 2 ? 'bg-zinc-200 rotate-[3deg]' :
-                  displayRank === 3 ? 'bg-amber-600 text-white rotate-[-2deg]' : 'bg-white'
+                <div className={`w-8 h-8 font-display font-black text-xs flex items-center justify-center border-2 border-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] rounded-full ${
+                  displayRank === 1 ? 'bg-c-yellow rotate-[-4deg]' :
+                  displayRank === 2 ? 'bg-c-teal text-white rotate-3' :
+                  displayRank === 3 ? 'bg-c-lilac -rotate-2' : 'bg-white'
                 }`}>
                   #{displayRank}
                 </div>
@@ -66,7 +66,7 @@ export const VanguardaTab: React.FC<ExtraTabsProps> = ({ points }) => {
                       {user.name}
                     </span>
                     {isMe && (
-                      <span className="bg-[#F0531F] text-white text-[8px] font-display font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wider rotate-[2deg]">
+                      <span className="bg-c-orange text-white text-[8px] font-display font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wider rotate-[2deg]">
                         Você
                       </span>
                     )}
@@ -99,10 +99,10 @@ export const VanguardaTab: React.FC<ExtraTabsProps> = ({ points }) => {
 export const PerfilTab: React.FC<ExtraTabsProps> = ({ points, onOpenLab }) => {
   // Unlocked milestones
   const badges = [
-    { id: 1, title: "AUDITOR BÁSICO", desc: "Aprovado na Aula de Introdução ao Estado.", icon: ShieldCheck, unlocked: true },
-    { id: 2, title: "CRÍTICO DA LUTA", desc: "Completou a sabatina de classes do Módulo 1.", icon: Flame, unlocked: points >= 500 },
-    { id: 3, title: "MESTRE DO DIÁRIO", desc: "Gerou relatórios de contradição no Laboratório.", icon: Library, unlocked: points > 450 },
-    { id: 4, title: "VANGUARDISTA", desc: "Figurou no Top 3 do ranking de agitadores.", icon: Star, unlocked: false }
+    { id: 1, title: "AUDITOR BÁSICO", desc: "Aprovado na Aula de Introdução ao Estado.", icon: ShieldCheck, unlocked: true, color: 'bg-c-orange' },
+    { id: 2, title: "CRÍTICO DA LUTA", desc: "Completou a sabatina de classes do Módulo 1.", icon: Flame, unlocked: points >= 500, color: 'bg-c-pink' },
+    { id: 3, title: "MESTRE DO DIÁRIO", desc: "Gerou relatórios de contradição no Laboratório.", icon: Library, unlocked: points > 450, color: 'bg-c-teal' },
+    { id: 4, title: "VANGUARDISTA", desc: "Figurou no Top 3 do ranking de agitadores.", icon: Star, unlocked: false, color: 'bg-c-lilac' }
   ];
 
   const unlockedCount = badges.filter(b => b.unlocked).length;
@@ -112,9 +112,9 @@ export const PerfilTab: React.FC<ExtraTabsProps> = ({ points, onOpenLab }) => {
       {/* AVATAR HERO COMPONENT */}
       <div className="bg-white border-[3px] border-black p-4 relative shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center gap-4 rounded-2xl">
         {/* AVATAR GLITCH CIRCLE */}
-        <div style={{ transform: 'rotate(-2deg)' }} className="w-16 h-16 bg-[#FFCC4A] border-[3px] border-black relative flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex-shrink-0 rounded-2xl">
+        <div style={{ transform: 'rotate(-2deg)' }} className="w-16 h-16 bg-c-yellow border-[3px] border-black relative flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex-shrink-0 rounded-2xl">
           <span className="font-display font-black text-3xl">P</span>
-          <div className="absolute -bottom-1 -right-1 bg-black text-[#FFCC4A] text-[8px] font-display font-black px-1.5 uppercase tracking-tight rounded-sm">
+          <div className="absolute -bottom-1 -right-1 bg-black text-c-yellow text-[8px] font-display font-black px-1.5 uppercase tracking-tight rounded-sm">
             LVL 4
           </div>
         </div>
@@ -135,19 +135,19 @@ export const PerfilTab: React.FC<ExtraTabsProps> = ({ points, onOpenLab }) => {
 
       {/* QUICK STATUS TICKERS */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-[#FFCC4A] border-2 border-black p-3 text-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
+        <div className="bg-c-yellow border-2 border-black p-3 text-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
           <span className="font-display font-black text-xs uppercase text-black block leading-none">REP TOTAL</span>
           <span className="font-display font-black text-xl text-black block mt-1 tracking-tight">{points} PTS</span>
         </div>
         <div className="bg-black border-2 border-black p-3 text-center text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
-          <span className="font-display font-black text-xs uppercase text-[#FFCC4A] block leading-none">DISTINTIVOS</span>
+          <span className="font-display font-black text-xs uppercase text-c-yellow block leading-none">DISTINTIVOS</span>
           <span className="font-display font-black text-xl block mt-1 tracking-tight">{unlockedCount} / {badges.length}</span>
         </div>
       </div>
 
       {/* DISTINTIVOS COLLECTIONS */}
       <div className="space-y-2.5">
-        <h3 className="font-display font-black text-xs uppercase text-black tracking-widest bg-[#FFFFFF] pl-1.5 border-l-4 border-black">
+        <h3 className="font-display font-black text-xs uppercase text-black tracking-widest bg-white pl-1.5 border-l-4 border-black">
           DISTINTIVOS DE COMBATE
         </h3>
 
@@ -163,8 +163,8 @@ export const PerfilTab: React.FC<ExtraTabsProps> = ({ points, onOpenLab }) => {
                     : 'bg-zinc-100 text-zinc-400 border-dashed border-zinc-350'
                 }`}
               >
-                <div className={`w-10 h-10 border-2 border-black flex items-center justify-center flex-shrink-0 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-xl ${
-                  b.unlocked ? 'bg-[#FFCC4A]' : 'bg-zinc-200 border-zinc-300 shadow-none'
+                <div className={`w-10 h-10 border-2 border-black flex items-center justify-center flex-shrink-0 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full ${
+                  b.unlocked ? b.color : 'bg-zinc-200 border-zinc-300 shadow-none'
                 }`}>
                   <Icon className={`w-5 h-5 ${b.unlocked ? 'text-black' : 'text-zinc-450'}`} />
                 </div>
@@ -179,7 +179,7 @@ export const PerfilTab: React.FC<ExtraTabsProps> = ({ points, onOpenLab }) => {
                 </div>
 
                 {b.unlocked ? (
-                  <span className="ml-auto text-xs font-display font-black text-[#F0531F]">✓</span>
+                  <span className="ml-auto text-xs font-display font-black text-c-orange">✓</span>
                 ) : (
                   <span className="ml-auto text-xs font-display font-black text-zinc-405">🔒</span>
                 )}
@@ -192,7 +192,7 @@ export const PerfilTab: React.FC<ExtraTabsProps> = ({ points, onOpenLab }) => {
       {/* QUICK LAB CTA */}
       <button 
         onClick={onOpenLab}
-        className="w-full bg-[#F0531F] text-white hover:bg-black font-display font-black text-xs py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer rounded-2xl"
+        className="w-full bg-c-orange text-white hover:bg-black font-display font-black text-xs py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer rounded-full"
       >
         EXECUTAR NOVA AUDITORIA DO DIÁRIO ➜
       </button>

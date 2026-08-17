@@ -75,21 +75,21 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F5F2] font-sans antialiased text-black relative md:py-8 md:px-4 flex items-center justify-center">
+    <div className="min-h-screen bg-c-surface font-sans antialiased text-black relative md:py-8 md:px-4 flex items-center justify-center">
       {/* BACKGROUND BRUTALIST GRID DECORATIVE ELEMENT FOR LARGER DISPLAY RANGE */}
       <div className="absolute inset-0 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px] opacity-[0.08] pointer-events-none" />
 
       {/* OUTERCARD DECK: CENTERING CONTAINER FOCUS FOR DESKTOP VIEWS */}
       <div 
         id="politiq-mobile-wrapper"
-        className="w-full max-w-md bg-[#FFFFFF] min-h-screen md:min-h-[85vh] md:my-4 border-[3px] border-black relative flex flex-col shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] overflow-hidden md:rounded-[28px]"
+        className="w-full max-w-md bg-white min-h-screen md:min-h-[85vh] md:my-4 border-[3px] border-black relative flex flex-col shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] overflow-hidden md:rounded-[28px]"
       >
         {/* TOP STATUS BAR DECORATOR (ZINE ROUGHCUT SIGHT) */}
         <div className="bg-black text-white text-[9px] font-mono leading-none py-2.5 px-5 flex justify-between items-center select-none tracking-widest border-b-2 border-black">
           <span>POLITIQ_MOBILE_V1.1_SYS</span>
           <span className="flex items-center gap-1.5 font-bold">
             <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping" />
-            <span className="text-[#FFCC4A]">● ACTV_AUDIT</span>
+            <span className="text-c-yellow">● ACTV_AUDIT</span>
           </span>
         </div>
 
@@ -105,12 +105,12 @@ export default function App() {
                 {/* DECORATIVE STICKER TAGS */}
                 <div 
                   style={{ transform: 'rotate(-3deg)' }}
-                  className="absolute top-4 right-3 bg-[#F0531F] text-white border-2 border-black text-[9px] font-display font-black tracking-widest px-2.5 py-1 uppercase shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] rounded-md"
+                  className="absolute top-4 right-3 bg-c-orange text-white border-2 border-black text-[9px] font-display font-black tracking-widest px-2.5 py-1 uppercase shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] rounded-md"
                 >
                   MÓDULO BÁSICO ✓
                 </div>
 
-                <span className="font-display font-black text-xs text-[#F0531F] block tracking-widest mb-1.5 uppercase">
+                <span className="font-display font-black text-xs text-c-orange block tracking-widest mb-1.5 uppercase">
                   TRILHA REVOLUCIONÁRIA ✦
                 </span>
 
@@ -127,8 +127,8 @@ export default function App() {
 
                 {/* SMALL DECORATIVE COUNTER DOTS */}
                 <div className="flex gap-2 mt-4 select-none">
-                  <div className="w-3 h-3 bg-[#FFCC4A] border-2 border-black rounded-sm" />
-                  <div className="w-3 h-3 bg-[#F0531F] border-2 border-black rounded-sm" />
+                  <div className="w-3 h-3 bg-c-yellow border-2 border-black rounded-sm" />
+                  <div className="w-3 h-3 bg-c-orange border-2 border-black rounded-sm" />
                   <div className="w-3 h-3 bg-black border-2 border-black rounded-sm" />
                 </div>
               </div>
@@ -139,7 +139,7 @@ export default function App() {
               </div>
 
               {/* REWARD CALL WORKBENCH SECTION */}
-              <div className="border-t-4 border-black bg-[#F0531F]/5 py-4">
+              <div className="border-t-4 border-black bg-c-orange/5 py-4">
                 <RewardSection onOpenLab={() => setIsLabOpen(true)} />
               </div>
             </div>
@@ -185,7 +185,7 @@ export default function App() {
               className="w-full max-w-xs bg-white border-[3px] border-black p-5 relative shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-center rounded-2xl animate-in zoom-in-95 duration-150"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="w-12 h-12 bg-[#F0531F] text-white border-2 border-black rounded-2xl flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-c-orange text-white border-2 border-black rounded-2xl flex items-center justify-center mx-auto mb-3">
                 <AlertCircle className="w-6 h-6 stroke-[3px]" />
               </div>
 
@@ -199,7 +199,7 @@ export default function App() {
 
               <button 
                 onClick={() => setIsWarningOpen(false)}
-                className="w-full bg-[#FFCC4A] text-black border-2 border-black font-display font-black text-xs py-3.5 uppercase tracking-wide shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 cursor-pointer rounded-2xl"
+                className="w-full bg-c-yellow text-black border-2 border-black font-display font-black text-xs py-3.5 uppercase tracking-wide shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 cursor-pointer rounded-2xl"
               >
                 ENTENDIDO! VOLTAR
               </button>

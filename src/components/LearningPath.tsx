@@ -46,11 +46,11 @@ export const LearningPath: React.FC<LearningPathProps> = ({ lessons, onNodeClick
                   <div 
                     style={{ transform: 'rotate(-4deg)' }}
                     title="Aula Ativa - TESTE SEUS CONHECIMENTOS!"
-                    className="w-14 h-14 bg-[#FFCC4A] border-[3px] border-black flex items-center justify-center text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:rotate-3 active:scale-95 transition-transform animate-pulse rounded-2xl relative"
+                    className="w-14 h-14 bg-c-yellow border-[3px] border-black flex items-center justify-center text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:rotate-3 active:scale-95 transition-transform animate-pulse rounded-2xl relative"
                   >
-                    <Zap className="w-6 h-6 text-black stroke-[3px] fill-[#FFCC4A]" />
+                    <Zap className="w-6 h-6 text-black stroke-[3px] fill-c-yellow" />
                     {/* ACTIVE BADGE sticker */}
-                    <div className="absolute -top-3.5 -right-3 bg-[#F0531F] text-white border-2 border-black text-[8px] font-display font-black tracking-widest px-1.5 py-0.5 uppercase rotate-[8deg] shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] scale-90 rounded-sm">
+                    <div className="absolute -top-3.5 -right-3 bg-c-orange text-white border-2 border-black text-[8px] font-display font-black tracking-widest px-1.5 py-0.5 uppercase rotate-[8deg] shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] scale-90 rounded-sm">
                       ATIVO
                     </div>
                   </div>
@@ -79,7 +79,7 @@ export const LearningPath: React.FC<LearningPathProps> = ({ lessons, onNodeClick
                 {/* ROTATED CARD HEADER */}
                 <div className="flex justify-between items-start gap-2 mb-1.5">
                   <span className={`font-display font-black text-xs uppercase tracking-tight ${
-                    isActive ? 'text-[#F0531F]' : isCompleted ? 'text-black' : 'text-zinc-500'
+                    isActive ? 'text-c-orange' : isCompleted ? 'text-black' : 'text-zinc-500'
                   }`}>
                     {lesson.title}
                   </span>
@@ -90,7 +90,7 @@ export const LearningPath: React.FC<LearningPathProps> = ({ lessons, onNodeClick
                     </span>
                   )}
                   {isActive && (
-                    <span className="font-display font-black text-[9px] bg-[#F0531F] text-white px-1.5 uppercase tracking-wider py-0.5 rotate-[-2deg] animate-bounce rounded-sm shrink-0">
+                    <span className="font-display font-black text-[9px] bg-c-orange text-white px-1.5 uppercase tracking-wider py-0.5 rotate-[-2deg] animate-bounce rounded-sm shrink-0">
                       JOGAR!
                     </span>
                   )}
@@ -105,7 +105,7 @@ export const LearningPath: React.FC<LearningPathProps> = ({ lessons, onNodeClick
 
                 {isActive && (
                   <div className="mt-3 flex items-center gap-2 font-display font-black text-[10px] uppercase text-black">
-                    <span className="bg-[#FFCC4A] border-2 border-black px-1.5 py-0.5 shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] rounded-md">
+                    <span className="bg-c-yellow border-2 border-black px-1.5 py-0.5 shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] rounded-md">
                       RECOMPENSA: +60 PONTOS
                     </span>
                   </div>

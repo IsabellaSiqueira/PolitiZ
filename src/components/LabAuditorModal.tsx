@@ -107,28 +107,28 @@ export const LabAuditorModal: React.FC<LabAuditorModalProps> = ({ isOpen, onClos
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs select-none overflow-y-auto">
       <div 
-        className="w-full max-w-sm bg-[#FFFFFF] border-[3px] border-black p-5 relative my-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-h-[90vh] overflow-y-auto rounded-2xl"
+        className="w-full max-w-sm bg-white border-[3px] border-black p-5 relative my-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-h-[90vh] overflow-y-auto rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* REWARD OR TAG */}
-        <div className="absolute top-2 left-2 bg-[#F0531F] text-white border-2 border-black font-display font-black text-[9px] px-2 py-0.5 uppercase rotate-[-2deg] rounded-sm">
+        <div className="absolute top-2 left-2 bg-c-orange text-white border-2 border-black font-display font-black text-[9px] px-2 py-0.5 uppercase rotate-[-2deg] rounded-sm">
           LAB DISBLOQUEADO ✓
         </div>
 
         {/* CLOSE BUTTON */}
         <button 
           onClick={onClose}
-          className="absolute top-2 right-2 bg-black text-white hover:bg-[#F0531F] border-2 border-black p-1 hover:text-white transition-colors cursor-pointer rounded-xl"
+          className="absolute top-2 right-2 bg-black text-white hover:bg-c-orange border-2 border-black p-1 hover:text-white transition-colors cursor-pointer rounded-xl"
         >
           <X className="w-4 h-4 stroke-[3px]" />
         </button>
 
         {/* LOGO */}
         <div className="mt-8 text-center mb-4">
-          <h2 className="font-display font-black text-2xl tracking-tighter uppercase text-[#F0531F] leading-none mb-1">
+          <h2 className="font-display font-black text-2xl tracking-tighter uppercase text-c-orange leading-none mb-1">
             AUDITOR DE CONTRADIÇÕES
           </h2>
-          <p className="font-display font-bold text-black text-[10px] uppercase tracking-widest bg-[#FFCC4A] inline-block px-2.5 py-1 border-2 border-black rotate-[1deg] rounded-md shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]">
+          <p className="font-display font-bold text-black text-[10px] uppercase tracking-widest bg-c-yellow inline-block px-2.5 py-1 border-2 border-black rotate-[1deg] rounded-md shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]">
             FERRAMENTA EXTRA OFICIAL DE INTELIGÊNCIA POPULAR
           </p>
         </div>
@@ -137,13 +137,13 @@ export const LabAuditorModal: React.FC<LabAuditorModalProps> = ({ isOpen, onClos
         <div className="grid grid-cols-2 border-2 border-black font-display font-black text-xs mb-4 rounded-xl overflow-hidden bg-white">
           <button
             onClick={() => { setActiveTab('presets'); setAuditResult(null); }}
-            className={`py-2 text-center border-r-2 border-black cursor-pointer transition-all ${activeTab === 'presets' ? 'bg-[#FFCC4A] text-black font-black' : 'bg-white text-black hover:bg-zinc-100 font-bold'}`}
+            className={`py-2 text-center border-r-2 border-black cursor-pointer transition-all ${activeTab === 'presets' ? 'bg-c-yellow text-black font-black' : 'bg-white text-black hover:bg-zinc-100 font-bold'}`}
           >
             ARQUIVOS PRONTOS
           </button>
           <button
             onClick={() => { setActiveTab('custom'); setAuditResult(null); }}
-            className={`py-2 text-center cursor-pointer transition-all ${activeTab === 'custom' ? 'bg-[#FFCC4A] text-black font-black' : 'bg-white text-black hover:bg-zinc-100 font-bold'}`}
+            className={`py-2 text-center cursor-pointer transition-all ${activeTab === 'custom' ? 'bg-c-yellow text-black font-black' : 'bg-white text-black hover:bg-zinc-100 font-bold'}`}
           >
             NOTÍCIA DO DIA (MANUAL)
           </button>
@@ -164,14 +164,14 @@ export const LabAuditorModal: React.FC<LabAuditorModalProps> = ({ isOpen, onClos
                     key={p.id}
                     onClick={() => handleSelectPreset(p.id)}
                     className={`w-full text-left p-2.5 border-2 border-black font-display font-bold text-xs flex justify-between items-center transition-all cursor-pointer rounded-xl ${
-                      isSelected ? 'bg-black text-[#FFCC4A] shadow-[2.5px_2.5px_0px_0px_rgba(240,83,31,1)]' : 'bg-white text-black hover:bg-[#FFCC4A]/20'
+                      isSelected ? 'bg-black text-c-yellow shadow-[2.5px_2.5px_0px_0px_rgba(240,83,31,1)]' : 'bg-white text-black hover:bg-c-yellow/20'
                     }`}
                   >
                     <div>
                       <span className="block uppercase leading-none font-black">{p.name}</span>
                       <span className="text-[10px] font-sans font-medium text-zinc-500">{p.party}</span>
                     </div>
-                    {isSelected && <span className="text-[10px] bg-[#F0531F] text-white px-2 py-0.5 font-bold uppercase rounded-md ml-2 shrink-0">Ativo</span>}
+                    {isSelected && <span className="text-[10px] bg-c-orange text-white px-2 py-0.5 font-bold uppercase rounded-md ml-2 shrink-0">Ativo</span>}
                   </button>
                 );
               })}
@@ -192,7 +192,7 @@ export const LabAuditorModal: React.FC<LabAuditorModalProps> = ({ isOpen, onClos
                 value={customName}
                 onChange={(e) => setCustomName(e.target.value)}
                 required
-                className="w-full bg-white border-2 border-black p-2.5 font-sans font-medium text-xs focus:bg-[#FFCC4A]/15 outline-none placeholder-zinc-400 rounded-xl"
+                className="w-full bg-white border-2 border-black p-2.5 font-sans font-medium text-xs focus:bg-c-yellow/15 outline-none placeholder-zinc-400 rounded-xl"
               />
             </div>
 
@@ -203,7 +203,7 @@ export const LabAuditorModal: React.FC<LabAuditorModalProps> = ({ isOpen, onClos
                 placeholder="Ex: PNB (Partido do Novo Brasil)"
                 value={customGroup}
                 onChange={(e) => setCustomGroup(e.target.value)}
-                className="w-full bg-white border-2 border-black p-2.5 font-sans font-medium text-xs focus:bg-[#FFCC4A]/15 outline-none placeholder-zinc-400 rounded-xl"
+                className="w-full bg-white border-2 border-black p-2.5 font-sans font-medium text-xs focus:bg-c-yellow/15 outline-none placeholder-zinc-400 rounded-xl"
               />
             </div>
 
@@ -215,7 +215,7 @@ export const LabAuditorModal: React.FC<LabAuditorModalProps> = ({ isOpen, onClos
                 onChange={(e) => setCustomClaim(e.target.value)}
                 required
                 rows={2}
-                className="w-full bg-white border-2 border-black p-2.5 font-sans font-medium text-xs focus:bg-[#FFCC4A]/15 outline-none placeholder-zinc-400 resize-none rounded-xl"
+                className="w-full bg-white border-2 border-black p-2.5 font-sans font-medium text-xs focus:bg-c-yellow/15 outline-none placeholder-zinc-400 resize-none rounded-xl"
               />
             </div>
 
@@ -227,13 +227,13 @@ export const LabAuditorModal: React.FC<LabAuditorModalProps> = ({ isOpen, onClos
                 onChange={(e) => setCustomFact(e.target.value)}
                 required
                 rows={2}
-                className="w-full bg-white border-2 border-black p-2.5 font-sans font-medium text-xs focus:bg-[#FFCC4A]/15 outline-none placeholder-zinc-400 resize-none rounded-xl"
+                className="w-full bg-white border-2 border-black p-2.5 font-sans font-medium text-xs focus:bg-c-yellow/15 outline-none placeholder-zinc-400 resize-none rounded-xl"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full bg-black text-white hover:bg-[#F0531F] transition-colors border-2 border-black py-3 font-display font-black text-xs text-center uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(255,204,74,1)] cursor-pointer rounded-2xl"
+              className="w-full bg-black text-white hover:bg-c-orange transition-colors border-2 border-black py-3 font-display font-black text-xs text-center uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(255,204,74,1)] cursor-pointer rounded-full"
             >
               CORTAR DISCURSO COM FATOS ➜
             </button>
@@ -245,7 +245,10 @@ export const LabAuditorModal: React.FC<LabAuditorModalProps> = ({ isOpen, onClos
           <div className="mt-5 border-[3px] border-black bg-white p-4 relative shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-in slide-in-from-bottom-4 duration-300 rounded-2xl">
             
             {/* NOISE STAMP */}
-            <div className="absolute -top-3.5 -right-2 bg-[#F0531F] text-white border-2 border-black font-display font-black text-[8px] px-2 py-0.5 tracking-tighter uppercase rotate-[8deg] z-10 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-md">
+            <div className={`absolute -top-3.5 -right-2 text-white border-2 border-black font-display font-black text-[8px] px-2 py-0.5 tracking-tighter uppercase rotate-[8deg] z-10 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-md ${
+              auditResult.severity === 'CONTRADIÇÃO LEVE' ? 'bg-c-teal' :
+              auditResult.severity === 'HIPOCRISIA GRAVE' ? 'bg-c-orange' : 'bg-black'
+            }`}>
               {auditResult.severity}
             </div>
 
@@ -261,24 +264,24 @@ export const LabAuditorModal: React.FC<LabAuditorModalProps> = ({ isOpen, onClos
             {/* THE CLASH OF DISCOURSE VS TRUTH */}
             <div className="space-y-2.5 mb-3">
               <div>
-                <p className="font-display font-black text-[9px] text-[#FFCC4A] bg-black px-1.5 inline-block py-0.5 uppercase rounded-sm">O PAPO:</p>
+                <p className="font-display font-black text-[9px] text-c-yellow bg-black px-1.5 inline-block py-0.5 uppercase rounded-sm">O PAPO:</p>
                 <p className="font-sans italic text-xs font-semibold text-zinc-650 pl-2 border-l border-black/40 mt-1 leading-relaxed">
                   {auditResult.claim}
                 </p>
               </div>
 
               <div>
-                <p className="font-display font-black text-[9px] text-white bg-[#F0531F] px-1.5 inline-block py-0.5 uppercase rounded-sm">O VOTO REAL (DIÁRIO OFICIAL):</p>
-                <p className="font-sans text-xs font-bold text-black pl-2 border-l border-[#F0531F] mt-1 leading-normal">
+                <p className="font-display font-black text-[9px] text-white bg-c-orange px-1.5 inline-block py-0.5 uppercase rounded-sm">O VOTO REAL (DIÁRIO OFICIAL):</p>
+                <p className="font-sans text-xs font-bold text-black pl-2 border-l border-c-orange mt-1 leading-normal">
                   {auditResult.voting}
                 </p>
               </div>
             </div>
 
             {/* PUNCHY ANARCHIST ANALYSIS */}
-            <div className="bg-[#FFFFFF] border-2 border-dashed border-black p-3 rounded-xl">
+            <div className="bg-white border-2 border-dashed border-black p-3 rounded-xl">
               <p className="font-display font-black text-[9px] text-black tracking-widest uppercase mb-1 flex items-center gap-1">
-                <ShieldAlert className="w-3.5 h-3.5 text-[#F0531F]" /> ANÁLISE DO LABORATÓRIO:
+                <ShieldAlert className="w-3.5 h-3.5 text-c-orange" /> ANÁLISE DO LABORATÓRIO:
               </p>
               <p className="font-sans font-medium text-[11px] text-zinc-800 leading-normal">
                 {auditResult.analysis}

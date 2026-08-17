@@ -17,21 +17,24 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab })
       id: 'trilhas' as const,
       label: 'TRILHAS',
       icon: Route,
+      color: '#F0531F',
     },
     {
       id: 'vanguarda' as const,
       label: 'VANGUARDA',
       icon: Trophy,
+      color: '#00A2AB',
     },
     {
       id: 'perfil' as const,
       label: 'PERFIL',
       icon: Fingerprint,
+      color: '#C4ACFA',
     },
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t-4 border-black grid grid-cols-3 z-40 select-none pb-safe">
+    <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t-[3px] border-black grid grid-cols-3 z-40 select-none pb-safe">
       {tabs.map((tab) => {
         const IconComponent = tab.icon;
         const isActive = activeTab === tab.id;
@@ -40,22 +43,23 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab })
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex flex-col items-center justify-center py-3.5 px-1 border-r border-[#000] last:border-r-0 transition-all cursor-pointer relative overflow-hidden group ${
-              isActive 
-                ? 'bg-[#FFCC4A] text-black font-black' 
-                : 'bg-white text-black hover:bg-zinc-50 font-bold'
-            }`}
+            className="flex flex-col items-center justify-center py-3 px-1 transition-all cursor-pointer relative overflow-hidden group"
           >
-            <div className={`transition-transform duration-200 ${isActive ? 'scale-110 -rotate-2' : 'group-hover:scale-105'}`}>
-              <IconComponent 
-                className={`w-5 h-5 mb-1 ${isActive ? 'stroke-[3px] text-[#F0531F]' : 'stroke-[2px] text-black'}`} 
+            <div
+              style={{ backgroundColor: isActive ? tab.color : '#fff' }}
+              className={`w-9 h-9 mb-1 border-2 border-black rounded-full flex items-center justify-center transition-all duration-200 ${
+                isActive ? 'scale-110 -rotate-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'group-hover:scale-105'
+              }`}
+            >
+              <IconComponent
+                className="w-4 h-4 text-black stroke-[2.5px]"
               />
             </div>
-            <span className="font-display text-[10px] tracking-widest uppercase select-none font-extrabold">
+            <span className={`font-display text-[9px] tracking-widest uppercase select-none ${isActive ? 'font-black text-black' : 'font-bold text-zinc-500'}`}>
               {tab.label}
             </span>
             {isActive && (
-              <span className="absolute top-1 right-2 text-[8px] animate-pulse text-[#F0531F]">✦</span>
+              <span style={{ color: tab.color }} className="absolute top-1 right-3 text-[8px] animate-pulse">✦</span>
             )}
           </button>
         );

@@ -17,19 +17,19 @@ export const LessonInfoModal: React.FC<LessonInfoModalProps> = ({ isOpen, onClos
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs select-none">
       <div 
-        className="w-full max-w-sm bg-[#FFFFFF] border-[3px] border-black p-5 relative shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] animate-in fade-in zoom-in-95 duration-150 rounded-2xl"
+        className="w-full max-w-sm bg-white border-[3px] border-black p-5 relative shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] animate-in fade-in zoom-in-95 duration-150 rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* CLOSE BUTTON */}
         <button 
           onClick={onClose}
-          className="absolute -top-3 -right-3 bg-[#F0531F] text-white border-2 border-black p-1.5 hover:bg-black hover:text-white transition-colors cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-xl"
+          className="absolute -top-3 -right-3 bg-c-orange text-white border-2 border-black p-1.5 hover:bg-black hover:text-white transition-colors cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-xl"
         >
           <X className="w-5 h-5 stroke-[3px]" />
         </button>
 
         {/* HEADER CONTAINER */}
-        <div style={{ transform: 'rotate(-1deg)' }} className="bg-[#FFCC4A] border-2 border-black p-3 mb-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-xl">
+        <div style={{ transform: 'rotate(-1deg)' }} className="bg-c-yellow border-2 border-black p-3 mb-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-xl">
           <span className="font-display font-black text-[10px] text-black block tracking-wider uppercase">MOD 01 • TEORIA</span>
           <h2 className="font-display font-black text-xl text-black tracking-tight uppercase leading-tight mt-0.5">
             AULA 1: O QUE É O ESTADO?
@@ -47,7 +47,7 @@ export const LessonInfoModal: React.FC<LessonInfoModalProps> = ({ isOpen, onClos
             Seja bem-vindo de volta! Para o pensamento crítico, o Estado moderno não é uma entidade mística ou neutra, mas um construto com propósitos evidentes:
           </p>
 
-          <div className="border-l-4 border-[#F0531F] pl-3 space-y-1.5">
+          <div className="border-l-4 border-c-orange pl-3 space-y-1.5">
             <h3 className="font-display font-black text-sm uppercase text-black tracking-tighter">
               1. O Monopólio Weberiano
             </h3>
@@ -70,14 +70,14 @@ export const LessonInfoModal: React.FC<LessonInfoModalProps> = ({ isOpen, onClos
             <p className="font-display italic text-xs font-bold leading-tight uppercase text-black pr-2">
               &ldquo;QUEM NÃO COMPREENDE A TEORIA SE TORNA MARIONETE DA PRÁTICA ALHEIA.&rdquo;
             </p>
-            <div className="absolute top-0 right-0 bg-[#F0531F] text-white text-[8px] font-black tracking-wider px-1 inline-block border-l-2 border-b-2 border-black rounded-bl-md">
+            <div className="absolute top-0 right-0 bg-c-orange text-white text-[8px] font-black tracking-wider px-1 inline-block border-l-2 border-b-2 border-black rounded-bl-md">
               ALERTA CRÍTICO
             </div>
           </div>
 
           {/* QUICK SUMMARY GRID */}
           <div className="bg-amber-100 border-2 border-black p-3 text-xs space-y-1 rounded-xl">
-            <p className="font-display font-bold text-[#F0531F] uppercase tracking-wide">PILARES DO ESTADO MODERNO:</p>
+            <p className="font-display font-bold text-c-orange uppercase tracking-wide">PILARES DO ESTADO MODERNO:</p>
             <ul className="list-disc pl-4 space-y-1 font-medium text-zinc-750">
               <li><strong>Força:</strong> Polícia, exército e prisões.</li>
               <li><strong>Burocracia:</strong> Aparato legal de cobrança e alvarás.</li>
@@ -89,7 +89,7 @@ export const LessonInfoModal: React.FC<LessonInfoModalProps> = ({ isOpen, onClos
         {/* ACTION BUTTON */}
         <button 
           onClick={onClose}
-          className="w-full mt-4 bg-black text-white hover:bg-[#F0531F] transition-colors border-2 border-black py-3 font-display font-black text-xs text-center uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(255,204,74,1)] cursor-pointer rounded-2xl"
+          className="w-full mt-4 bg-black text-white hover:bg-c-orange transition-colors border-2 border-black py-3 font-display font-black text-xs text-center uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(255,204,74,1)] cursor-pointer rounded-2xl"
         >
           FECHAR CADERNO E VOLTAR
         </button>
