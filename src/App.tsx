@@ -173,25 +173,25 @@ export default function App() {
 
                 {/* TIMELINE + REWARD: STACKED ON MOBILE, MAIN+SIDEBAR ON DESKTOP */}
                 <div className="md:max-w-6xl md:mx-auto md:px-6 md:grid md:grid-cols-[1fr_360px] md:gap-10 md:items-start md:mt-4">
-                  {/* TIMELINE PATH MOUNT */}
-                  <div className="my-2 md:my-0">
+                  {/* TIMELINE PATH MOUNT — full-bleed color band on mobile */}
+                  <div className="bg-c-lilac/15 md:bg-transparent border-b-[3px] md:border-b-0 border-black">
                     <LearningPath lessons={lessons} onNodeClick={handleNodeClick} />
                   </div>
 
-                  {/* REWARD CALL WORKBENCH SECTION */}
-                  <div className="border-t-4 md:border-t-0 border-black bg-c-orange/5 md:bg-transparent py-4 md:py-0 md:sticky md:top-28">
+                  {/* REWARD CALL WORKBENCH SECTION — full-bleed color band on mobile */}
+                  <div className="border-t-[3px] md:border-t-0 border-black bg-c-yellow/20 md:bg-transparent py-4 md:py-0 md:sticky md:top-28">
                     <RewardSection onOpenLab={openTinder} />
                   </div>
                 </div>
               </div>
             ) : activeTab === 'vanguarda' ? (
-              /* LEADERBOARD VIEW */
-              <div className="md:max-w-3xl md:mx-auto md:px-6 md:py-12">
+              /* LEADERBOARD VIEW — full-bleed teal band on mobile */
+              <div className="bg-c-teal/10 md:bg-transparent min-h-full md:min-h-0 md:max-w-3xl md:mx-auto md:px-6 md:py-12">
                 <VanguardaTab points={points} onOpenLab={openTinder} />
               </div>
             ) : (
-              /* USER RANK PROFILE VIEW */
-              <div className="md:max-w-3xl md:mx-auto md:px-6 md:py-12">
+              /* USER RANK PROFILE VIEW — full-bleed pink band on mobile */
+              <div className="bg-c-pink/10 md:bg-transparent min-h-full md:min-h-0 md:max-w-3xl md:mx-auto md:px-6 md:py-12">
                 <PerfilTab points={points} onOpenLab={openTinder} />
               </div>
             )}

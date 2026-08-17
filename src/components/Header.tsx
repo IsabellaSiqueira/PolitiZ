@@ -13,13 +13,13 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ points }) => {
   return (
     <header className="sticky top-0 z-40 bg-white border-b-4 border-black p-4 flex justify-between items-center select-none">
-      {/* BRAND LOGO */}
-      <div className="flex items-center gap-1.5">
-        <h1 className="font-display font-black text-3xl tracking-tighter uppercase italic text-black">
+      {/* BRAND LOGO STICKER */}
+      <div style={{ transform: 'rotate(-2deg)' }} className="flex items-center gap-1.5 bg-c-lilac border-2 border-black rounded-xl px-2.5 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+        <h1 className="font-display font-black text-2xl tracking-tighter uppercase italic text-black">
           politi<span className="text-c-orange">Z</span>
         </h1>
-        <div style={{ transform: 'rotate(-3deg)' }} className="bg-black text-white px-2 py-0.5 text-[9px] font-display font-black tracking-widest border border-black inline-block uppercase shadow-[1.5px_1.5px_0px_0px_rgba(240,83,31,1)] rounded-sm">
-          AUDITOR
+        <div style={{ transform: 'rotate(3deg)' }} className="bg-black text-white px-1.5 py-0.5 text-[8px] font-display font-black tracking-widest border border-black inline-block uppercase rounded-sm">
+          GER. Z
         </div>
       </div>
 
