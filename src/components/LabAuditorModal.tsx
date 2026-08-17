@@ -65,9 +65,9 @@ export const LabAuditorModal: React.FC<LabAuditorModalProps> = ({ isOpen, onClos
   const generateCustomAnalysis = (name: string, claimString: string, factString: string) => {
     // Generates a mock humorous, zine-style critical review
     const templates = [
-      `Diz defender as demandas do trabalhador em palanques virtuais de alta definição, mas as impressões digitais registradas no painel de votações revelam que a prioridade é o acerto de contas com o lobby financeiro. A incoerência não é erro, é método.`,
-      `A retórica é cheia de termos humanitários e apelos emocionados para a imprensa. Mas, na hora do voto que afeta o bolso dos poderosos, a coragem evapora e restam apenas desculpas técnicas e alianças de bastidores.`,
-      `Usa a causa popular como um verniz descartável. Quando o holofote desliga e a ata do Diário Oficial registra o boletim de ocorrência legislativo, o discurso cede lugar aos privilégios de gabinete.`
+      `No palanque, é tudo por nós. No painel de votação, é outra história: a prioridade real é o acerto com o lobby financeiro. Não é erro de percurso, é o método mesmo.`,
+      `Discurso bonito, cheio de causa e emoção pra imprensa. Mas na hora do voto que mexe no bolso dos poderosos, a coragem some e sobra só desculpa técnica.`,
+      `Usa a causa popular como decoração. Quando o holofote apaga e a ata do Diário Oficial fala mais alto, o discurso dá lugar aos privilégios de gabinete de sempre.`
     ];
     // Hash function based on name length
     const index = (name.length + claimString.length) % templates.length;
@@ -112,7 +112,7 @@ export const LabAuditorModal: React.FC<LabAuditorModalProps> = ({ isOpen, onClos
       >
         {/* REWARD OR TAG */}
         <div className="absolute top-2 left-2 bg-c-orange text-white border-2 border-black font-display font-black text-[9px] px-2 py-0.5 uppercase rotate-[-2deg] rounded-sm">
-          LAB DISBLOQUEADO ✓
+          LAB DESBLOQUEADO ✓
         </div>
 
         {/* CLOSE BUTTON */}
@@ -153,7 +153,7 @@ export const LabAuditorModal: React.FC<LabAuditorModalProps> = ({ isOpen, onClos
         {activeTab === 'presets' ? (
           <div className="space-y-3">
             <p className="font-sans font-medium text-[11px] text-zinc-600 leading-normal">
-              Selecione o prontuário de um político arquivado no banco de contradições do Diário Oficial:
+              Escolhe um político já catalogado no banco de contradições do Diário Oficial:
             </p>
 
             <div className="space-y-1.5 max-h-[140px] overflow-y-auto pr-1">
@@ -181,7 +181,7 @@ export const LabAuditorModal: React.FC<LabAuditorModalProps> = ({ isOpen, onClos
           /* MANUAL CUSTOM ENTRY */
           <form onSubmit={handleRunCustomAudit} className="space-y-3">
             <p className="font-sans font-medium text-[11px] text-zinc-600 leading-normal">
-              Viu um político mentindo ao vivo? Redija as informações abaixo e cruze as contradições delas com as atas oficiais!
+              Viu um político mentindo ao vivo? Bota as informações aqui embaixo e cruza com o que tá nas atas oficiais!
             </p>
 
             <div>

@@ -44,7 +44,7 @@ export const LessonInfoModal: React.FC<LessonInfoModalProps> = ({ isOpen, onClos
         {/* BODY (SCROLLABLE CONTENT FOR SAFETY) */}
         <div className="max-h-[50vh] overflow-y-auto space-y-4 pr-1 scrollbar-thin">
           <p className="font-sans font-medium text-xs text-zinc-855 leading-relaxed">
-            Seja bem-vindo de volta! Para o pensamento crítico, o Estado moderno não é uma entidade mística ou neutra, mas um construto com propósitos evidentes:
+            E aí, de volta! Bora relembrar rapidinho: o Estado não é essa coisa neutra e distante que te ensinaram na escola. Ele tem função clara, e tu precisa saber qual:
           </p>
 
           <div className="border-l-4 border-c-orange pl-3 space-y-1.5">
@@ -52,7 +52,7 @@ export const LessonInfoModal: React.FC<LessonInfoModalProps> = ({ isOpen, onClos
               1. O Monopólio Weberiano
             </h3>
             <p className="font-sans font-medium text-xs text-zinc-700">
-              Para <strong className="text-black">Max Weber</strong>, o Estado se define pelo <strong>monopólio da violência física legítima</strong>. Nenhuma outra instituição pode punir, prender ou guerrear sem sua autorização.
+              Pra <strong className="text-black">Max Weber</strong>, o Estado é quem detém o <strong>monopólio da violência física legítima</strong>. Nenhuma outra instituição pode punir, prender ou entrar em guerra sem autorização dele.
             </p>
           </div>
 
@@ -61,7 +61,7 @@ export const LessonInfoModal: React.FC<LessonInfoModalProps> = ({ isOpen, onClos
               2. O Comitê de Classe Marxista
             </h3>
             <p className="font-sans font-medium text-xs text-zinc-700">
-              Para <strong className="text-black">Karl Marx</strong>, o Estado moderno age primordialmente como o gerente dos <strong>negócios comuns da classe dominante</strong> (a burguesia), usando leis e forças para garantir o fluxo do capital.
+              Já pra <strong className="text-black">Karl Marx</strong>, o Estado moderno funciona basicamente como o gerente dos <strong>negócios comuns da classe dominante</strong> (a burguesia), usando lei e força pra manter o capital fluindo.
             </p>
           </div>
 
@@ -87,11 +87,11 @@ export const LessonInfoModal: React.FC<LessonInfoModalProps> = ({ isOpen, onClos
         </div>
 
         {/* ACTION BUTTON */}
-        <button 
+        <button
           onClick={onClose}
-          className="w-full mt-4 bg-black text-white hover:bg-c-orange transition-colors border-2 border-black py-3 font-display font-black text-xs text-center uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(255,204,74,1)] cursor-pointer rounded-2xl"
+          className="w-full mt-4 bg-black text-white hover:bg-c-orange transition-colors border-2 border-black py-3 font-display font-black text-xs text-center uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(255,204,74,1)] cursor-pointer rounded-full"
         >
-          FECHAR CADERNO E VOLTAR
+          FECHAR E VOLTAR
         </button>
       </div>
     </div>

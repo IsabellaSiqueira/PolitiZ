@@ -86,7 +86,7 @@ export const LearningPath: React.FC<LearningPathProps> = ({ lessons, onNodeClick
                   
                   {isCompleted && (
                     <span className="font-display font-black text-[9px] bg-black text-white px-1.5 uppercase tracking-wider py-0.5 rotate-[2deg] rounded-sm shrink-0">
-                      REMITIDO
+                      FECHOU ✓
                     </span>
                   )}
                   {isActive && (

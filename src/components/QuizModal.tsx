@@ -145,7 +145,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, onComplet
                     </div>
                   )}
                   <span className="font-display font-black text-xs uppercase tracking-tight">
-                    {isCorrect ? "CORRETO! BOA ANÁLISE COMPANHEIRO!" : "ERROU! VEJA A EXPLICATIVA CRÍTICA:"}
+                    {isCorrect ? "MANDOU BEM! TÁ LIGADO." : "ERROU, MAS RELAXA. OLHA A EXPLICAÇÃO:"}
                   </span>
                 </div>
                 <p className="font-sans font-medium text-[11px] text-zinc-700 leading-normal">
@@ -175,10 +175,10 @@ export const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, onComplet
             </div>
 
             <h2 className="font-display font-black text-2xl text-black tracking-tighter uppercase leading-none mb-1">
-              TEORIA DOMINADA!
+              MANDOU MUITO BEM!
             </h2>
             <p className="font-display font-bold text-c-orange text-xs uppercase tracking-wider mb-4">
-              VOCÊ FINALIZOU O QUIZ CRÍTICO
+              QUIZ FINALIZADO, GERAÇÃO!
             </p>
 
             <div className="bg-white border-2 border-black p-4 mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-left space-y-2 rounded-xl">
@@ -193,22 +193,22 @@ export const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, onComplet
             </div>
 
             <p className="font-sans font-medium text-xs text-zinc-650 mb-5 leading-relaxed">
-              O Diário Oficial é a espada da verdade e a teoria é o escudo. Você está habilitado a auditar as contradições dos poderosos.
+              Com a teoria afiada e o Diário Oficial na mão, tu já tá pronto pra auditar os poderosos.
             </p>
 
             <div className="space-y-2.5">
               <button
                 onClick={handleFinish}
-                className="w-full bg-c-yellow text-black hover:bg-black hover:text-white font-display font-black text-xs py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer rounded-2xl"
+                className="w-full bg-c-yellow text-black hover:bg-black hover:text-white font-display font-black text-xs py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer rounded-full"
               >
-                RESGATAR PONTOS E LIBERAR TRILHA✓
+                RESGATAR PONTOS E LIBERAR TRILHA ✓
               </button>
-              
+
               <button
                 onClick={restartQuiz}
-                className="w-full bg-white text-zinc-650 hover:text-black font-display font-black text-[10px] py-1.5 border-2 border-black uppercase tracking-wider cursor-pointer rounded-xl"
+                className="w-full bg-white text-zinc-650 hover:text-black font-display font-black text-[10px] py-1.5 border-2 border-black uppercase tracking-wider cursor-pointer rounded-full"
               >
-                REFazer TESTE (SEM RECOMPENSA)
+                REFAZER TESTE (SEM RECOMPENSA)
               </button>
             </div>
           </div>

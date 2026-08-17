@@ -37,7 +37,7 @@ export const RewardSection: React.FC<RewardSectionProps> = ({ onOpenLab }) => {
           </div>
           
           <p className="font-sans font-medium text-xs text-amber-50 leading-relaxed pr-2">
-            Você dominou a teoria. Agora, use esta ferramenta para desmascarar políticos com o Diário Oficial.
+            Já manja da teoria? Bora usar essa ferramenta pra pegar político no pulo com o Diário Oficial.
           </p>
         </div>
 
@@ -45,20 +45,20 @@ export const RewardSection: React.FC<RewardSectionProps> = ({ onOpenLab }) => {
         <div className="bg-black/30 border-2 border-dashed border-white/20 p-3 mb-4 rounded-xl text-xs space-y-1.5 font-sans font-medium">
           <div className="flex items-center gap-1.5 text-c-yellow">
             <span className="text-[14px]">✦</span>
-            <span>Cruze discursos pomposos com atas de votação real</span>
+            <span>Cruza o discurso bonito com o que rolou de verdade na votação</span>
           </div>
           <div className="flex items-center gap-1.5 text-white">
             <span className="text-[14px]">✦</span>
-            <span>Gere prontuários de incoerência e hipocrisia</span>
+            <span>Monta um dossiê da incoerência e da hipocrisia</span>
           </div>
         </div>
 
         {/* ENTRAR ACTION BUTTON */}
-        <button 
+        <button
           onClick={onOpenLab}
           className="w-full bg-black text-white hover:bg-c-yellow hover:text-black hover:scale-[1.01] border-[3px] border-black py-3.5 font-display font-black text-xs text-center uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1.5px_1.5px_0px_0px_rgba(255,255,255,1)] transition-all cursor-pointer rounded-full"
         >
-          ENTRAR NO LABORATÓRIO
+          BORA PRO LABORATÓRIO
         </button>
 
         {/* BRUTALIST GRID DECORATOR */}

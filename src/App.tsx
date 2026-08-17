@@ -33,9 +33,9 @@ export default function App() {
   const handleNodeClick = (lesson: LessonNode) => {
     if (lesson.status === 'locked') {
       setWarningMessage(
-        `CONTEÚDO BLOQUEADO! Termine a ${
-          lesson.id === 3 ? 'Aula 2 (Quiz)' : 'Aula anterior'
-        } de forma brilhante para acessar "${lesson.title.replace(/Aula \d+:\s*/, '')}".`
+        `CALMA AÍ! Termina a ${
+          lesson.id === 3 ? 'Aula 2 (Quiz)' : 'aula anterior'
+        } primeiro pra destravar "${lesson.title.replace(/Aula \d+:\s*/, '')}".`
       );
       setIsWarningOpen(true);
       return;
@@ -111,7 +111,7 @@ export default function App() {
                 </div>
 
                 <span className="font-display font-black text-xs text-c-orange block tracking-widest mb-1.5 uppercase">
-                  TRILHA REVOLUCIONÁRIA ✦
+                  NOSSA TRILHA ✦
                 </span>
 
                 <h1 className="font-display font-black text-3.5xl tracking-tighter uppercase text-black leading-[0.9] max-w-[85%] break-words">
@@ -121,8 +121,8 @@ export default function App() {
                 </h1>
 
                 <p className="font-sans font-medium text-xs text-zinc-650 mt-3 max-w-[90%] leading-relaxed">
-                  Destrinche a arquitetura do poder público, tire a máscara neutra do Estado de bem-estar social e domine o jogo político pela teoria crítica da luta de classes.
-                  <span className="font-display font-black text-[10px] text-black uppercase mt-1 block tracking-wider">✦ APRENDA & AUDITE EM TEMPO REAL ✦</span>
+                  Entende como o poder realmente funciona, tira a máscara do Estado "neutro" e descobre quem manda de verdade no jogo político.
+                  <span className="font-display font-black text-[10px] text-black uppercase mt-1 block tracking-wider">✦ BORA APRENDER E AUDITAR ✦</span>
                 </p>
 
                 {/* SMALL DECORATIVE COUNTER DOTS */}
@@ -190,18 +190,18 @@ export default function App() {
               </div>
 
               <h3 className="font-display font-black text-md text-black uppercase tracking-tight mb-2">
-                ACESSO RESTRITO
+                AINDA NÃO ROLA
               </h3>
 
               <p className="font-sans font-medium text-xs text-zinc-700 leading-normal mb-4">
                 {warningMessage}
               </p>
 
-              <button 
+              <button
                 onClick={() => setIsWarningOpen(false)}
-                className="w-full bg-c-yellow text-black border-2 border-black font-display font-black text-xs py-3.5 uppercase tracking-wide shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 cursor-pointer rounded-2xl"
+                className="w-full bg-c-yellow text-black border-2 border-black font-display font-black text-xs py-3.5 uppercase tracking-wide shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 cursor-pointer rounded-full"
               >
-                ENTENDIDO! VOLTAR
+                SAQUEI, VOLTAR
               </button>
             </div>
           </div>

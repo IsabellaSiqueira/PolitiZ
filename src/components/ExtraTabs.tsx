@@ -29,12 +29,12 @@ export const VanguardaTab: React.FC<ExtraTabsProps> = ({ points }) => {
           VANGUARDA CRÍTICA
         </h2>
         <p className="font-display font-bold text-xs text-c-yellow uppercase tracking-wider">
-          CLASSIFICAÇÃO GERAL DE FORMADORES DE OPINIÃO
+          RANKING DE QUEM TÁ LIGADO
         </p>
       </div>
 
       <p className="font-sans font-medium text-xs text-zinc-700 leading-normal">
-        Quem tem a teoria mais afiada? Consiga pontos completando os quizzes de trilha e utilizando a auditoria de contradições.
+        Quem manja mais de teoria? Ganha ponto fazendo os quizzes da trilha e auditando político no Laboratório.
       </p>
 
       {/* LEADERBOARD LIST CONTAINER */}
@@ -89,7 +89,7 @@ export const VanguardaTab: React.FC<ExtraTabsProps> = ({ points }) => {
       {/* FOOTER PUNK NOTICE */}
       <div className="bg-white border-2 border-dashed border-black p-3 text-center my-4 rotate-[0.5deg] rounded-xl">
         <p className="font-display text-[9px] font-black text-black uppercase tracking-wider leading-none">
-          ✦ O DIÁRIO OFICIAL É PÚBLICO. A FISCALIZAÇÃO É DEVER DE TODOS. ✦
+          ✦ O DIÁRIO OFICIAL É DE TODO MUNDO. FISCALIZAR TAMBÉM É LUTA. ✦
         </p>
       </div>
     </div>
@@ -194,7 +194,7 @@ export const PerfilTab: React.FC<ExtraTabsProps> = ({ points, onOpenLab }) => {
         onClick={onOpenLab}
         className="w-full bg-c-orange text-white hover:bg-black font-display font-black text-xs py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer rounded-full"
       >
-        EXECUTAR NOVA AUDITORIA DO DIÁRIO ➜
+        BORA AUDITAR DE NOVO ➜
       </button>
     </div>
   );
