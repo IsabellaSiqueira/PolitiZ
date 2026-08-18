@@ -98,8 +98,9 @@ export default function App() {
       <div className="flex items-center justify-center md:block min-h-screen md:min-h-0 md:py-0 relative">
         <div
           id="politiz-shell"
-          className="w-full max-w-md md:max-w-none bg-white md:bg-transparent min-h-screen md:min-h-0 border-[3px] md:border-0 border-black relative flex flex-col shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] md:shadow-none overflow-hidden md:overflow-visible"
+          className="w-full max-w-md md:max-w-none bg-white md:bg-transparent min-h-screen md:min-h-0 border-4 md:border-0 border-black relative flex flex-col shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] md:shadow-none overflow-hidden md:overflow-visible"
         >
+          <div className="grain-overlay md:hidden" />
           {/* TOP STATUS BAR DECORATOR (ZINE ROUGHCUT SIGHT) — mobile only */}
           <div className="md:hidden bg-black text-white text-[9px] font-mono leading-none py-2.5 px-5 flex justify-between items-center select-none tracking-widest border-b-2 border-black">
             <span>POLITIZ_MOBILE_V1.1_SYS</span>
@@ -141,7 +142,7 @@ export default function App() {
                       </h1>
 
                       <p className="font-sans font-medium text-xs md:text-base text-zinc-650 mt-3 md:mt-5 max-w-[90%] md:max-w-lg leading-relaxed">
-                        Entende como o poder realmente funciona, tira a máscara do Estado "neutro" e descobre quem manda de verdade no jogo político.
+                        Entende como o poder realmente funciona, tira a máscara do Estado "neutro" e descobre quem <span className="marker-highlight font-semibold">manda de verdade</span> no jogo político.
                         <span className="font-display font-black text-[10px] md:text-xs text-black uppercase mt-1 block tracking-wider">✦ BORA APRENDER E AUDITAR ✦</span>
                       </p>
 

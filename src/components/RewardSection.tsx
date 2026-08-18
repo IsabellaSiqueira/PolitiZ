@@ -15,7 +15,7 @@ export const RewardSection: React.FC<RewardSectionProps> = ({ onOpenLab }) => {
     <div className="p-4 select-none">
       <div 
         style={{ transform: 'rotate(-0.5deg)' }}
-        className="bg-c-orange border-[3px] border-black p-5 relative shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-white select-none overflow-hidden hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all rounded-2xl"
+        className="bg-c-orange border-[3px] border-black p-5 relative shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] text-white select-none overflow-hidden hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] transition-all rounded-3xl"
       >
         {/* TOP GLITCH STICKER */}
         <div className="absolute top-0 right-0 bg-c-yellow text-black text-[9px] font-display font-black tracking-widest px-2.5 py-1 uppercase border-l-4 border-b-4 border-black font-bold rounded-bl-xl">

@@ -80,7 +80,7 @@ export const LearningPath: React.FC<LearningPathProps> = ({ lessons, onNodeClick
               <div
                 className={`flex-grow border-[3px] border-black p-4 select-none relative transition-all ${
                   isActive
-                    ? 'bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-2xl hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'
+                    ? 'bg-white shadow-[10px_10px_0px_0px_rgba(255,144,232,1)] rounded-3xl hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[7px_7px_0px_0px_rgba(255,144,232,1)]'
                     : isCompleted
                       ? 'bg-white hover:bg-zinc-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl active:translate-y-0.5'
                       : isSoon
