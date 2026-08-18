@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Check, Zap, Lock, BookOpen } from 'lucide-react';
+import { Check, Zap, Lock, Clock } from 'lucide-react';
 import { LessonNode } from '../types';
 
 interface LearningPathProps {
@@ -24,6 +24,7 @@ export const LearningPath: React.FC<LearningPathProps> = ({ lessons, onNodeClick
           const isCompleted = lesson.status === 'completed';
           const isActive = lesson.status === 'active';
           const isLocked = lesson.status === 'locked';
+          const isSoon = lesson.status === 'soon';
 
           return (
             <div 
@@ -57,33 +58,44 @@ export const LearningPath: React.FC<LearningPathProps> = ({ lessons, onNodeClick
                 )}
 
                 {isLocked && (
-                  <div 
+                  <div
                     title="Aula Bloqueada"
                     className="w-12 h-12 bg-zinc-300 border-[3px] border-black flex items-center justify-center text-zinc-650 cursor-not-allowed rounded-2xl"
                   >
                     <Lock className="w-4 h-4 stroke-[2.5px]" />
                   </div>
                 )}
+
+                {isSoon && (
+                  <div
+                    title="Aula em produção"
+                    className="w-12 h-12 bg-c-yellow/40 border-[3px] border-black border-dashed flex items-center justify-center text-c-orange cursor-pointer rounded-2xl"
+                  >
+                    <Clock className="w-4 h-4 stroke-[2.5px]" />
+                  </div>
+                )}
               </div>
 
               {/* LESSON DETAILS AND HEADER */}
-              <div 
+              <div
                 className={`flex-grow border-[3px] border-black p-4 select-none relative transition-all ${
-                  isActive 
-                    ? 'bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-2xl hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' 
-                    : isCompleted 
-                      ? 'bg-white hover:bg-zinc-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl active:translate-y-0.5' 
-                      : 'bg-zinc-100 text-zinc-500 hover:bg-zinc-100 cursor-not-allowed border-dashed rounded-2xl'
+                  isActive
+                    ? 'bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-2xl hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'
+                    : isCompleted
+                      ? 'bg-white hover:bg-zinc-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl active:translate-y-0.5'
+                      : isSoon
+                        ? 'bg-c-yellow/10 text-zinc-700 hover:bg-c-yellow/20 border-dashed rounded-2xl'
+                        : 'bg-zinc-100 text-zinc-500 hover:bg-zinc-100 cursor-not-allowed border-dashed rounded-2xl'
                 }`}
               >
                 {/* ROTATED CARD HEADER */}
                 <div className="flex justify-between items-start gap-2 mb-1.5">
                   <span className={`font-display font-black text-xs uppercase tracking-tight ${
-                    isActive ? 'text-c-orange' : isCompleted ? 'text-black' : 'text-zinc-500'
+                    isActive ? 'text-c-orange' : isCompleted ? 'text-black' : isSoon ? 'text-c-orange' : 'text-zinc-500'
                   }`}>
                     {lesson.title}
                   </span>
-                  
+
                   {isCompleted && (
                     <span className="font-display font-black text-[9px] bg-black text-white px-1.5 uppercase tracking-wider py-0.5 rotate-[2deg] rounded-sm shrink-0">
                       FECHOU ✓
@@ -92,6 +104,11 @@ export const LearningPath: React.FC<LearningPathProps> = ({ lessons, onNodeClick
                   {isActive && (
                     <span className="font-display font-black text-[9px] bg-c-orange text-white px-1.5 uppercase tracking-wider py-0.5 rotate-[-2deg] animate-bounce rounded-sm shrink-0">
                       JOGAR!
+                    </span>
+                  )}
+                  {isSoon && (
+                    <span className="font-display font-black text-[9px] bg-c-yellow text-black border border-black px-1.5 uppercase tracking-wider py-0.5 rotate-[-2deg] rounded-sm shrink-0">
+                      EM BREVE
                     </span>
                   )}
                 </div>

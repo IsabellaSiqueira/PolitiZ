@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from 'react';
+import { usePersistentState } from './lib/storage';
 import { Header } from './components/Header';
 import { LearningPath } from './components/LearningPath';
 import { RewardSection } from './components/RewardSection';
@@ -18,9 +19,9 @@ import { LessonNode } from './types';
 import { AlertCircle, ShieldAlert, Zap } from 'lucide-react';
 
 export default function App() {
-  // Gamified State Loop
-  const [points, setPoints] = useState<number>(450);
-  const [lessons, setLessons] = useState<LessonNode[]>(LESSONS);
+  // Gamified State Loop — persisted so progress survives a reload
+  const [points, setPoints] = usePersistentState<number>('points', 450);
+  const [lessons, setLessons] = usePersistentState<LessonNode[]>('lessons', LESSONS);
   const [activeTab, setActiveTab] = useState<'trilhas' | 'vanguarda' | 'perfil'>('trilhas');
 
   // Modals Visibility Management
@@ -37,6 +38,14 @@ export default function App() {
         `CALMA AÍ! Termina a ${
           lesson.id === 3 ? 'Aula 2 (Quiz)' : 'aula anterior'
         } primeiro pra destravar "${lesson.title.replace(/Aula \d+:\s*/, '')}".`
+      );
+      setIsWarningOpen(true);
+      return;
+    }
+
+    if (lesson.status === 'soon') {
+      setWarningMessage(
+        `AINDA TÁ NO FORNO! "${lesson.title.replace(/Aula \d+:\s*/, '')}" já foi desbloqueada por você, mas o conteúdo ainda tá em produção. Volta em breve.`
       );
       setIsWarningOpen(true);
       return;
@@ -62,8 +71,8 @@ export default function App() {
           return { ...l, status: 'completed' };
         }
         if (l.id === 3) {
-          // Unlock Class 3!
-          return { ...l, status: 'active' };
+          // Content isn't built yet — say so honestly instead of faking "active"
+          return { ...l, status: 'soon' };
         }
         return l;
       })

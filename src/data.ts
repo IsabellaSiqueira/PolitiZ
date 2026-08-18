@@ -94,7 +94,8 @@ export const BILLS: Bill[] = [
     fotoUrl: "https://legis.senado.leg.br/senadores/fotos-oficiais/5982",
     partido: "MDB",
     estado: "SE",
-    curiosidade: "Aprovado no Senado em 2020, ainda espera votação na Câmara. Foi apresentado quando o autor ainda estava no Cidadania — hoje ele está no MDB."
+    curiosidade: "Aprovado no Senado em 2020, ainda espera votação na Câmara. Foi apresentado quando o autor ainda estava no Cidadania — hoje ele está no MDB.",
+    fonteUrl: "https://www25.senado.leg.br/web/atividade/materias/-/materia/141944"
   },
   {
     id: 2,
@@ -106,7 +107,8 @@ export const BILLS: Bill[] = [
     fotoUrl: "https://www.camara.leg.br/internet/deputado/bandep/160604.jpg",
     partido: "PT",
     estado: "SC",
-    curiosidade: "O IGF está previsto na Constituição desde 1988, mas nunca foi regulamentado — essa é mais uma tentativa entre várias ao longo de décadas."
+    curiosidade: "O IGF está previsto na Constituição desde 1988, mas nunca foi regulamentado — essa é mais uma tentativa entre várias ao longo de décadas.",
+    fonteUrl: "https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2600263"
   },
   {
     id: 3,
@@ -118,7 +120,8 @@ export const BILLS: Bill[] = [
     fotoUrl: "https://www.camara.leg.br/internet/deputado/bandep/220607.jpg",
     partido: "UNIÃO",
     estado: "RJ",
-    curiosidade: "A relatoria na comissão ficou com a deputada Erika Kokay (PT-DF) — parlamentares de partidos diferentes trabalhando juntos nesse tema."
+    curiosidade: "A relatoria na comissão ficou com a deputada Erika Kokay (PT-DF) — parlamentares de partidos diferentes trabalhando juntos nesse tema.",
+    fonteUrl: "https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2485614"
   },
   {
     id: 4,
@@ -130,7 +133,8 @@ export const BILLS: Bill[] = [
     fotoUrl: "https://www.camara.leg.br/internet/deputado/bandep/141488.jpg",
     partido: "PT",
     estado: "SP",
-    curiosidade: "A \"lupa\" nos rótulos já é obrigatória desde 2022 — esse projeto quer ir além, com aviso específico pra ultraprocessados."
+    curiosidade: "A \"lupa\" nos rótulos já é obrigatória desde 2022 — esse projeto quer ir além, com aviso específico pra ultraprocessados.",
+    fonteUrl: "https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2627647"
   },
   {
     id: 5,
@@ -142,6 +146,7 @@ export const BILLS: Bill[] = [
     fotoUrl: "https://www.camara.leg.br/internet/deputado/bandep/220690.jpg",
     partido: "PL",
     estado: "BA",
-    curiosidade: "O tema porte de armas divide o Congresso desde o Estatuto do Desarmamento de 2003 — o número de propostas sobre o assunto só cresce a cada legislatura."
+    curiosidade: "O tema porte de armas divide o Congresso desde o Estatuto do Desarmamento de 2003 — o número de propostas sobre o assunto só cresce a cada legislatura.",
+    fonteUrl: "https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2617803"
   }
 ];

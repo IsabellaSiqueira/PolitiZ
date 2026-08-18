@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Flame, Star, Check, X, Share2 } from 'lucide-react';
+import { Flame, Star, Check, X, Share2, ExternalLink } from 'lucide-react';
 import { BILLS } from '../data';
 import { Vote } from '../types';
 
@@ -85,6 +85,15 @@ export const RetratoParlamentar: React.FC<RetratoParlamentarProps> = ({ votes, o
                   {bill.autor} ({bill.partido}-{bill.estado})
                 </span>
               </div>
+              <a
+                href={bill.fonteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Ver ficha oficial do ${bill.plNumber}`}
+                className="shrink-0 text-zinc-400 hover:text-c-orange transition-colors"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
             </div>
           );
         })}

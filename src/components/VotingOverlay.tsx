@@ -5,7 +5,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Search, ThumbsUp, ThumbsDown, ExternalLink } from 'lucide-react';
 import { Bill, VoteDirection } from '../types';
 
 interface VotingOverlayProps {
@@ -101,6 +101,15 @@ export const VotingOverlay: React.FC<VotingOverlayProps> = ({ bill, direction, o
                 {bill.curiosidade}
               </p>
             </div>
+
+            <a
+              href={bill.fonteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 mt-3 font-display font-black text-[10px] uppercase tracking-wider text-c-orange hover:text-black transition-colors"
+            >
+              <ExternalLink className="w-3 h-3" /> Ver ficha oficial do {bill.plNumber}
+            </a>
 
             <button
               onClick={onContinue}

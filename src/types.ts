@@ -7,7 +7,7 @@ export interface LessonNode {
   id: number;
   title: string;
   type: 'theory' | 'quiz' | 'locked';
-  status: 'completed' | 'active' | 'locked';
+  status: 'completed' | 'active' | 'locked' | 'soon';
   subtitle: string;
 }
 
@@ -38,6 +38,7 @@ export interface Bill {
   partido: string; // Ex: "PT", "PL", "MDB"
   estado: string; // Ex: "SP", "RJ", "BA"
   curiosidade: string; // Contexto de bastidores sobre a tramitação
+  fonteUrl: string; // Ficha oficial do PL na Câmara/Senado
 }
 
 export type VoteDirection = 'aprovar' | 'rejeitar';
