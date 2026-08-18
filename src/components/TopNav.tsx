@@ -42,7 +42,7 @@ export const TopNav: React.FC<TopNavProps> = ({ activeTab, setActiveTab, points,
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full border-2 font-display font-black text-xs uppercase tracking-wider transition-all cursor-pointer ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-full border-2 font-display font-black text-xs uppercase tracking-wider transition-[transform,box-shadow,background-color,color] cursor-pointer ${
                   isActive
                     ? 'bg-black text-white border-black shadow-[2px_2px_0px_0px_rgba(240,83,31,1)]'
                     : 'bg-transparent text-black border-transparent hover:border-black hover:bg-white'
@@ -63,7 +63,7 @@ export const TopNav: React.FC<TopNavProps> = ({ activeTab, setActiveTab, points,
           </div>
           <button
             onClick={onOpenLab}
-            className="bg-c-orange text-white hover:bg-black font-display font-black text-xs px-5 py-2.5 border-2 border-black uppercase tracking-wider shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer rounded-full whitespace-nowrap"
+            className="bg-c-orange text-white hover:bg-black font-display font-black text-xs px-5 py-2.5 border-2 border-black uppercase tracking-wider shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 transition-[transform,box-shadow,background-color,color] cursor-pointer rounded-full whitespace-nowrap"
           >
             Tinder das Leis
           </button>

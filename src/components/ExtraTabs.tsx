@@ -157,7 +157,7 @@ export const PerfilTab: React.FC<ExtraTabsProps> = ({ points, onOpenLab }) => {
             return (
               <div 
                 key={b.id} 
-                className={`border-2 border-black p-3 flex gap-3 items-center transition-all rounded-xl ${
+                className={`border-2 border-black p-3 flex gap-3 items-center transition-[transform,box-shadow,background-color,color] rounded-xl ${
                   b.unlocked 
                     ? 'bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' 
                     : 'bg-zinc-100 text-zinc-400 border-dashed border-zinc-350'
@@ -192,7 +192,7 @@ export const PerfilTab: React.FC<ExtraTabsProps> = ({ points, onOpenLab }) => {
       {/* QUICK LAB CTA */}
       <button 
         onClick={onOpenLab}
-        className="w-full bg-c-orange text-white hover:bg-black font-display font-black text-xs py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer rounded-full"
+        className="w-full bg-c-orange text-white hover:bg-black font-display font-black text-xs py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 transition-[transform,box-shadow,background-color,color] cursor-pointer rounded-full"
       >
         BORA VOTAR DE NOVO ➜
       </button>

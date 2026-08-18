@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ points }) => {
       {/* SCORE DISK CARD */}
       <div 
         style={{ transform: 'rotate(1.5deg)' }} 
-        className="bg-c-yellow border-2 border-black font-display font-black text-xs px-3 py-1.5 flex items-center gap-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] transition-all cursor-cell rounded-full"
+        className="bg-c-yellow border-2 border-black font-display font-black text-xs px-3 py-1.5 flex items-center gap-1.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] transition-[transform,box-shadow,background-color,color] cursor-cell rounded-full"
       >
         <span className="text-black text-sm">✦</span>
         <span className="tracking-tight text-black">{points} PONTOS CRÍTICOS</span>

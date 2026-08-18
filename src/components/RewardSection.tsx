@@ -15,7 +15,7 @@ export const RewardSection: React.FC<RewardSectionProps> = ({ onOpenLab }) => {
     <div className="p-4 select-none">
       <div 
         style={{ transform: 'rotate(-0.5deg)' }}
-        className="bg-c-orange border-[3px] border-black p-5 relative shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] text-white select-none overflow-hidden hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] transition-all rounded-3xl"
+        className="bg-c-orange border-[3px] border-black p-5 relative shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-white select-none overflow-hidden hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-[transform,box-shadow,background-color,color] rounded-3xl"
       >
         {/* TOP GLITCH STICKER */}
         <div className="absolute top-0 right-0 bg-c-yellow text-black text-[9px] font-display font-black tracking-widest px-2.5 py-1 uppercase border-l-4 border-b-4 border-black font-bold rounded-bl-xl">
@@ -56,7 +56,7 @@ export const RewardSection: React.FC<RewardSectionProps> = ({ onOpenLab }) => {
         {/* ENTRAR ACTION BUTTON */}
         <button
           onClick={onOpenLab}
-          className="w-full bg-black text-white hover:bg-c-yellow hover:text-black hover:scale-[1.01] border-[3px] border-black py-3.5 font-display font-black text-xs text-center uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1.5px_1.5px_0px_0px_rgba(255,255,255,1)] transition-all cursor-pointer rounded-full"
+          className="w-full bg-black text-white hover:bg-c-yellow hover:text-black hover:scale-[1.01] border-[3px] border-black py-3.5 font-display font-black text-xs text-center uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1.5px_1.5px_0px_0px_rgba(255,255,255,1)] transition-[transform,box-shadow,background-color,color] cursor-pointer rounded-full"
         >
           BORA VOTAR
         </button>

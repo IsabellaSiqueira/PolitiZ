@@ -7,6 +7,7 @@ import React from 'react';
 import { Flame, Star, Check, X, Share2, ExternalLink } from 'lucide-react';
 import { BILLS } from '../data';
 import { Vote } from '../types';
+import { getTemaColor } from '../lib/theme-colors';
 
 interface RetratoParlamentarProps {
   votes: Vote[];
@@ -56,9 +57,9 @@ export const RetratoParlamentar: React.FC<RetratoParlamentarProps> = ({ votes, o
         VOTO ÀS CEGAS FINALIZADO
       </p>
 
-      <div className="bg-white border-2 border-black p-4 mb-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-xl">
+      <div className="bg-white border-2 border-black p-5 mb-3 shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
         <span className="font-display font-black text-[10px] uppercase text-zinc-500 block leading-none mb-1">TAXA DE APROVAÇÃO</span>
-        <span className="font-display font-black text-4xl text-black block tracking-tight">{approvalRate}%</span>
+        <span className="font-display font-black text-6xl text-black block tracking-tight">{approvalRate}%</span>
         {topParties.length > 0 && (
           <p className="font-sans font-medium text-[11px] text-zinc-600 mt-2">
             Você mais concordou com parlamentares do(a) <strong className="text-black">{topParties.join(', ')}</strong>
@@ -72,11 +73,13 @@ export const RetratoParlamentar: React.FC<RetratoParlamentarProps> = ({ votes, o
           const bill = BILLS.find((b) => b.id === v.billId);
           if (!bill) return null;
           const approved = v.direction === 'aprovar';
+          const tema = getTemaColor(bill.tema);
           return (
             <div key={v.billId} className="p-3 flex items-center gap-3">
               <div className={`w-7 h-7 shrink-0 border-2 border-black rounded-full flex items-center justify-center ${approved ? 'bg-[#22C55E]' : 'bg-[#BF1836]'}`}>
                 {approved ? <Check className="w-4 h-4 text-black stroke-[3px]" /> : <X className="w-4 h-4 text-white stroke-[3px]" />}
               </div>
+              <span className={`w-2 h-8 shrink-0 rounded-full border border-black ${tema.bg}`} title={bill.tema} />
               <div className="min-w-0 flex-1">
                 <span className="font-display font-black text-[10px] uppercase text-black block truncate">
                   {bill.plNumber} · {bill.tema}
@@ -89,10 +92,9 @@ export const RetratoParlamentar: React.FC<RetratoParlamentarProps> = ({ votes, o
                 href={bill.fonteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`Ver ficha oficial do ${bill.plNumber}`}
-                className="shrink-0 text-zinc-400 hover:text-c-orange transition-colors"
+                className="shrink-0 inline-flex items-center gap-1 font-display font-black text-[9px] uppercase tracking-wide text-c-orange hover:text-black transition-colors"
               >
-                <ExternalLink className="w-3.5 h-3.5" />
+                Fonte <ExternalLink className="w-3 h-3" />
               </a>
             </div>
           );
@@ -106,7 +108,7 @@ export const RetratoParlamentar: React.FC<RetratoParlamentarProps> = ({ votes, o
       <div className="space-y-2.5">
         <button
           onClick={handleShare}
-          className="w-full bg-c-yellow text-black hover:bg-black hover:text-white font-display font-black text-xs py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer rounded-full flex items-center justify-center gap-2"
+          className="w-full bg-c-yellow text-black hover:bg-black hover:text-white font-display font-black text-xs py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-[transform,box-shadow,background-color,color] cursor-pointer rounded-full flex items-center justify-center gap-2"
         >
           <Share2 className="w-4 h-4" /> Compartilhar resultado
         </button>

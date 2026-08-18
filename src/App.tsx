@@ -155,7 +155,7 @@ export default function App() {
                       {/* DESKTOP-ONLY QUICK CTA */}
                       <button
                         onClick={openTinder}
-                        className="hidden md:inline-block mt-8 bg-black text-white hover:bg-c-orange font-display font-black text-xs px-7 py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer rounded-full"
+                        className="hidden md:inline-block mt-8 bg-black text-white hover:bg-c-orange font-display font-black text-xs px-7 py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 transition-[transform,box-shadow,background-color,color] cursor-pointer rounded-full"
                       >
                         Vota nas leis ➜
                       </button>

@@ -45,7 +45,7 @@ export const LearningPath: React.FC<LearningPathProps> = ({ lessons, onNodeClick
 
                 {isActive && (
                   <div 
-                    style={{ transform: 'rotate(-4deg)' }}
+                    style={{ transform: 'rotate(-3deg)' }}
                     title="Aula Ativa - TESTE SEUS CONHECIMENTOS!"
                     className="w-14 h-14 bg-c-yellow border-[3px] border-black flex items-center justify-center text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:rotate-3 active:scale-95 transition-transform animate-pulse rounded-2xl relative"
                   >
@@ -78,9 +78,9 @@ export const LearningPath: React.FC<LearningPathProps> = ({ lessons, onNodeClick
 
               {/* LESSON DETAILS AND HEADER */}
               <div
-                className={`flex-grow border-[3px] border-black p-4 select-none relative transition-all ${
+                className={`flex-grow border-[3px] border-black p-4 select-none relative transition-[transform,box-shadow,background-color,color] ${
                   isActive
-                    ? 'bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-2xl hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'
+                    ? 'bg-white shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] rounded-2xl hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[7px_7px_0px_0px_rgba(0,0,0,1)]'
                     : isCompleted
                       ? 'bg-white hover:bg-zinc-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl active:translate-y-0.5'
                       : isSoon

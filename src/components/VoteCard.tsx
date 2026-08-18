@@ -7,6 +7,7 @@ import React from 'react';
 import { motion, useMotionValue, useTransform } from 'motion/react';
 import { Landmark, Check, X } from 'lucide-react';
 import { Bill, VoteDirection } from '../types';
+import { getTemaColor } from '../lib/theme-colors';
 
 interface VoteCardProps {
   bill: Bill;
@@ -18,6 +19,7 @@ interface VoteCardProps {
 const SWIPE_THRESHOLD = 100;
 
 export const VoteCard: React.FC<VoteCardProps> = ({ bill, index, total, onVote }) => {
+  const tema = getTemaColor(bill.tema);
   const x = useMotionValue(0);
   const rotate = useTransform(x, (v) => v * 0.08);
   const approveOpacity = useTransform(x, [20, SWIPE_THRESHOLD], [0, 1]);
@@ -58,16 +60,18 @@ export const VoteCard: React.FC<VoteCardProps> = ({ bill, index, total, onVote }
         </motion.div>
 
         {/* CARD HEADER */}
-        <div className="flex items-center justify-between mb-4">
-          <span className="font-mono text-[9px] font-bold tracking-widest uppercase bg-black text-white px-2 py-1 rounded-sm">
-            {bill.plNumber}
-          </span>
-          <span className="font-mono text-[9px] font-bold tracking-widest uppercase text-zinc-500">
+        <div className="flex items-start justify-between mb-4 gap-2">
+          <div style={{ transform: 'rotate(-2deg)' }} className="bg-ink text-white px-3 py-1.5 rounded-md border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <span className="font-display font-black text-base tracking-tight leading-none block">
+              {bill.plNumber}
+            </span>
+          </div>
+          <span className="font-mono text-[9px] font-bold tracking-widest uppercase text-zinc-500 pt-1.5">
             {index + 1} DE {total}
           </span>
         </div>
 
-        <div style={{ transform: 'rotate(-1deg)' }} className="inline-block bg-c-yellow border-2 border-black px-2.5 py-1 mb-4 font-display font-black text-[10px] uppercase tracking-wider rounded-md shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]">
+        <div style={{ transform: 'rotate(-1deg)' }} className={`inline-block ${tema.bg} ${tema.text} border-2 border-black px-2.5 py-1 mb-4 font-display font-black text-[10px] uppercase tracking-wider rounded-md shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)]`}>
           #{bill.tema}
         </div>
 
@@ -90,14 +94,14 @@ export const VoteCard: React.FC<VoteCardProps> = ({ bill, index, total, onVote }
         <button
           onClick={() => onVote('rejeitar')}
           aria-label="Rejeitar projeto"
-          className="w-14 h-14 bg-white text-[#BF1836] border-[3px] border-black rounded-full flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer"
+          className="w-14 h-14 bg-white text-[#BF1836] border-[3px] border-black rounded-full flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] transition-[transform,box-shadow,background-color,color] cursor-pointer"
         >
           <X className="w-6 h-6 stroke-[3px]" />
         </button>
         <button
           onClick={() => onVote('aprovar')}
           aria-label="Aprovar projeto"
-          className="w-14 h-14 bg-black text-[#22C55E] border-[3px] border-black rounded-full flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer"
+          className="w-14 h-14 bg-black text-[#22C55E] border-[3px] border-black rounded-full flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] transition-[transform,box-shadow,background-color,color] cursor-pointer"
         >
           <Check className="w-6 h-6 stroke-[3px]" />
         </button>

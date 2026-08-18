@@ -91,7 +91,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, onComplet
             {/* PROGRESS BAR */}
             <div className="w-full bg-white border-2 border-black h-4 mb-4 relative overflow-hidden rounded-full">
               <div 
-                className="h-full bg-c-orange border-r-2 border-black transition-all duration-300 rounded-full"
+                className="h-full bg-c-orange border-r-2 border-black transition-[transform,box-shadow,background-color,color] duration-300 rounded-full"
                 style={{ width: `${((currentIdx + 1) / QUIZ_QUESTIONS.length) * 100}%` }}
               />
             </div>
@@ -106,7 +106,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, onComplet
             {/* OPTIONS */}
             <div className="space-y-2 mb-4">
               {currentQuestion.options.map((option, index) => {
-                let btnStyle = "bg-white text-black border-2 border-black font-medium text-xs p-3 text-left w-full hover:bg-zinc-100 transition-all cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] rounded-xl";
+                let btnStyle = "bg-white text-black border-2 border-black font-medium text-xs p-3 text-left w-full hover:bg-zinc-100 transition-[transform,box-shadow,background-color,color] cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] rounded-xl";
                 
                 if (isAnswered) {
                   if (index === currentQuestion.correctAnswer) {
@@ -158,7 +158,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, onComplet
             {isAnswered && (
               <button
                 onClick={handleNext}
-                className="w-full bg-c-orange text-white hover:bg-black font-display font-black text-xs py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer rounded-full"
+                className="w-full bg-c-orange text-white hover:bg-black font-display font-black text-xs py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 transition-[transform,box-shadow,background-color,color] cursor-pointer rounded-full"
               >
                 {currentIdx + 1 === QUIZ_QUESTIONS.length ? "VER RESULTADOS ➜" : "PRÓXIMA PERGUNTA ➜"}
               </button>
@@ -199,7 +199,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({ isOpen, onClose, onComplet
             <div className="space-y-2.5">
               <button
                 onClick={handleFinish}
-                className="w-full bg-c-yellow text-black hover:bg-black hover:text-white font-display font-black text-xs py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer rounded-full"
+                className="w-full bg-c-yellow text-black hover:bg-black hover:text-white font-display font-black text-xs py-3.5 border-2 border-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-[transform,box-shadow,background-color,color] cursor-pointer rounded-full"
               >
                 RESGATAR PONTOS E LIBERAR TRILHA ✓
               </button>

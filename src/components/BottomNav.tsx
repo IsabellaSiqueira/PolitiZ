@@ -43,11 +43,11 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab })
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className="flex flex-col items-center justify-center py-3 px-1 transition-all cursor-pointer relative overflow-hidden group"
+            className="flex flex-col items-center justify-center py-3 px-1 transition-[transform,box-shadow,background-color,color] cursor-pointer relative overflow-hidden group"
           >
             <div
               style={{ backgroundColor: isActive ? tab.color : '#fff' }}
-              className={`w-9 h-9 mb-1 border-2 border-black rounded-full flex items-center justify-center transition-all duration-200 ${
+              className={`w-9 h-9 mb-1 border-2 border-black rounded-full flex items-center justify-center transition-[transform,box-shadow,background-color,color] duration-200 ${
                 isActive ? 'scale-110 -rotate-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'group-hover:scale-105'
               }`}
             >
