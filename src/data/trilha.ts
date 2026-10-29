@@ -13,6 +13,8 @@ export type Aula = {
   numero: number;
   titulo: string;
   resumo: string;
+  /** Texto da aula, um parágrafo por item. Provisório: o conteúdo final é da equipe politiQ. */
+  texto: string[];
   perguntas: Pergunta[];
 };
 
@@ -43,6 +45,12 @@ export const modulo: Modulo = {
       numero: 1,
       titulo: "Os Três Poderes",
       resumo: "Executivo, Legislativo e Judiciário",
+      texto: [
+        "O poder do Estado brasileiro é dividido em três partes, chamadas de Poderes: Executivo, Legislativo e Judiciário. A Constituição, que é a lei mais importante do país, diz o que cada um pode e não pode fazer.",
+        "O Executivo administra: cuida dos serviços públicos e coloca as leis em prática. No país, é chefiado pelo presidente; nos estados, pelos governadores; nas cidades, pelos prefeitos.",
+        "O Legislativo faz as leis e fiscaliza o Executivo, ou seja, acompanha se o dinheiro público está sendo bem usado. O Judiciário, formado por juízes e tribunais, resolve conflitos aplicando as leis.",
+        "Essa divisão existe para que nenhum grupo concentre todo o poder. Cada Poder tem formas de frear os outros. Esse equilíbrio é chamado de sistema de freios e contrapesos."
+      ],
       perguntas: [
         {
           enunciado: "Quem administra o país e coloca as leis federais em prática?",
@@ -89,6 +97,12 @@ export const modulo: Modulo = {
       numero: 2,
       titulo: "Quem faz as leis?",
       resumo: "Câmara, Senado e Câmara Municipal",
+      texto: [
+        "As leis que valem para todo o Brasil são feitas pelo Congresso Nacional, que tem duas casas: a Câmara dos Deputados e o Senado Federal. Por ter duas casas, o sistema é chamado de bicameral.",
+        "A Câmara tem 513 deputados federais. Cada estado elege um número proporcional à sua população, com no mínimo 8 e no máximo 70. O Senado tem 81 senadores: 3 por estado e 3 pelo Distrito Federal, não importa o tamanho.",
+        "Depois que as duas casas aprovam um projeto de lei, ele vai para o presidente, que pode sancionar (concordar e transformar em lei) ou vetar (recusar no todo ou em parte).",
+        "Nos estados, as leis são feitas pelas Assembleias Legislativas. Nas cidades, pelas Câmaras Municipais, onde trabalham os vereadores."
+      ],
       perguntas: [
         {
           enunciado: "Quem cria e vota as leis que valem para todo o Brasil?",
@@ -137,6 +151,12 @@ export const modulo: Modulo = {
       numero: 3,
       titulo: "Município, estado e União",
       resumo: "Quem cuida do quê",
+      texto: [
+        "O Brasil é uma federação: o poder é repartido entre a União (o governo federal), os estados, o Distrito Federal e os municípios. Cada um desses entes cuida de assuntos diferentes.",
+        "A prefeitura cuida do que está mais perto do dia a dia: transporte coletivo da cidade, coleta de lixo, postos de saúde e escolas de educação infantil e do ensino fundamental.",
+        "O governo do estado cuida, por exemplo, da Polícia Militar e de boa parte do ensino médio. A União cuida de temas nacionais, como a moeda, a defesa do país e as relações com outros países.",
+        "Saber quem é responsável por cada coisa ajuda a cobrar a pessoa certa quando um serviço público não funciona."
+      ],
       perguntas: [
         {
           enunciado: "Quem normalmente organiza os ônibus que circulam dentro de uma cidade?",
@@ -173,6 +193,12 @@ export const modulo: Modulo = {
       numero: 4,
       titulo: "Como uma lei nasce",
       resumo: "Do projeto à sanção",
+      texto: [
+        "Toda lei começa como um projeto de lei, uma proposta escrita. Podem apresentar projetos os deputados, os senadores, o presidente, alguns tribunais e até os próprios cidadãos, pela chamada iniciativa popular.",
+        "Na iniciativa popular, o projeto precisa das assinaturas de pelo menos 1% do eleitorado do país, espalhadas por pelo menos cinco estados.",
+        "Antes da votação geral, chamada de plenário, o projeto costuma passar por comissões: grupos menores de parlamentares que estudam o assunto e dão um parecer, uma opinião por escrito.",
+        "Aprovado nas duas casas, o projeto vai para sanção ou veto do presidente. Se houver veto, o Congresso pode derrubá-lo em votação, e o texto vira lei mesmo assim."
+      ],
       perguntas: [
         {
           enunciado: "Quem pode apresentar um projeto de lei federal?",

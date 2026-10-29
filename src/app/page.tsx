@@ -7,9 +7,9 @@ import { Icone } from "@/components/icones";
 import { Cabecalho, Janela, Manchete, Regua, Tela } from "@/components/ui";
 
 export default function Trilhas() {
-  const { aulasFeitas, aulaLiberada } = useProgresso();
-  const feitas = modulo.aulas.filter((a) => aulasFeitas.includes(a.id)).length;
-  const proxima = modulo.aulas.find((a) => !aulasFeitas.includes(a.id) && aulaLiberada(a.numero));
+  const { aulasConcluidas, aulaLiberada, tentativas } = useProgresso();
+  const feitas = modulo.aulas.filter((a) => aulasConcluidas.includes(a.id)).length;
+  const proxima = modulo.aulas.find((a) => !aulasConcluidas.includes(a.id) && aulaLiberada(a.numero));
 
   return (
     <Tela>
@@ -26,14 +26,14 @@ export default function Trilhas() {
           total={modulo.aulas.length}
           feitos={feitas}
           atual={proxima ? proxima.numero - 1 : undefined}
-          rotulo={`${feitas} de ${modulo.aulas.length} aulas feitas`}
+          rotulo={`${feitas} de ${modulo.aulas.length} aulas concluídas`}
         />
 
         <section className="px-5 pt-[18px]" aria-label="Sua trilha">
-          <Janela rotulo="Sua trilha" etiqueta={`${feitas}/${modulo.aulas.length} feitas`} pilha>
+          <Janela rotulo="Sua trilha" etiqueta={`${feitas}/${modulo.aulas.length} concluídas`} pilha>
             <ol>
               {modulo.aulas.map((a, i) => {
-                const feita = aulasFeitas.includes(a.id);
+                const feita = aulasConcluidas.includes(a.id);
                 const liberada = aulaLiberada(a.numero);
                 const atual = proxima?.id === a.id;
                 const ultima = i === modulo.aulas.length - 1;
@@ -51,7 +51,11 @@ export default function Trilhas() {
                   <span className="flex min-w-0 flex-1 flex-col">
                     <span className={`text-base leading-tight font-semibold ${liberada ? "" : "text-tinta-suave"}`}>{a.titulo}</span>
                     <span className="text-sm text-tinta-suave">
-                      {liberada ? `Quiz · ${a.perguntas.length} perguntas` : `Libera depois da aula ${a.numero - 1}`}
+                      {!liberada
+                        ? `Libera depois da aula ${a.numero - 1}`
+                        : melhor(tentativas[a.id])
+                          ? `Melhor quiz: ${melhor(tentativas[a.id])}`
+                          : `Leitura + quiz de ${a.perguntas.length} perguntas`}
                     </span>
                   </span>
                 );
@@ -67,17 +71,17 @@ export default function Trilhas() {
                 }
                 return (
                   <li key={a.id}>
-                    <Link href={`/quiz/${a.id}`} className={`${linha} active:bg-amarelo/30`}>
+                    <Link href={`/aula/${a.id}`} className={`${linha} active:bg-amarelo/30`}>
                       {numero}
                       {textos}
                       {feita ? (
                         <span className="flex items-center gap-1 text-[13px] font-semibold uppercase tracking-[0.04em] text-certo">
                           <Icone nome="certo" tamanho={18} />
-                          Feita
+                          Concluída
                         </span>
                       ) : (
                         <span className="btn-acao flex items-center gap-1.5 rounded-[4px] bg-amarelo px-3 py-2 text-[13px] font-black uppercase tracking-[0.04em]">
-                          Jogar
+                          Ler
                           <Icone nome="seta" tamanho={16} />
                         </span>
                       )}
@@ -91,4 +95,10 @@ export default function Trilhas() {
       </main>
     </Tela>
   );
+}
+
+function melhor(t?: { acertos: number; total: number }[]) {
+  if (!t?.length) return null;
+  const m = t.reduce((a, b) => (b.acertos / b.total > a.acertos / a.total ? b : a));
+  return `${m.acertos} de ${m.total}`;
 }

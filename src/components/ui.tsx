@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icone, type Nome } from "./icones";
-import { useProgresso } from "@/lib/progresso";
 
 /* ---------- Estrutura de tela ---------- */
 
@@ -17,18 +16,11 @@ export function Tela({ children, comNavegacao = true }: { children: React.ReactN
 }
 
 export function Cabecalho() {
-  const { pontos, carregado } = useProgresso();
   return (
     <header className="flex items-center justify-between border-b-[1.5px] border-tinta bg-papel px-5 pt-[max(14px,env(safe-area-inset-top))] pb-3">
       <Link href="/" className="flex min-h-11 items-center font-sans text-2xl font-black tracking-[-0.03em] text-tinta">
         politiQ
       </Link>
-      <span
-        className="rounded-full border-[1.5px] border-tinta bg-amarelo px-2.5 py-1 font-mono text-xs font-semibold uppercase text-tinta"
-        aria-label={`${pontos} pontos`}
-      >
-        {carregado ? pontos : "…"} pts
-      </span>
     </header>
   );
 }

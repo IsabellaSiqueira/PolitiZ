@@ -3,45 +3,54 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { modulo } from "@/data/trilha";
 
+/**
+ * Progresso do aluno, guardado só no navegador enquanto o Supabase não entra.
+ *
+ * REGRA DO MVP: o voto nunca é gravado. Do Voto às Cegas guardamos apenas
+ * QUE houve uma decisão sobre uma lei (o id), nunca se foi aprovar ou rejeitar.
+ */
 export type Voto = "aprovo" | "rejeito";
-export type Registro = { voto: Voto; tema: string | null };
+
+export type Tentativa = { acertos: number; total: number; em: string };
 
 type Estado = {
-  pontos: number;
-  /** ids das aulas concluídas */
-  aulasFeitas: string[];
-  /** voto e tema por id da lei (o tema alimenta o perfil) */
-  votos: Record<string, Registro>;
-  /** índice da lei que aparece no Voto às Cegas */
-  leiAtual: number;
+  /** aulas que o aluno marcou como concluídas */
+  aulasConcluidas: string[];
+  /** histórico de tentativas de quiz por aula */
+  tentativas: Record<string, Tentativa[]>;
+  /** ids das leis em que houve decisão (sem o voto) */
+  decididas: string[];
+  /** ids das leis puladas, na ordem em que foram puladas */
+  puladas: string[];
 };
 
-const INICIAL: Estado = { pontos: 0, aulasFeitas: [], votos: {}, leiAtual: 0 };
-const CHAVE = "politiq:v1";
-const PONTOS_POR_ACERTO = 10;
-const PONTOS_POR_VOTO = 5;
+const INICIAL: Estado = { aulasConcluidas: [], tentativas: {}, decididas: [], puladas: [] };
+const CHAVE = "politiq:v2";
+const CHAVES_ANTIGAS = ["politiq:v1"]; // a v1 guardava votos: é apagada ao abrir o app
 
 type Ctx = Estado & {
   carregado: boolean;
   aulaLiberada: (numero: number) => boolean;
-  concluirAula: (id: string, acertos: number) => void;
-  votar: (id: string, voto: Voto, tema: string | null) => void;
-  proximaLei: (total: number) => void;
-  refazerVotos: () => void;
+  concluirAula: (id: string) => void;
+  registrarTentativa: (id: string, acertos: number, total: number) => void;
+  registrarDecisao: (leiId: string) => void;
+  pular: (leiId: string) => void;
 };
 
 const ProgressoCtx = createContext<Ctx | null>(null);
 
 function ler(): Estado {
   try {
+    for (const k of CHAVES_ANTIGAS) window.localStorage.removeItem(k);
     const bruto = window.localStorage.getItem(CHAVE);
     if (!bruto) return INICIAL;
-    const salvo = JSON.parse(bruto) as Partial<Estado>;
-    // versões antigas guardavam só "aprovo"/"rejeito": descarta o que não estiver no formato atual
-    const votos = Object.fromEntries(
-      Object.entries(salvo.votos ?? {}).filter(([, v]) => typeof v === "object" && v !== null),
-    ) as Record<string, Registro>;
-    return { ...INICIAL, ...salvo, votos };
+    const s = JSON.parse(bruto) as Partial<Estado>;
+    return {
+      aulasConcluidas: Array.isArray(s.aulasConcluidas) ? s.aulasConcluidas : [],
+      tentativas: s.tentativas && typeof s.tentativas === "object" ? s.tentativas : {},
+      decididas: Array.isArray(s.decididas) ? s.decididas.filter((x) => typeof x === "string") : [],
+      puladas: Array.isArray(s.puladas) ? s.puladas.filter((x) => typeof x === "string") : [],
+    };
   } catch {
     return INICIAL;
   }
@@ -71,38 +80,38 @@ export function ProgressoProvider({ children }: { children: React.ReactNode }) {
     (numero: number) => {
       if (numero === 1) return true;
       const anterior = modulo.aulas.find((a) => a.numero === numero - 1);
-      return !!anterior && estado.aulasFeitas.includes(anterior.id);
+      return !!anterior && estado.aulasConcluidas.includes(anterior.id);
     },
-    [estado.aulasFeitas],
+    [estado.aulasConcluidas],
   );
 
-  const concluirAula = useCallback((id: string, acertos: number) => {
-    setEstado((e) =>
-      e.aulasFeitas.includes(id)
-        ? e
-        : { ...e, aulasFeitas: [...e.aulasFeitas, id], pontos: e.pontos + acertos * PONTOS_POR_ACERTO },
-    );
+  const concluirAula = useCallback((id: string) => {
+    setEstado((e) => (e.aulasConcluidas.includes(id) ? e : { ...e, aulasConcluidas: [...e.aulasConcluidas, id] }));
   }, []);
 
-  const votar = useCallback((id: string, voto: Voto, tema: string | null) => {
+  const registrarTentativa = useCallback((id: string, acertos: number, total: number) => {
     setEstado((e) => ({
       ...e,
-      votos: { ...e.votos, [id]: { voto, tema } },
-      pontos: e.votos[id] ? e.pontos : e.pontos + PONTOS_POR_VOTO,
+      tentativas: { ...e.tentativas, [id]: [...(e.tentativas[id] ?? []), { acertos, total, em: new Date().toISOString() }] },
     }));
   }, []);
 
-  const proximaLei = useCallback((total: number) => {
-    setEstado((e) => ({ ...e, leiAtual: (e.leiAtual + 1) % Math.max(1, total) }));
+  const registrarDecisao = useCallback((leiId: string) => {
+    setEstado((e) =>
+      e.decididas.includes(leiId)
+        ? e
+        : { ...e, decididas: [...e.decididas, leiId], puladas: e.puladas.filter((x) => x !== leiId) },
+    );
   }, []);
 
-  const refazerVotos = useCallback(() => {
-    setEstado((e) => ({ ...e, votos: {}, leiAtual: 0 }));
+  const pular = useCallback((leiId: string) => {
+    // pular não conta: a lei vai pro fim da fila e pode voltar
+    setEstado((e) => ({ ...e, puladas: [...e.puladas.filter((x) => x !== leiId), leiId] }));
   }, []);
 
   const valor = useMemo<Ctx>(
-    () => ({ ...estado, carregado, aulaLiberada, concluirAula, votar, proximaLei, refazerVotos }),
-    [estado, carregado, aulaLiberada, concluirAula, votar, proximaLei, refazerVotos],
+    () => ({ ...estado, carregado, aulaLiberada, concluirAula, registrarTentativa, registrarDecisao, pular }),
+    [estado, carregado, aulaLiberada, concluirAula, registrarTentativa, registrarDecisao, pular],
   );
 
   return <ProgressoCtx.Provider value={valor}>{children}</ProgressoCtx.Provider>;

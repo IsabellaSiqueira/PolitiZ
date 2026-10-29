@@ -10,13 +10,11 @@ import { BotaoAcao, CabecalhoTarefa, Janela, LinkSecundario, Manchete, Regua, Te
 type Letra = Alternativa["letra"];
 
 export default function Quiz({ aula }: { aula: Aula }) {
-  const { aulaLiberada, concluirAula, aulasFeitas, carregado } = useProgresso();
+  const { aulasConcluidas, registrarTentativa, tentativas, carregado } = useProgresso();
   const [indice, setIndice] = useState(0);
   const [escolha, setEscolha] = useState<Letra | null>(null);
   const [acertos, setAcertos] = useState(0);
   const [fim, setFim] = useState(false);
-  // guardado antes de concluir: diz se os pontos desta rodada contaram ou não
-  const [jaFeita, setJaFeita] = useState(false);
   const feedback = useRef<HTMLDivElement>(null);
 
   const pergunta = aula.perguntas[indice];
@@ -28,19 +26,25 @@ export default function Quiz({ aula }: { aula: Aula }) {
     if (respondida) feedback.current?.focus();
   }, [respondida]);
 
-  if (carregado && !aulaLiberada(aula.numero)) {
+  // o quiz vem depois da leitura: a aula precisa estar marcada como concluída
+  if (carregado && !aulasConcluidas.includes(aula.id)) {
     return (
       <Tela comNavegacao={false}>
         <CabecalhoTarefa contexto={`Aula ${aula.numero}`} />
         <main className="flex-1 px-5 pt-8">
-          <p className="text-[15px] font-semibold text-papel">
-            Esta aula libera depois que você concluir a aula {aula.numero - 1}.
-          </p>
-          <BotaoAcao href="/" className="mt-6 w-full">Voltar pra trilha</BotaoAcao>
+          <p className="text-[15px] font-semibold text-papel">Leia a aula e marque como concluída antes de fazer o quiz.</p>
+          <BotaoAcao href={`/aula/${aula.id}`} className="mt-6 w-full">Ir pra aula</BotaoAcao>
         </main>
       </Tela>
     );
   }
+
+  const recomecar = () => {
+    setIndice(0);
+    setEscolha(null);
+    setAcertos(0);
+    setFim(false);
+  };
 
   const responder = (letra: Letra) => {
     if (respondida) return;
@@ -53,8 +57,7 @@ export default function Quiz({ aula }: { aula: Aula }) {
       setIndice(indice + 1);
       setEscolha(null);
     } else {
-      setJaFeita(aulasFeitas.includes(aula.id));
-      concluirAula(aula.id, acertos);
+      registrarTentativa(aula.id, acertos, total);
       setFim(true);
     }
   };
@@ -63,15 +66,17 @@ export default function Quiz({ aula }: { aula: Aula }) {
     const seguinte = modulo.aulas.find((a) => a.numero === aula.numero + 1);
     return (
       <Tela comNavegacao={false}>
-        <CabecalhoTarefa contexto={`Aula ${aula.numero} concluída`} />
+        <CabecalhoTarefa contexto={`Quiz da aula ${aula.numero}`} />
         <main className="flex-1 pb-10">
           <Manchete sobretitulo={aula.titulo} linha1="Você" linha2="acertou" numeral={String(acertos)} numeralRotulo={`de ${total}`} tamanho="media" />
           <p className="px-5 pt-4 text-[15px] leading-[1.45] font-semibold text-papel">
-            {jaFeita ? "Você já tinha concluído esta aula, então os pontos não foram somados de novo." : `+${acertos * 10} pontos na sua conta.`}
+            {(tentativas[aula.id]?.length ?? 1) > 1
+              ? `Esta foi sua tentativa número ${tentativas[aula.id].length}. Você pode refazer quando quiser.`
+              : "Você pode refazer o quiz quando quiser. Suas tentativas ficam no seu histórico."}
           </p>
           <div className="px-5 pt-6">
             {seguinte ? (
-              <BotaoAcao href={`/quiz/${seguinte.id}`} className="w-full">
+              <BotaoAcao href={`/aula/${seguinte.id}`} className="w-full">
                 Próxima aula
                 <Icone nome="seta" />
               </BotaoAcao>
@@ -81,7 +86,8 @@ export default function Quiz({ aula }: { aula: Aula }) {
                 <Icone nome="seta" />
               </BotaoAcao>
             )}
-            <div className="pt-1.5">
+            <div className="flex flex-col pt-1.5">
+              <LinkSecundario onClick={recomecar}>Refazer o quiz</LinkSecundario>
               <LinkSecundario href="/">Voltar pra trilha</LinkSecundario>
             </div>
           </div>

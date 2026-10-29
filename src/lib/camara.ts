@@ -11,7 +11,7 @@ import type { Autoria, LeiCartao } from "./tipos";
  */
 // CAMARA_API_URL só existe para testes locais com um servidor simulado
 const API = process.env.CAMARA_API_URL ?? "https://dadosabertos.camara.leg.br/api/v2";
-const QUANTIDADE = 10;
+const QUANTIDADE = 15; // tamanho da sessão do Voto às Cegas (requisitos do MVP)
 
 async function get<T>(caminho: string): Promise<T> {
   const r = await fetch(`${API}${caminho}`, {

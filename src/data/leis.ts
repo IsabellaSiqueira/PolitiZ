@@ -95,6 +95,46 @@ export const leis: Lei[] = [
     autoria: "Sen. João Simulado",
     partido: "PXY",
   },
+  {
+    numero: "0455",
+    tema: "Trabalho",
+    ementa: "Primeiro emprego com desconto de impostos",
+    resumo: "Reduz impostos para empresas que contratarem jovens de 16 a 24 anos sem experiência anterior com carteira assinada.",
+    autoria: "Dep. Karla Esboço",
+    partido: "PJV",
+  },
+  {
+    numero: "0458",
+    tema: "Meio ambiente",
+    ementa: "Coleta seletiva obrigatória em todas as cidades",
+    resumo: "Obriga todos os municípios a oferecer coleta seletiva de lixo reciclável em até cinco anos, com ajuda financeira da União.",
+    autoria: "Dep. Leo Exercício",
+    partido: "PEX",
+  },
+  {
+    numero: "0461",
+    tema: "Segurança",
+    ementa: "Iluminação pública perto das escolas",
+    resumo: "Determina que ruas num raio de 500 metros de escolas públicas tenham iluminação reforçada, custeada pelos municípios.",
+    autoria: "Sen. Marta Modelo",
+    partido: "PXY",
+  },
+  {
+    numero: "0465",
+    tema: "Cultura",
+    ementa: "Biblioteca aberta aos fins de semana",
+    resumo: "Obriga bibliotecas públicas municipais a abrir aos sábados e domingos em cidades com mais de 50 mil habitantes.",
+    autoria: "Dep. Nina Rascunho",
+    partido: "PQZ",
+  },
+  {
+    numero: "0469",
+    tema: "Saúde",
+    ementa: "Absorvente gratuito nas escolas",
+    resumo: "Garante a distribuição gratuita de absorventes higiênicos em todas as escolas públicas de ensino fundamental e médio.",
+    autoria: "Dep. Otávio Caso",
+    partido: "PWK",
+  },
 ];
 
 /* ---------- Adaptadores para o formato usado pela tela ---------- */
