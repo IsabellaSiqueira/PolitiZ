@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# politiQ
 
-## Getting Started
+Política brasileira do zero: trilhas de quiz, o Voto às Cegas e um perfil de prioridades.
 
-First, run the development server:
+## Rodar no computador
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra http://localhost:3000. O app é pensado para celular (até 430px de largura).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Telas
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Rota | O que faz |
+| --- | --- |
+| `/` | Trilha do módulo 01, com as aulas liberadas em sequência |
+| `/quiz/[aula]` | Quiz da aula, com correção e explicação de cada pergunta |
+| `/voto` | Voto às Cegas: julga a lei, depois revela autoria e partido |
+| `/perfil` | Temas que a pessoa mais aprovou |
+| `/ferramentas` | Ferramentas liberadas, em breve e bloqueadas |
 
-## Learn More
+## Onde está cada coisa
 
-To learn more about Next.js, take a look at the following resources:
+- `src/data/trilha.ts`: aulas e perguntas
+- `src/data/leis.ts`: leis do Voto às Cegas (autores e partidos fictícios, marcados como exemplo ilustrativo na tela)
+- `src/lib/progresso.tsx`: pontos, aulas feitas e votos, salvos no navegador (localStorage)
+- `src/components/ui.tsx`: componentes do sistema visual (manchete, régua, janela, botão, selo, navegação)
+- `src/app/globals.css`: cores, espessuras de borda, foco de teclado e animações
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Sistema visual
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Cores com papel fixo:** azul é o fundo da marca, amarelo é ação e progresso, limão é estado, rosa é o documento e o que foi revelado, papel e tinta são o conteúdo.
+- **Bordas:** 2,5px com sombra só no que é tocável (e a sombra some ao pressionar), 2px na janela do documento, 1,5px nas linhas de estrutura.
+- **Tipografia:** Archivo para a marca e a leitura, IBM Plex Mono só para metadados (número da lei, contagens, rótulos).
+- **Movimento:** respeita "reduzir movimento" do sistema.
 
-## Deploy on Vercel
+## Próximos passos
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Login e progresso salvo no Supabase
+- Conteúdo real das leis vindo das APIs da Câmara e do Senado
+- Telas do Auditor de Contradições e das ferramentas bloqueadas
