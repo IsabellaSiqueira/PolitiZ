@@ -1,3 +1,4 @@
+import type { Autoria, LeiCartao } from "@/lib/tipos";
 /**
  * Projetos de lei de exemplo para o Voto às Cegas.
  * Autores e partidos são FICTÍCIOS. A interface sempre marca isso como exemplo ilustrativo.
@@ -95,3 +96,25 @@ export const leis: Lei[] = [
     partido: "PXY",
   },
 ];
+
+/* ---------- Adaptadores para o formato usado pela tela ---------- */
+
+const PREFIXO = "ex-";
+
+export const leisExemplo: LeiCartao[] = leis.map((l) => ({
+  id: PREFIXO + l.numero,
+  rotulo: `PL ${l.numero}`,
+  tema: l.tema,
+  ementa: l.ementa,
+  resumo: l.resumo,
+}));
+
+export function ehExemplo(id: string) {
+  return id.startsWith(PREFIXO);
+}
+
+export function autoriaExemplo(id: string): Autoria | null {
+  const l = leis.find((x) => PREFIXO + x.numero === id);
+  if (!l) return null;
+  return { autoria: l.autoria, partido: l.partido, coautores: 0, fonte: "exemplo", link: null };
+}

@@ -1,25 +1,23 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { leis, type Tema } from "@/data/leis";
 import { useProgresso } from "@/lib/progresso";
 import { Icone } from "@/components/icones";
 import { BotaoAcao, Cabecalho, Janela, LinkSecundario, Manchete, Tela } from "@/components/ui";
 
-type Linha = { tema: Tema; votos: number; aprovou: number };
+type Linha = { tema: string; votos: number; aprovou: number };
 
 export default function Perfil() {
   const { votos, refazerVotos } = useProgresso();
   const router = useRouter();
 
-  const porTema = new Map<Tema, Linha>();
-  for (const lei of leis) {
-    const v = votos[lei.numero];
-    if (!v) continue;
-    const l = porTema.get(lei.tema) ?? { tema: lei.tema, votos: 0, aprovou: 0 };
+  const porTema = new Map<string, Linha>();
+  for (const { voto, tema } of Object.values(votos)) {
+    const nome = tema ?? "Sem tema definido";
+    const l = porTema.get(nome) ?? { tema: nome, votos: 0, aprovou: 0 };
     l.votos += 1;
-    if (v === "aprovo") l.aprovou += 1;
-    porTema.set(lei.tema, l);
+    if (voto === "aprovo") l.aprovou += 1;
+    porTema.set(nome, l);
   }
   const linhas = [...porTema.values()].sort((a, b) => b.aprovou / b.votos - a.aprovou / a.votos || b.votos - a.votos);
   const total = Object.keys(votos).length;
@@ -44,7 +42,7 @@ export default function Perfil() {
         </p>
 
         <section className="px-5 pt-[18px]" aria-label="Temas">
-          <Janela rotulo="Prioridades" etiqueta={`${total} de ${leis.length} leis`}>
+          <Janela rotulo="Prioridades" etiqueta={`${total} ${total === 1 ? "lei julgada" : "leis julgadas"}`}>
             {linhas.length === 0 ? (
               <div className="flex flex-col gap-4 px-5 py-5">
                 <p className="text-[15px] leading-[1.47]">

@@ -2,16 +2,16 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { modulo } from "@/data/trilha";
-import { leis } from "@/data/leis";
 
 export type Voto = "aprovo" | "rejeito";
+export type Registro = { voto: Voto; tema: string | null };
 
 type Estado = {
   pontos: number;
   /** ids das aulas concluídas */
   aulasFeitas: string[];
-  /** voto por número da lei */
-  votos: Record<string, Voto>;
+  /** voto e tema por id da lei (o tema alimenta o perfil) */
+  votos: Record<string, Registro>;
   /** índice da lei que aparece no Voto às Cegas */
   leiAtual: number;
 };
@@ -25,8 +25,8 @@ type Ctx = Estado & {
   carregado: boolean;
   aulaLiberada: (numero: number) => boolean;
   concluirAula: (id: string, acertos: number) => void;
-  votar: (numero: string, voto: Voto) => void;
-  proximaLei: () => void;
+  votar: (id: string, voto: Voto, tema: string | null) => void;
+  proximaLei: (total: number) => void;
   refazerVotos: () => void;
 };
 
@@ -36,7 +36,12 @@ function ler(): Estado {
   try {
     const bruto = window.localStorage.getItem(CHAVE);
     if (!bruto) return INICIAL;
-    return { ...INICIAL, ...(JSON.parse(bruto) as Partial<Estado>) };
+    const salvo = JSON.parse(bruto) as Partial<Estado>;
+    // versões antigas guardavam só "aprovo"/"rejeito": descarta o que não estiver no formato atual
+    const votos = Object.fromEntries(
+      Object.entries(salvo.votos ?? {}).filter(([, v]) => typeof v === "object" && v !== null),
+    ) as Record<string, Registro>;
+    return { ...INICIAL, ...salvo, votos };
   } catch {
     return INICIAL;
   }
@@ -79,16 +84,16 @@ export function ProgressoProvider({ children }: { children: React.ReactNode }) {
     );
   }, []);
 
-  const votar = useCallback((numero: string, voto: Voto) => {
+  const votar = useCallback((id: string, voto: Voto, tema: string | null) => {
     setEstado((e) => ({
       ...e,
-      votos: { ...e.votos, [numero]: voto },
-      pontos: e.votos[numero] ? e.pontos : e.pontos + PONTOS_POR_VOTO,
+      votos: { ...e.votos, [id]: { voto, tema } },
+      pontos: e.votos[id] ? e.pontos : e.pontos + PONTOS_POR_VOTO,
     }));
   }, []);
 
-  const proximaLei = useCallback(() => {
-    setEstado((e) => ({ ...e, leiAtual: (e.leiAtual + 1) % leis.length }));
+  const proximaLei = useCallback((total: number) => {
+    setEstado((e) => ({ ...e, leiAtual: (e.leiAtual + 1) % Math.max(1, total) }));
   }, []);
 
   const refazerVotos = useCallback(() => {
