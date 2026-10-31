@@ -30,8 +30,8 @@ Abra http://localhost:3000. O app é pensado para celular (até 430px de largura
 - `src/lib/camara.ts`: integração com a API de Dados Abertos da Câmara (leis recentes e autoria, com cache)
 - `src/data/leis.ts`: leis de exemplo, usadas só quando a Câmara não responde (autores fictícios, marcados na tela)
 - `src/lib/progresso.tsx`: aulas concluídas, tentativas de quiz e leis já decididas, salvos no navegador (localStorage) até o Supabase entrar
-- `src/components/ui.tsx`: componentes do sistema visual (manchete, régua, janela, botão, selo, navegação)
-- `src/app/globals.css`: cores, espessuras de borda, foco de teclado e animações
+- `src/components/ui.tsx`: componentes do sistema visual (logo, título, régua, cartão, botões, campo, alternativa do quiz, etiqueta, marca-texto, carimbo, navegação)
+- `src/app/globals.css`: cores, escala tipográfica, foco de teclado e animações
 
 ## Regras do MVP que o código já cumpre
 
@@ -53,9 +53,12 @@ Ainda dependem do Supabase (script SQL e documento de requisitos): login, entrad
 
 ## Sistema visual
 
-- **Cores com papel fixo:** azul é o fundo da marca, amarelo é ação e progresso, limão é estado, rosa é o documento e o que foi revelado, papel e tinta são o conteúdo.
-- **Bordas:** 2,5px com sombra só no que é tocável (e a sombra some ao pressionar), 2px na janela do documento, 1,5px nas linhas de estrutura.
-- **Tipografia:** Archivo para a marca e a leitura, IBM Plex Mono só para metadados (número da lei, contagens, rótulos).
+Segue o Manual de identidade v1 (Figma, outubro de 2026).
+
+- **Fundo branco** e quatro cores com função: azul em ações e destaques, amarelo em etiquetas, marca-texto e no botão principal, tinta nos textos e contornos.
+- **Tipografia:** só Plus Jakarta Sans, servida pelo próprio app. A personalidade vem do peso ExtraBold e do espaçamento apertado.
+- **Componentes:** botão principal amarelo (um por tela), botão secundário com contorno, campo, alternativas do quiz em quatro estados, cartões de cantos arredondados e barra de abas.
+- **Elementos gráficos:** etiqueta inclinada, marca-texto e carimbo. A colagem (papel rasgado, rabiscos, coroa, foto) ainda vai ser exportada do Figma.
 - **Movimento:** respeita "reduzir movimento" do sistema.
 
 ## Próximos passos

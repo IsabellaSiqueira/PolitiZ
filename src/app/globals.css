@@ -1,38 +1,69 @@
 @import "tailwindcss";
 
 /*
-  politiQ · sistema visual
-  Cores com papel fixo:
-  - azul: fundo de marca
-  - amarelo: ação e progresso
-  - limão: estado (aba ativa, selo do voto)
-  - rosa: identidade do documento e o que foi revelado
-  - papel e tinta: conteúdo
+  politiQ · sistema visual (Manual de identidade, versão 1, outubro de 2026)
+  Quatro cores fazem a marca, cada uma com uma função:
+  - branco: fundo de todas as telas (nada de bege ou creme)
+  - azul: ações, links, o Q do logo e destaques (não em blocos de texto corrido)
+  - amarelo: etiquetas, marca-texto e o botão principal (nunca texto sobre branco)
+  - tinta: textos, títulos e contornos
+  Cores de apoio: suave (texto secundário), linha (divisórias), claro (fundo de destaque), erro.
 */
 @theme {
   --color-azul: #3346ff;
   --color-amarelo: #ffd43b;
-  --color-limao: #c6f24e;
-  --color-rosa: #ff9bd2;
-  --color-papel: #fffdf7;
-  --color-tinta: #17150f;
-  --color-tinta-suave: #55524a;
-  --color-certo: #0e7a4d;
-  --color-errado: #b42318;
+  --color-tinta: #171717;
+  --color-branco: #ffffff;
+  --color-suave: #6b6760;
+  --color-linha: #e3dfd5;
+  --color-claro: #f1f3ff;
+  --color-erro: #d92d20;
 
-  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-
-  /* espessuras: 1 = ação, 2 = documento, 3 = estrutura */
-  --border-width-acao: 2.5px;
-  --border-width-doc: 2px;
-  --border-width-linha: 1.5px;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
   --ease-revela: cubic-bezier(0.05, 0.7, 0.1, 1);
 }
 
+/* Escala tipográfica do manual: uma família só, a personalidade vem do peso e do espaçamento */
+@utility t-display {
+  font-size: clamp(40px, 12.3vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+@utility t-titulo {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+@utility t-subtitulo {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+@utility t-corpo {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+@utility t-rotulo {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+/* Anotação: no lugar da letra de mão */
+@utility t-anotacao {
+  font-style: italic;
+  font-weight: 800;
+  color: var(--color-azul);
+}
+
 html {
-  background: var(--color-azul);
+  background: var(--color-branco);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -42,41 +73,24 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Foco de teclado: amarelo dentro de tinta, visível em qualquer fundo do app */
+/* Foco de teclado: contorno azul, separado do elemento para aparecer sobre amarelo e branco */
 :focus-visible {
-  outline: 3px solid var(--color-amarelo);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 5px var(--color-tinta);
-  border-radius: 4px;
+  outline: 3px solid var(--color-azul);
+  outline-offset: 3px;
 }
 
-/* Botão que afunda ao pressionar: a sombra só existe em quem é tocável */
-.btn-acao {
-  border: var(--border-width-acao) solid var(--color-tinta);
-  box-shadow: 4px 4px 0 var(--color-tinta);
-  transition: transform 100ms ease-out, box-shadow 100ms ease-out;
+/* Botões afundam um pouco ao pressionar */
+.toque {
+  transition: transform 100ms ease-out, background-color 150ms ease-out;
 }
-.btn-acao:active {
-  transform: translate(4px, 4px);
-  box-shadow: 0 0 0 var(--color-tinta);
-}
-
-.numeral-vazado {
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--color-papel);
-}
-
-.perfuracao {
-  background-image: linear-gradient(90deg, var(--color-tinta) 55%, transparent 55%);
-  background-size: 9px 1.5px;
-  background-repeat: repeat-x;
-  background-position: top left;
+.toque:active {
+  transform: scale(0.98);
 }
 
 @keyframes carimbar {
-  0% { opacity: 0; transform: scale(1.35) rotate(-22deg); }
-  70% { opacity: 1; transform: scale(0.96) rotate(-9deg); }
-  100% { opacity: 1; transform: scale(1) rotate(-10deg); }
+  0% { opacity: 0; transform: scale(1.35) rotate(24deg); }
+  70% { opacity: 1; transform: scale(0.96) rotate(10deg); }
+  100% { opacity: 1; transform: scale(1) rotate(12deg); }
 }
 @keyframes revelar {
   from { opacity: 0; transform: translateY(4px); }

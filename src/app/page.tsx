@@ -4,7 +4,7 @@ import Link from "next/link";
 import { modulo } from "@/data/trilha";
 import { useProgresso } from "@/lib/progresso";
 import { Icone } from "@/components/icones";
-import { Cabecalho, Janela, Manchete, Regua, Tela } from "@/components/ui";
+import { Cabecalho, Cartao, Etiqueta, Regua, Tela, Titulo } from "@/components/ui";
 
 export default function Trilhas() {
   const { aulasConcluidas, aulaLiberada, tentativas } = useProgresso();
@@ -15,13 +15,12 @@ export default function Trilhas() {
     <Tela>
       <Cabecalho />
       <main className="flex-1 pb-32">
-        <Manchete
-          sobretitulo={`Módulo ${String(modulo.numero).padStart(2, "0")} · ${modulo.tema}`}
-          linha1="Quem manda"
-          linha2="em quê?"
-          tamanho="media"
+        <Titulo
+          rotulo={`Módulo ${String(modulo.numero).padStart(2, "0")} · ${modulo.tema}`}
+          titulo="Quem manda em "
+          destaque="quê?"
+          apoio={modulo.descricao}
         />
-        <p className="max-w-[34ch] px-5 pt-3 text-[15px] leading-[1.45] font-semibold text-papel">{modulo.descricao}</p>
         <Regua
           total={modulo.aulas.length}
           feitos={feitas}
@@ -29,28 +28,28 @@ export default function Trilhas() {
           rotulo={`${feitas} de ${modulo.aulas.length} aulas concluídas`}
         />
 
-        <section className="px-5 pt-[18px]" aria-label="Sua trilha">
-          <Janela rotulo="Sua trilha" etiqueta={`${feitas}/${modulo.aulas.length} concluídas`} pilha>
-            <ol>
+        <section className="px-5 pt-5" aria-label="Sua trilha">
+          <Cartao rotulo="Sua trilha" etiqueta={`${feitas} de ${modulo.aulas.length} concluídas`}>
+            <ol className="pt-2">
               {modulo.aulas.map((a, i) => {
                 const feita = aulasConcluidas.includes(a.id);
                 const liberada = aulaLiberada(a.numero);
                 const atual = proxima?.id === a.id;
                 const ultima = i === modulo.aulas.length - 1;
-                const linha = `flex min-h-[76px] items-center gap-4 px-5 py-3.5 ${ultima ? "" : "border-b-[1.5px] border-tinta/15"}`;
+                const linha = `flex min-h-[76px] items-center gap-4 px-5 py-3.5 ${ultima ? "rounded-b-2xl" : "border-b border-linha"}`;
                 const numero = (
                   <span
-                    className={`flex size-10 shrink-0 items-center justify-center text-[28px] leading-none font-black ${
-                      atual ? "bg-amarelo" : ""
-                    } ${liberada ? "text-tinta" : "text-tinta-suave"}`}
+                    className={`flex size-10 shrink-0 items-center justify-center rounded-full text-lg font-extrabold ${
+                      atual ? "bg-amarelo text-tinta" : feita ? "bg-azul text-branco" : liberada ? "border border-linha" : "border border-linha text-suave"
+                    }`}
                   >
-                    {a.numero}
+                    {feita ? <Icone nome="certo" tamanho={18} /> : a.numero}
                   </span>
                 );
                 const textos = (
-                  <span className="flex min-w-0 flex-1 flex-col">
-                    <span className={`text-base leading-tight font-semibold ${liberada ? "" : "text-tinta-suave"}`}>{a.titulo}</span>
-                    <span className="text-sm text-tinta-suave">
+                  <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <span className={`text-base leading-tight font-bold ${liberada ? "" : "text-suave"}`}>{a.titulo}</span>
+                    <span className="text-sm text-suave">
                       {!liberada
                         ? `Libera depois da aula ${a.numero - 1}`
                         : melhor(tentativas[a.id])
@@ -64,33 +63,29 @@ export default function Trilhas() {
                     <li key={a.id} className={linha}>
                       {numero}
                       {textos}
-                      <Icone nome="cadeado" tamanho={20} className="text-tinta-suave" />
+                      <Icone nome="cadeado" tamanho={20} className="text-suave" />
                       <span className="sr-only">Bloqueada</span>
                     </li>
                   );
                 }
                 return (
                   <li key={a.id}>
-                    <Link href={`/aula/${a.id}`} className={`${linha} active:bg-amarelo/30`}>
+                    <Link href={`/aula/${a.id}`} className={`${linha} active:bg-claro`}>
                       {numero}
                       {textos}
                       {feita ? (
-                        <span className="flex items-center gap-1 text-[13px] font-semibold uppercase tracking-[0.04em] text-certo">
-                          <Icone nome="certo" tamanho={18} />
-                          Concluída
-                        </span>
+                        <span className="text-[13px] font-semibold text-azul">Concluída</span>
+                      ) : atual ? (
+                        <Etiqueta>Agora</Etiqueta>
                       ) : (
-                        <span className="btn-acao flex items-center gap-1.5 rounded-[4px] bg-amarelo px-3 py-2 text-[13px] font-black uppercase tracking-[0.04em]">
-                          Ler
-                          <Icone nome="seta" tamanho={16} />
-                        </span>
+                        <Icone nome="seta" tamanho={20} />
                       )}
                     </Link>
                   </li>
                 );
               })}
             </ol>
-          </Janela>
+          </Cartao>
         </section>
       </main>
     </Tela>

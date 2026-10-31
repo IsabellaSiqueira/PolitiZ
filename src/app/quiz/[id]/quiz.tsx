@@ -5,7 +5,19 @@ import type { Alternativa, Aula } from "@/data/trilha";
 import { modulo } from "@/data/trilha";
 import { useProgresso } from "@/lib/progresso";
 import { Icone } from "@/components/icones";
-import { BotaoAcao, CabecalhoTarefa, Janela, LinkSecundario, Manchete, Regua, Tela } from "@/components/ui";
+import {
+  BotaoPrincipal,
+  CabecalhoTarefa,
+  Cartao,
+  Etiqueta,
+  LinkTexto,
+  MarcaTexto,
+  OpcaoQuiz,
+  Regua,
+  Tela,
+  Titulo,
+  type EstadoOpcao,
+} from "@/components/ui";
 
 type Letra = Alternativa["letra"];
 
@@ -32,8 +44,8 @@ export default function Quiz({ aula }: { aula: Aula }) {
       <Tela comNavegacao={false}>
         <CabecalhoTarefa contexto={`Aula ${aula.numero}`} />
         <main className="flex-1 px-5 pt-8">
-          <p className="text-[15px] font-semibold text-papel">Leia a aula e marque como concluída antes de fazer o quiz.</p>
-          <BotaoAcao href={`/aula/${aula.id}`} className="mt-6 w-full">Ir pra aula</BotaoAcao>
+          <p className="t-corpo">Leia a aula e marque como concluída antes de fazer o quiz.</p>
+          <BotaoPrincipal href={`/aula/${aula.id}`} className="mt-6 w-full">Ir pra aula</BotaoPrincipal>
         </main>
       </Tela>
     );
@@ -68,27 +80,35 @@ export default function Quiz({ aula }: { aula: Aula }) {
       <Tela comNavegacao={false}>
         <CabecalhoTarefa contexto={`Quiz da aula ${aula.numero}`} />
         <main className="flex-1 pb-10">
-          <Manchete sobretitulo={aula.titulo} linha1="Você" linha2="acertou" numeral={String(acertos)} numeralRotulo={`de ${total}`} tamanho="media" />
-          <p className="px-5 pt-4 text-[15px] leading-[1.45] font-semibold text-papel">
-            {(tentativas[aula.id]?.length ?? 1) > 1
-              ? `Esta foi sua tentativa número ${tentativas[aula.id].length}. Você pode refazer quando quiser.`
-              : "Você pode refazer o quiz quando quiser. Suas tentativas ficam no seu histórico."}
-          </p>
-          <div className="px-5 pt-6">
+          <div className="px-5 pt-4">
+            <p className="t-rotulo text-azul">{aula.titulo}</p>
+            <h1 className="t-display mt-3">
+              <MarcaTexto>
+                {acertos} de {total}
+              </MarcaTexto>
+            </h1>
+            <p className="t-subtitulo mt-3">{acertos === total ? "Você acertou tudo." : `Você acertou ${acertos} de ${total} perguntas.`}</p>
+            <p className="t-corpo mt-2 text-suave">
+              {(tentativas[aula.id]?.length ?? 1) > 1
+                ? `Esta foi sua tentativa número ${tentativas[aula.id].length}. Você pode refazer quando quiser.`
+                : "Você pode refazer o quiz quando quiser. Suas tentativas ficam no seu histórico."}
+            </p>
+          </div>
+          <div className="px-5 pt-8">
             {seguinte ? (
-              <BotaoAcao href={`/aula/${seguinte.id}`} className="w-full">
+              <BotaoPrincipal href={`/aula/${seguinte.id}`} className="w-full">
                 Próxima aula
-                <Icone nome="seta" />
-              </BotaoAcao>
+                <Icone nome="seta" tamanho={20} />
+              </BotaoPrincipal>
             ) : (
-              <BotaoAcao href="/voto" className="w-full">
+              <BotaoPrincipal href="/voto" className="w-full">
                 Ir pro Voto às Cegas
-                <Icone nome="seta" />
-              </BotaoAcao>
+                <Icone nome="seta" tamanho={20} />
+              </BotaoPrincipal>
             )}
-            <div className="flex flex-col pt-1.5">
-              <LinkSecundario onClick={recomecar}>Refazer o quiz</LinkSecundario>
-              <LinkSecundario href="/">Voltar pra trilha</LinkSecundario>
+            <div className="flex flex-col items-center pt-2">
+              <LinkTexto onClick={recomecar}>Refazer o quiz</LinkTexto>
+              <LinkTexto href="/">Voltar pra trilha</LinkTexto>
             </div>
           </div>
         </main>
@@ -96,67 +116,46 @@ export default function Quiz({ aula }: { aula: Aula }) {
     );
   }
 
+  const estadoDe = (letra: Letra): EstadoOpcao => {
+    if (!respondida) return "padrao";
+    if (letra === pergunta.correta) return "correta";
+    if (letra === escolha) return "errada";
+    return "padrao";
+  };
+
   return (
     <Tela comNavegacao={false}>
-      <CabecalhoTarefa contexto={`Pergunta ${indice + 1} de ${total}`} />
+      <CabecalhoTarefa contexto={`${indice + 1} de ${total}`} />
       <main className="flex-1 pb-10">
         <Regua total={total} feitos={indice + (respondida ? 1 : 0)} atual={respondida ? undefined : indice} rotulo={`Pergunta ${indice + 1} de ${total}`} />
-        <div className="px-5 pt-5">
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-amarelo">
-            Aula {aula.numero} · {aula.titulo}
-          </p>
-          <h1 className="mt-2 text-[28px] leading-[1.04] font-black tracking-[-0.02em] text-papel">{pergunta.enunciado}</h1>
-        </div>
+        <Titulo rotulo={`Aula ${aula.numero} · ${aula.titulo}`} titulo={pergunta.enunciado} />
 
-        <fieldset className="flex flex-col gap-3 px-5 pt-6">
+        <fieldset className="flex flex-col gap-2.5 px-5 pt-6">
           <legend className="sr-only">Escolha uma alternativa</legend>
-          {pergunta.alternativas.map((alt) => {
-            const certa = respondida && alt.letra === pergunta.correta;
-            const errada = respondida && alt.letra === escolha && !acertou;
-            const neutra = respondida && !certa && !errada;
-            return (
-              <button
-                key={alt.letra}
-                type="button"
-                onClick={() => responder(alt.letra)}
-                disabled={respondida}
-                aria-pressed={escolha === alt.letra}
-                className={`flex min-h-14 items-center gap-3 rounded-[4px] border-2 px-3 py-2.5 text-left text-base transition-colors duration-200 ${
-                  certa
-                    ? "border-tinta bg-limao"
-                    : errada
-                      ? "border-tinta bg-rosa"
-                      : neutra
-                        ? "border-papel/40 bg-transparent text-papel"
-                        : "btn-acao border-tinta bg-papel"
-                }`}
-              >
-                <span
-                  className={`flex size-8 shrink-0 items-center justify-center rounded-[3px] border-[1.5px] font-semibold ${
-                    certa || errada ? "border-tinta bg-tinta text-papel" : neutra ? "border-papel/40" : "border-tinta"
-                  }`}
-                >
-                  {certa ? <Icone nome="certo" tamanho={18} /> : errada ? <Icone nome="errado" tamanho={18} /> : alt.letra}
-                </span>
-                <span className="flex-1">{alt.texto}</span>
-                {certa && <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.06em]">Correta</span>}
-                {errada && <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.06em]">Sua resposta</span>}
-              </button>
-            );
-          })}
+          {pergunta.alternativas.map((alt) => (
+            <OpcaoQuiz
+              key={alt.letra}
+              letra={alt.letra}
+              texto={alt.texto}
+              estado={estadoDe(alt.letra)}
+              onClick={() => responder(alt.letra)}
+              disabled={respondida}
+            />
+          ))}
         </fieldset>
 
         {respondida && (
           <div className="anim-revela px-5 pt-6">
             <div ref={feedback} tabIndex={-1} aria-live="polite" className="outline-none">
-              <Janela rotulo={acertou ? "Isso. Por quê?" : `A resposta é a ${pergunta.correta}. Por quê?`}>
-                <p className="px-5 py-4 text-[15px] leading-[1.47]">{pergunta.explicacao}</p>
-              </Janela>
+              <Cartao className="px-5 pt-5 pb-4">
+                <Etiqueta cor={acertou ? "amarelo" : "azul"}>{acertou ? "Resposta correta!" : `A resposta é a ${pergunta.correta}`}</Etiqueta>
+                <p className="t-corpo mt-3">{pergunta.explicacao}</p>
+              </Cartao>
             </div>
-            <BotaoAcao onClick={continuar} className="mt-5 w-full">
+            <BotaoPrincipal onClick={continuar} className="mt-5 w-full">
               {indice + 1 < total ? "Próxima pergunta" : "Ver resultado"}
-              <Icone nome="seta" />
-            </BotaoAcao>
+              <Icone nome="seta" tamanho={20} />
+            </BotaoPrincipal>
           </div>
         )}
       </main>

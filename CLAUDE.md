@@ -38,16 +38,19 @@ Em caso de dúvida entre o código atual e o documento, vale o documento. A Isa 
 - **Autoria escondida até a decisão:** a lista de leis vai ao aparelho sem autor/partido (`LeiCartao` em `src/lib/tipos.ts`). Autor e partido vêm de `GET /api/autoria/[id]`, chamada só depois da decisão e que recebe apenas o id. O partido mostrado é o atual do deputado, e a tela diz isso.
 - Textos das aulas em `src/data/trilha.ts` são **provisórios**; o conteúdo final é da Isa. Ao escrever conteúdo educacional, explique todo termo técnico na primeira vez que aparecer.
 
-## Sistema visual (já aprovado pela Isa, não redesenhar sem pedido)
+## Sistema visual (Manual de identidade v1, outubro de 2026)
 
-Neobrutalista com direção editorial. Tokens em `src/app/globals.css`, componentes em `src/components/ui.tsx`.
+Fonte da verdade: o manual no Figma, https://www.figma.com/design/izkGoAQyBueKwjQLeaHRFY/politiQ-%C2%B7-Startup-One?node-id=348-17 (14 páginas: essência, combinados, logo, cores, tipografia, elementos gráficos, colagem, componentes, voz e tom, aplicações). Tokens em `src/app/globals.css`, componentes em `src/components/ui.tsx`. Não redesenhar sem pedido da Isa.
 
-- **Cada cor tem um papel:** azul `#3346FF` é o fundo da marca; amarelo `#FFD43B` é ação e progresso; limão `#C6F24E` é estado (aba ativa, selo); rosa `#FF9BD2` é o documento e o que foi revelado; papel `#FFFDF7` e tinta `#17150F` são o conteúdo. Não introduza gradientes nem cores novas.
-- **Três espessuras de borda:** 2,5px com sombra dura de 4px só no que é tocável (a sombra some ao pressionar: `.btn-acao`); 2px na janela do documento; 1,5px em linhas de estrutura.
-- **Tipografia:** Archivo (Black para títulos, SemiBold/Regular para leitura; nunca Black em parágrafo longo) e IBM Plex Mono só para metadados (número da lei, contagens, rótulos).
-- **Peças:** `Manchete` (sobretítulo mono amarelo + título em duas vozes + numeral vazado opcional), `Regua` (progresso segmentado), `Janela` (documento com barra rosa e folhas empilhadas), `BotaoAcao`, `Selo` (carimbo redondo do voto), `Navegacao`.
-- **Foco de teclado:** contorno amarelo dentro de tinta (padrão GOV.UK). Respeitar "reduzir movimento".
-- Aprovo e Rejeito têm sempre o mesmo peso visual: a interface não pode sugerir resposta.
+- **Fundo sempre branco.** Nada de bege, creme ou papel envelhecido.
+- **Quatro cores com função:** azul `#3346FF` em ações, links, o Q do logo e destaques (não em texto corrido); amarelo `#FFD43B` em etiquetas, marca-texto e no botão principal (nunca texto amarelo sobre branco); tinta `#171717` em textos, títulos e contornos; branco `#FFFFFF` no fundo. Apoio: suave `#6B6760` (texto secundário), linha `#E3DFD5` (divisórias e contornos), claro `#F1F3FF` (fundo de destaque), erro `#D92D20`. Não introduza gradientes nem cores novas.
+- **Tipografia:** uma família só, Plus Jakarta Sans (servida por `@fontsource`). Escala em utilitários: `t-display` (ExtraBold 48, -5%), `t-titulo` (ExtraBold 24 a 32, -3%), `t-subtitulo` (Bold 18 a 20), `t-corpo` (Regular 16, entrelinha 150%), `t-rotulo` (ExtraBold 11, maiúsculas, +10%), `t-anotacao` (ExtraBold Italic azul, no lugar da letra de mão).
+- **Logo:** `politiQ` em ExtraBold, espaçamento apertado, Q em azul (`Logo`). Sem acento, p minúsculo, Q maiúsculo, inclusive no começo da frase.
+- **Componentes:** `BotaoPrincipal` (amarelo, pílula, seta; **um por tela**), `BotaoSecundario` (contorno tinta, fundo branco), `LinkTexto`, `Campo` (rótulo em cima, borda fina, foco azul), `OpcaoQuiz` (padrão, marcada, certa, errada; certa e errada sempre com ícone), `Cartao` (contorno linha, cantos de 16px), `Titulo`, `Regua`, barra de abas `Navegacao`.
+- **Elementos gráficos:** `Etiqueta` (maiúsculas, inclinada 2 graus), `MarcaTexto` (uma vez por tela), `Carimbo` (revelação do Voto às Cegas). No máximo três na mesma composição. Papel rasgado, rabiscos, coroa e foto em preto e branco da colagem ainda não estão no código: as peças precisam ser exportadas do Figma (o ambiente remoto não alcança figma.com). Colagem só em abertura, capas, cards de jogos e revelação; nunca em formulários, aulas ou perguntas do quiz.
+- **Aprovo e Rejeito** são dois `BotaoSecundario` lado a lado: mesmo tamanho, mesma cor, mesmo lugar. O carimbo é igual para os dois.
+- **Foco de teclado:** contorno azul de 3px afastado do elemento. Respeitar "reduzir movimento".
+- **Voz:** frases de até 20 palavras, números em algarismos, sem travessão, pessoas e lugares concretos em vez de lados políticos.
 - Telas pensadas para 390px de largura (máx. 430px); conferir também em 320px.
 
 ## Como trabalhar

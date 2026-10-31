@@ -3,7 +3,7 @@
 import type { Aula as TAula } from "@/data/trilha";
 import { useProgresso } from "@/lib/progresso";
 import { Icone } from "@/components/icones";
-import { BotaoAcao, CabecalhoTarefa, Janela, LinkSecundario, Manchete, Tela } from "@/components/ui";
+import { BotaoPrincipal, CabecalhoTarefa, LinkTexto, Tela, Titulo } from "@/components/ui";
 
 export default function Aula({ aula }: { aula: TAula }) {
   const { aulaLiberada, aulasConcluidas, concluirAula, carregado } = useProgresso();
@@ -14,8 +14,8 @@ export default function Aula({ aula }: { aula: TAula }) {
       <Tela comNavegacao={false}>
         <CabecalhoTarefa contexto={`Aula ${aula.numero}`} />
         <main className="flex-1 px-5 pt-8">
-          <p className="text-[15px] font-semibold text-papel">Esta aula libera depois que você concluir a aula {aula.numero - 1}.</p>
-          <BotaoAcao href="/" className="mt-6 w-full">Voltar pra trilha</BotaoAcao>
+          <p className="t-corpo">Esta aula libera depois que você concluir a aula {aula.numero - 1}.</p>
+          <BotaoPrincipal href="/" className="mt-6 w-full">Voltar pra trilha</BotaoPrincipal>
         </main>
       </Tela>
     );
@@ -25,36 +25,32 @@ export default function Aula({ aula }: { aula: TAula }) {
     <Tela comNavegacao={false}>
       <CabecalhoTarefa contexto={`Aula ${aula.numero} de 4`} />
       <main className="flex-1 pb-10">
-        <Manchete sobretitulo={`Módulo 01 · Aula ${aula.numero}`} linha1={aula.titulo} tamanho="media" />
-        <section className="px-5 pt-5" aria-label="Texto da aula">
-          <Janela rotulo="Leitura" etiqueta={concluida ? "Concluída" : undefined}>
-            <div className="flex max-w-[60ch] flex-col gap-4 px-5 py-5 text-base leading-[1.6]">
-              {aula.texto.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
-          </Janela>
+        <Titulo rotulo={`Módulo 01 · Aula ${aula.numero}`} titulo={aula.titulo} />
+        <section className="flex max-w-[60ch] flex-col gap-4 px-5 pt-5 t-corpo" aria-label="Texto da aula">
+          {aula.texto.map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
         </section>
-        <div className="px-5 pt-6">
+        <div className="px-5 pt-8">
           {concluida ? (
             <>
-              <p className="mb-4 flex items-center gap-2 text-[15px] font-semibold text-papel" role="status">
+              <p className="mb-4 flex items-center gap-2 text-[15px] font-semibold text-azul" role="status">
                 <Icone nome="certo" tamanho={18} />
                 Aula concluída
               </p>
-              <BotaoAcao href={`/quiz/${aula.id}`} className="w-full">
+              <BotaoPrincipal href={`/quiz/${aula.id}`} className="w-full">
                 Fazer o quiz
-                <Icone nome="seta" />
-              </BotaoAcao>
+                <Icone nome="seta" tamanho={20} />
+              </BotaoPrincipal>
             </>
           ) : (
-            <BotaoAcao onClick={() => concluirAula(aula.id)} className="w-full">
-              <Icone nome="certo" />
+            <BotaoPrincipal onClick={() => concluirAula(aula.id)} className="w-full">
               Marcar como concluída
-            </BotaoAcao>
+              <Icone nome="certo" tamanho={20} />
+            </BotaoPrincipal>
           )}
-          <div className="pt-1.5">
-            <LinkSecundario href="/">Voltar pra trilha</LinkSecundario>
+          <div className="flex justify-center pt-2">
+            <LinkTexto href="/">Voltar pra trilha</LinkTexto>
           </div>
         </div>
       </main>

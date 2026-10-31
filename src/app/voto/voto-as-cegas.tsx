@@ -1,11 +1,22 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
 import type { Autoria, LeiCartao } from "@/lib/tipos";
 import { useProgresso, type Voto } from "@/lib/progresso";
 import { Icone } from "@/components/icones";
-import { AvisoExemplo, BotaoAcao, Cabecalho, Janela, LinkSecundario, Manchete, Regua, Selo, Tela } from "@/components/ui";
+import {
+  AvisoExemplo,
+  BotaoPrincipal,
+  BotaoSecundario,
+  Cabecalho,
+  Carimbo,
+  Cartao,
+  Etiqueta,
+  LinkTexto,
+  MarcaTexto,
+  Regua,
+  Tela,
+} from "@/components/ui";
 
 type Revelacao = { estado: "buscando" } | { estado: "ok"; dados: Autoria } | { estado: "erro" };
 
@@ -83,109 +94,121 @@ export default function VotoAsCegas({ leis, fonte }: { leis: LeiCartao[]; fonte:
   if (!lei) return null;
 
   const ementaLonga = lei.ementa.length > 110;
+  const dados = revelacao?.estado === "ok" ? revelacao.dados : null;
 
   return (
     <Tela>
-      <Cabecalho />
+      <Cabecalho>
+        <span className="text-[13px] font-semibold" aria-hidden="true">
+          {posicao} de {leis.length}
+        </span>
+      </Cabecalho>
       <main className="flex-1 pb-32">
-        <Manchete
-          sobretitulo={votou ? "Agora você sabe quem propôs" : "Julgue a ideia, não a pessoa"}
-          linha1="Voto às"
-          linha2="Cegas"
-          numeral={String(posicao).padStart(2, "0")}
-          numeralRotulo={`de ${leis.length}`}
-        />
         <Regua
           total={leis.length}
           feitos={decididasNaSessao - (votou ? 1 : 0)}
           atual={posicao - 1}
           rotulo={`Lei ${posicao} de ${leis.length}. ${decididasNaSessao} decididas.`}
         />
-        <p className="px-5 pt-1">
-          <Link
-            href="/criterio"
-            className="inline-flex min-h-11 items-center font-mono text-[11px] font-semibold uppercase tracking-[0.04em] text-papel underline underline-offset-4"
+
+        <section className="px-5 pt-5" aria-label="Projeto de lei">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            {votou ? (
+              <Etiqueta cor="azul">Revelado após a sua decisão</Etiqueta>
+            ) : (
+              <p className="t-rotulo text-azul" aria-live="polite">Julgue a ideia, não a pessoa</p>
+            )}
+          </div>
+          <p className="mt-3 text-[13px] font-semibold text-suave">
+            {[lei.rotulo, lei.tema, fonte === "camara" ? "Ementa oficial" : null].filter(Boolean).join(" · ")}
+          </p>
+          <h2
+            ref={tituloLei}
+            tabIndex={-1}
+            className={`mt-2 outline-none ${ementaLonga ? "t-subtitulo" : "t-titulo"}`}
           >
-            Como as leis são escolhidas
-          </Link>
-        </p>
+            {lei.ementa}
+          </h2>
+          {lei.resumo && <p className="t-corpo mt-2">{lei.resumo}</p>}
+        </section>
 
-        <section className="relative px-5" aria-label="Projeto de lei">
-          <Janela rotulo={lei.rotulo} etiqueta={lei.tema ?? undefined} pilha>
-            <div className="flex flex-col gap-3 px-5 pt-[18px] pr-[22px] pb-[18px]">
-              {fonte === "camara" && (
-                <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.04em] text-tinta-suave">Ementa oficial</p>
-              )}
-              <h2
-                ref={tituloLei}
-                tabIndex={-1}
-                className={`outline-none ${
-                  ementaLonga ? "text-[17px] leading-[1.42] font-semibold" : "text-[27px] leading-none font-black tracking-[-0.025em]"
-                }`}
-              >
-                {lei.ementa}
-              </h2>
-              {lei.resumo && <p className="text-[15px] leading-[1.47]">{lei.resumo}</p>}
-            </div>
-
-            <div className="perfuracao flex flex-col gap-2 px-5 pt-3 pb-3.5">
-              <p className="flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.04em] text-tinta-suave">
-                <Icone nome={revelacao?.estado === "ok" ? "olho" : "cadeado"} tamanho={14} />
-                {revelacao?.estado === "ok" ? "Revelado após a sua decisão" : votou ? "Revelando…" : "Oculto até a sua decisão"}
+        <section className="relative px-5 pt-5" aria-label="Quem propôs">
+          <Cartao className="px-5 pt-4 pb-4">
+            <p className="flex items-center gap-1.5 text-[13px] font-semibold text-suave">
+              {!dados && <Icone nome="cadeado" tamanho={15} />}
+              {dados ? "Agora você sabe quem propôs" : votou ? "Revelando…" : "Oculto até a sua decisão"}
+            </p>
+            <Campo
+              rotulo="Autoria"
+              larguraTarja="w-[164px]"
+              valor={dados ? <MarcaTexto>{dados.autoria}</MarcaTexto> : null}
+              nota={dados && dados.coautores > 0 ? `e mais ${dados.coautores} coautor${dados.coautores > 1 ? "es" : ""}` : null}
+            />
+            <div className="my-3 h-px bg-linha" />
+            <Campo
+              rotulo="Partido"
+              larguraTarja="w-[54px]"
+              valor={dados ? (dados.partido ?? "Sem partido") : null}
+              nota={dados ? (fonte === "camara" ? "Partido atual do autor · fonte: Câmara dos Deputados" : "Exemplo ilustrativo") : null}
+            />
+            {revelacao?.estado === "erro" && (
+              <p className="mt-3 text-sm" role="alert">
+                Não deu pra consultar a autoria agora.{" "}
+                <button type="button" onClick={() => revelar(lei.id)} className="min-h-11 font-bold text-azul underline underline-offset-4">
+                  Tentar de novo
+                </button>
               </p>
-              <Campo
-                rotulo="Autoria"
-                larguraTarja="w-[164px]"
-                valor={revelacao?.estado === "ok" ? revelacao.dados.autoria : null}
-                nota={
-                  revelacao?.estado === "ok" && revelacao.dados.coautores > 0
-                    ? `e mais ${revelacao.dados.coautores} coautor${revelacao.dados.coautores > 1 ? "es" : ""}`
-                    : null
-                }
-              />
-              <Campo
-                rotulo="Partido"
-                larguraTarja="w-[54px]"
-                valor={revelacao?.estado === "ok" ? (revelacao.dados.partido ?? "Sem partido") : null}
-              />
-              {revelacao?.estado === "erro" && (
-                <p className="text-sm" role="alert">
-                  Não deu pra consultar a autoria agora.{" "}
-                  <button type="button" onClick={() => revelar(lei.id)} className="min-h-11 font-bold underline underline-offset-4">
-                    Tentar de novo
-                  </button>
-                </p>
-              )}
-              <div className={votou ? "pr-24" : ""}>
-                <Rodape fonte={fonte} revelacao={revelacao} />
+            )}
+            {!votou && fonte === "exemplo" && (
+              <div className="mt-3">
+                <AvisoExemplo />
               </div>
-            </div>
-          </Janela>
+            )}
+          </Cartao>
 
-          {voto && <Selo voto={voto} className="absolute right-5 -bottom-11" />}
+          {voto && <Carimbo voto={voto} className="absolute -top-1 right-3" />}
         </section>
 
         <div className="px-5 pt-5">
           {!votou ? (
             <>
-              <div role="group" aria-label="Sua decisão sobre a ideia" className="btn-acao flex h-[60px] overflow-hidden rounded-[4px] bg-amarelo">
-                <BotaoVoto onClick={() => decidir("rejeito")} icone="errado" className="border-r-[2.5px] border-tinta">
+              <div role="group" aria-label="Sua decisão sobre a ideia" className="grid grid-cols-2 gap-3">
+                <BotaoSecundario onClick={() => decidir("rejeito")}>
+                  <Icone nome="errado" tamanho={20} />
                   Rejeito
-                </BotaoVoto>
-                <BotaoVoto onClick={() => decidir("aprovo")} icone="certo">
+                </BotaoSecundario>
+                <BotaoSecundario onClick={() => decidir("aprovo")}>
+                  <Icone nome="certo" tamanho={20} />
                   Aprovo
-                </BotaoVoto>
+                </BotaoSecundario>
               </div>
-              <div className="pt-1.5">
-                <LinkSecundario onClick={pularLei}>Pular esta lei</LinkSecundario>
+              <div className="flex flex-col items-center pt-2">
+                <LinkTexto onClick={pularLei}>Pular esta lei</LinkTexto>
+                <p className="text-center text-[13px] text-suave">Pular não conta. A lei volta no fim da sessão.</p>
               </div>
-              <p className="text-center text-xs font-semibold text-papel">Pular não conta. A lei volta no fim da sessão.</p>
+              <div className="flex justify-center pt-1">
+                <LinkTexto href="/criterio" azul>
+                  Como as leis são escolhidas
+                </LinkTexto>
+              </div>
             </>
           ) : (
-            <BotaoAcao id="proxima-lei" onClick={proxima} className="mt-[34px] w-full">
-              {fila.length ? "Próxima lei" : "Fechar a sessão"}
-              <Icone nome="seta" />
-            </BotaoAcao>
+            <>
+              <p className="text-[15px] leading-[1.4] font-bold">
+                Saber quem propôs é só o começo. Leia o que a lei muda antes de pensar de novo.
+              </p>
+              {dados?.link && (
+                <div className="pt-2">
+                  <LinkTexto href={dados.link} azul externo>
+                    Ler o texto oficial na Câmara
+                  </LinkTexto>
+                </div>
+              )}
+              <BotaoPrincipal id="proxima-lei" onClick={proxima} className="mt-5 w-full">
+                {fila.length ? "Próxima lei" : "Fechar a sessão"}
+                <Icone nome="seta" tamanho={20} />
+              </BotaoPrincipal>
+            </>
           )}
         </div>
       </main>
@@ -198,47 +221,30 @@ function SessaoConcluida({ total, fonte }: { total: number; fonte: "camara" | "e
     <Tela>
       <Cabecalho />
       <main className="flex-1 pb-32">
-        <Manchete sobretitulo="Sessão concluída" linha1="Você" linha2="decidiu" numeral={String(total)} numeralRotulo="leis" tamanho="media" />
-        <p className="max-w-[36ch] px-5 pt-4 text-[15px] leading-[1.45] font-semibold text-papel">
-          {fonte === "camara"
-            ? "Você julgou todas as leis desta sessão. Leis decididas não voltam: uma nova sessão aparece quando a Câmara apresentar novos projetos."
-            : "Você julgou todas as leis de exemplo desta sessão. Leis decididas não voltam."}
-        </p>
-        <div className="px-5 pt-6">
-          <BotaoAcao href="/" className="w-full">
+        <div className="px-5 pt-4">
+          <p className="t-rotulo text-azul">Sessão concluída</p>
+          <h1 className="t-display mt-3">
+            Você decidiu <MarcaTexto>{total} leis</MarcaTexto>
+          </h1>
+          <p className="t-corpo mt-3 max-w-[36ch] text-suave">
+            {fonte === "camara"
+              ? "Você julgou todas as leis desta sessão. Leis decididas não voltam: uma nova sessão aparece quando a Câmara apresentar novos projetos."
+              : "Você julgou todas as leis de exemplo desta sessão. Leis decididas não voltam."}
+          </p>
+        </div>
+        <div className="px-5 pt-8">
+          <BotaoPrincipal href="/" className="w-full">
             Voltar pra trilha
-            <Icone nome="seta" />
-          </BotaoAcao>
-          <div className="pt-1.5">
-            <LinkSecundario href="/criterio">Como as leis são escolhidas</LinkSecundario>
+            <Icone nome="seta" tamanho={20} />
+          </BotaoPrincipal>
+          <div className="flex justify-center pt-2">
+            <LinkTexto href="/criterio" azul>
+              Como as leis são escolhidas
+            </LinkTexto>
           </div>
         </div>
       </main>
     </Tela>
-  );
-}
-
-function Rodape({ fonte, revelacao }: { fonte: "camara" | "exemplo"; revelacao: Revelacao | null }) {
-  if (fonte === "exemplo") return <AvisoExemplo />;
-  const dados = revelacao?.estado === "ok" ? revelacao.dados : null;
-  return (
-    <p className="font-mono text-[11px] font-medium uppercase leading-relaxed tracking-[0.04em] text-tinta-suave">
-      Fonte: Câmara dos Deputados
-      {dados?.partido && " · partido atual do autor"}
-      {dados?.link && (
-        <>
-          {" · "}
-          <a
-            href={dados.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex min-h-11 items-center font-semibold text-tinta underline underline-offset-4"
-          >
-            Texto oficial
-          </a>
-        </>
-      )}
-    </p>
   );
 }
 
@@ -249,53 +255,26 @@ function Campo({
   nota = null,
 }: {
   rotulo: string;
-  valor: string | null;
+  valor: React.ReactNode | null;
   larguraTarja: string;
   nota?: string | null;
 }) {
   return (
-    <div className="flex min-h-7 items-start gap-3">
-      <span className="w-[68px] shrink-0 pt-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.04em] text-tinta-suave">{rotulo}</span>
-      <span className="flex min-w-0 flex-col items-start gap-1">
-        <span className="relative inline-flex min-w-0 items-center">
-          {valor ? (
-            <>
-              <span className="anim-revela bg-rosa px-1.5 py-px text-lg leading-tight font-black tracking-[-0.01em] [box-decoration-break:clone]">
-                {valor}
-              </span>
-              <span aria-hidden="true" className={`anim-tarja absolute inset-y-0 left-0 bg-tinta ${larguraTarja}`} />
-            </>
-          ) : (
-            <span className={`block h-6 bg-tinta ${larguraTarja}`}>
-              <span className="sr-only">oculto até a sua decisão</span>
-            </span>
-          )}
-        </span>
-        {nota && <span className="anim-revela font-mono text-[11px] font-semibold uppercase tracking-[0.04em] text-tinta-suave">{nota}</span>}
+    <div className="mt-3 flex flex-col items-start gap-1">
+      <span className="t-rotulo text-suave">{rotulo}</span>
+      <span className="relative inline-flex min-h-7 min-w-0 items-center">
+        {valor ? (
+          <>
+            <span className="anim-revela text-[22px] leading-tight font-extrabold tracking-[-0.02em]">{valor}</span>
+            <span aria-hidden="true" className={`anim-tarja absolute inset-y-0 left-0 bg-tinta ${larguraTarja}`} />
+          </>
+        ) : (
+          <span className={`block h-6 rounded-[3px] bg-tinta ${larguraTarja}`}>
+            <span className="sr-only">oculto até a sua decisão</span>
+          </span>
+        )}
       </span>
+      {nota && <span className="anim-revela text-[13px] text-suave">{nota}</span>}
     </div>
-  );
-}
-
-function BotaoVoto({
-  children,
-  icone,
-  onClick,
-  className = "",
-}: {
-  children: React.ReactNode;
-  icone: "certo" | "errado";
-  onClick: () => void;
-  className?: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`flex flex-1 items-center justify-center gap-2 text-[17px] font-black uppercase tracking-[0.03em] transition-colors duration-100 active:bg-tinta active:text-papel ${className}`}
-    >
-      <Icone nome={icone} tamanho={20} />
-      {children}
-    </button>
   );
 }

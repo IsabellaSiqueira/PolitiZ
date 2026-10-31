@@ -3,7 +3,7 @@ import { connection } from "next/server";
 import { buscarLeisRecentes } from "@/lib/camara";
 import { leisExemplo } from "@/data/leis";
 import type { LeiCartao } from "@/lib/tipos";
-import { Cabecalho, Manchete, Tela } from "@/components/ui";
+import { Cabecalho, Tela, Titulo } from "@/components/ui";
 import VotoAsCegas from "./voto-as-cegas";
 
 export default function Page() {
@@ -35,9 +35,9 @@ function Carregando() {
     <Tela>
       <Cabecalho />
       <main className="flex-1 pb-32" aria-busy="true">
-        <Manchete sobretitulo="Buscando leis na Câmara" linha1="Voto às" linha2="Cegas" />
+        <Titulo rotulo="Buscando leis na Câmara" titulo="Voto às " destaque="Cegas" />
         <div className="px-5 pt-6">
-          <div className="h-80 animate-pulse rounded-[3px] border-2 border-tinta bg-papel/90" />
+          <div className="h-80 animate-pulse rounded-2xl border-[1.5px] border-linha bg-claro" />
         </div>
       </main>
     </Tela>
