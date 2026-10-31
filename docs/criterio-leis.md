@@ -70,7 +70,7 @@ Cada resumo:
 
 A ementa oficial continua aparecendo como apoio, e o link leva ao texto completo.
 
-**Correções:** a página `/criterio` tem um contato para avisar de resumo errado ou tendencioso. A equipe responde em até 7 dias e, se corrigir, registra a mudança (a auditoria do banco já guarda o antes e o depois).
+**Correções:** qualquer pessoa avisa de resumo errado ou tendencioso pelo e-mail `leis@` do domínio do politiQ (decidido em 31/10/2026). A página `/criterio` mostra o endereço, e a tela de revelação do Voto às Cegas tem um link que abre o e-mail já com o projeto no assunto. Nada fica guardado no app: é e-mail comum, que encaminha para a caixa da equipe. A equipe responde em até 7 dias e, se corrigir, registra a mudança (a auditoria do banco já guarda o antes e o depois).
 
 ## 7. Ritmo e quantidade no piloto
 
@@ -102,7 +102,7 @@ O partido mostrado é o **atual** do autor, e a tela avisa que pode ser diferent
 >
 > **O que o politiQ guarda.** Só que você decidiu sobre aquela lei, para ela não voltar. Se você aprovou ou rejeitou nunca é gravado, em lugar nenhum.
 >
-> **Achou um resumo errado ou tendencioso?** Escreva para [contato]. Respondemos em até 7 dias.
+> **Achou um resumo errado ou tendencioso?** Escreva para leis@[domínio do politiQ], dizendo qual é o projeto. Respondemos em até 7 dias.
 
 ## 9. Pontos para a Isa decidir
 
@@ -112,7 +112,7 @@ O partido mostrado é o **atual** do autor, e a tela avisa que pode ser diferent
 4. **Filtro de faixa etária (item 6 da seção 3):** quem da equipe pedagógica decide, e se a escola pode pedir para tirar algum tema.
 5. **Sorteio com semente pública:** vale a complexidade? A alternativa é a equipe escolher dentro das cotas, o que é mais simples mas menos verificável.
 6. **Ritmo do piloto:** 45 leis no início e 15 a cada 2 semanas está bom para a equipe escrever os resumos?
-7. **Contato para correções:** qual e-mail ou formulário.
+7. ~~Contato para correções~~ decidido: e-mail `leis@` do domínio do politiQ.
 8. **Registro dos lotes:** fica público na página, ou só disponível a pedido e para as escolas?
 
 Se o sorteio for aprovado, um script pequeno faz a busca nos dados abertos, aplica as cotas e gera o lote com a semente. Ele entra no plano como item novo.

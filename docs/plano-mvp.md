@@ -13,7 +13,7 @@ Situação em 31/10/2026: o app roda só no navegador (progresso no `localStorag
 Sem estas respostas, partes grandes não podem começar. Em ordem de urgência.
 
 - [x] 🟣 **D1. Fonte das leis do Voto às Cegas:** opção B (31/10/2026). Leis escolhidas pela equipe, com resumo próprio, cadastradas no banco. O app mostra o resumo; a ementa oficial e o link ficam como apoio.
-- [x] 🟣 **D1b. Critério de seleção das leis** aprovado (31/10/2026) como está em `docs/criterio-leis.md`, com sorteio. Falta só o contato para correções (item 7 da seção 9 do critério). Era, para a página pública `/criterio`: quem escolhe, com que regras (temas, equilíbrio entre partidos e regiões, só projetos em tramitação ou também aprovados) e de quanto em quanto tempo entram leis novas. Junto: quantas leis o piloto precisa ter no ar (cada sessão tem 15, e quem decide todas fica sem leis novas).
+- [x] 🟣 **D1b. Critério de seleção das leis** aprovado (31/10/2026) como está em `docs/criterio-leis.md`, com sorteio pela Mega-Sena e correções pelo e-mail `leis@` do domínio. Era, para a página pública `/criterio`: quem escolhe, com que regras (temas, equilíbrio entre partidos e regiões, só projetos em tramitação ou também aprovados) e de quanto em quanto tempo entram leis novas. Junto: quantas leis o piloto precisa ter no ar (cada sessão tem 15, e quem decide todas fica sem leis novas).
 - [x] 🟣 **D2. As 5 decisões do banco aprovadas** (31/10/2026): aluno sem turma conta como gratuito; trocar de turma exige a coordenação; arquivar turma só desliga o código; professor vê o nome dos alunos; leis cadastradas no banco.
 - [ ] 🟣 **D3. Mandar o documento de requisitos** (33 RF, 13 RNF, 33 RN, glossário). Tudo abaixo foi deduzido do documento do MVP; o de requisitos pode acrescentar ou mudar regras.
 - [ ] 🟣 **D4. Tamanho do conteúdo no piloto:** quantos módulos e aulas precisam estar prontos no primeiro dia, e em que ritmo entram os outros.
@@ -46,7 +46,8 @@ O manual de identidade e as telas de abertura, início e revelação já existem
 - [ ] Questões com 4 alternativas e explicação de cada uma
 - [ ] Revisão pedagógica e de neutralidade política (combinado 05: pessoas, não lados)
 - [ ] Escolher as leis do piloto e escrever os resumos (linguagem de quem começa do zero, sem tomar partido), com autor, partido atual, coautores e link oficial
-- [ ] Texto novo da página `/criterio`, a partir de D1b
+- [ ] Trocar o texto da página `/criterio` pelo da seção 8 de `docs/criterio-leis.md`, com o e-mail `leis@`, quando o Voto às Cegas passar a usar as leis do banco (antes disso, a página descreveria um critério que o app ainda não usa)
+- [ ] Link "Achou um erro neste resumo?" na revelação do Voto às Cegas, abrindo o e-mail com o projeto no assunto (sem guardar nada)
 - [ ] E-mails em português: confirmação de conta e redefinição de senha
 - [ ] Mensagens de erro de cada código do banco (`sem_vidas`, `escola_lotada` etc.; lista em `supabase/README.md`)
 - [ ] Guia rápido para o professor (como criar turma, passar o código, ler o painel)
@@ -120,6 +121,7 @@ Já existem sem login: trilha, aula, quiz com explicação e refazer, histórico
 - [ ] 🟣 Juntar este ramo no `main` (abrir o pull request e revisar)
 - [ ] 🟣 Contas: Vercel, Resend, domínio (e Sentry, se D8 = sim)
 - [ ] 🟣 Comprar o domínio e apontar para a Vercel (HTTPS automático)
+- [ ] 🟣 Criar o e-mail `leis@` no domínio (encaminhamento para a caixa da equipe), para as correções de resumo
 - [ ] Projeto na Vercel com deploy automático: `main` vai para produção, pull requests ganham prévia ligada ao banco de teste
 - [ ] Variáveis de ambiente de cada ambiente (URL e chave pública do Supabase; nunca a chave de serviço no navegador)
 - [ ] Resend com domínio verificado (SPF e DKIM) para os e-mails não caírem no spam
