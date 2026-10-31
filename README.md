@@ -15,14 +15,15 @@ Abra http://localhost:3000. O app é pensado para celular (até 430px de largura
 
 | Rota | O que faz |
 | --- | --- |
-| `/` | Trilha do módulo 01, com as aulas liberadas em sequência |
+| `/` | Início: saudação, busca nas aulas, temas e o quiz do dia (ou a primeira aula, para quem está começando) |
+| `/trilhas` | Trilha do módulo 01, com as aulas liberadas em sequência |
 | `/aula/[aula]` | Texto da aula e "marcar como concluída" |
 | `/quiz/[aula]` | Quiz da aula (depois da leitura), com correção e explicação; pode ser refeito |
 | `/voto` | Voto às Cegas: sessão de 15 leis; aprova, rejeita ou pula; autoria e partido só depois da decisão |
 | `/criterio` | Página pública com o critério de seleção das leis |
 | `/api/autoria/[id]` | Revela autor e partido de uma lei, chamada só depois do voto |
 | `/perfil` | Progresso: aulas concluídas, histórico de quizzes e número de decisões (nunca o voto) |
-| `/ferramentas` | Ferramentas liberadas, em breve e bloqueadas |
+| `/jogos` | Jogos liberados, em breve e bloqueados (`/ferramentas` redireciona para cá) |
 
 ## Onde está cada coisa
 

@@ -62,21 +62,24 @@
   color: var(--color-azul);
 }
 
-html {
-  background: var(--color-branco);
-  -webkit-text-size-adjust: 100%;
-}
+/* na camada base, para que os componentes possam trocar o foco (ex.: campos, que mudam a borda) */
+@layer base {
+  html {
+    background: var(--color-branco);
+    -webkit-text-size-adjust: 100%;
+  }
 
-body {
-  font-family: var(--font-sans);
-  color: var(--color-tinta);
-  -webkit-font-smoothing: antialiased;
-}
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-tinta);
+    -webkit-font-smoothing: antialiased;
+  }
 
-/* Foco de teclado: contorno azul, separado do elemento para aparecer sobre amarelo e branco */
-:focus-visible {
-  outline: 3px solid var(--color-azul);
-  outline-offset: 3px;
+  /* Foco de teclado: contorno azul, separado do elemento para aparecer sobre amarelo e branco */
+  :focus-visible {
+    outline: 3px solid var(--color-azul);
+    outline-offset: 3px;
+  }
 }
 
 /* Botões afundam um pouco ao pressionar */

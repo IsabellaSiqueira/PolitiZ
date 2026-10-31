@@ -37,7 +37,7 @@ export function Cabecalho({ children }: { children?: React.ReactNode }) {
 }
 
 /** Cabeçalho de tarefa (aula, quiz): voltar à esquerda, onde a pessoa está à direita. */
-export function CabecalhoTarefa({ contexto, voltar = "/" }: { contexto: string; voltar?: string }) {
+export function CabecalhoTarefa({ contexto, voltar = "/trilhas" }: { contexto: string; voltar?: string }) {
   return (
     <header className="flex items-center justify-between px-3 pt-[max(8px,env(safe-area-inset-top))] pb-1">
       <Link href={voltar} className="flex min-h-11 min-w-11 items-center justify-center rounded-full text-tinta">
@@ -50,9 +50,10 @@ export function CabecalhoTarefa({ contexto, voltar = "/" }: { contexto: string; 
 }
 
 const abas: { href: string; nome: string; icone: Nome }[] = [
-  { href: "/", nome: "Trilhas", icone: "trilhas" },
+  { href: "/", nome: "Início", icone: "inicio" },
+  { href: "/trilhas", nome: "Trilhas", icone: "trilhas" },
   { href: "/voto", nome: "Voto às Cegas", icone: "voto" },
-  { href: "/ferramentas", nome: "Ferramentas", icone: "ferramentas" },
+  { href: "/jogos", nome: "Jogos", icone: "jogos" },
   { href: "/perfil", nome: "Perfil", icone: "perfil" },
 ];
 
@@ -65,13 +66,18 @@ export function Navegacao() {
     >
       <ul className="flex justify-between">
         {abas.map((a) => {
-          const ativa = a.href === "/" ? rota === "/" || rota.startsWith("/quiz") || rota.startsWith("/aula") : rota.startsWith(a.href);
+          const ativa =
+            a.href === "/"
+              ? rota === "/"
+              : a.href === "/trilhas"
+                ? ["/trilhas", "/aula", "/quiz"].some((r) => rota.startsWith(r))
+                : rota.startsWith(a.href);
           return (
             <li key={a.href} className="flex-1">
               <Link
                 href={a.href}
                 aria-current={ativa ? "page" : undefined}
-                className={`mx-auto flex h-[54px] flex-col items-center justify-center gap-1 rounded-xl text-[11px] ${
+                className={`mx-auto flex h-[54px] flex-col items-center justify-center gap-1 rounded-xl text-center text-[10.5px] leading-tight ${
                   ativa ? "font-bold text-azul" : "font-medium text-suave"
                 }`}
               >
@@ -275,7 +281,7 @@ export function Campo({
       <input
         id={id}
         aria-describedby={ajuda ? `${id}-ajuda` : undefined}
-        className="h-[52px] rounded-[14px] border-[1.5px] border-linha bg-branco px-3.5 text-[15px] placeholder:text-suave focus:border-azul focus-visible:outline-none"
+        className="h-[52px] rounded-[14px] border-[1.5px] border-linha bg-branco px-3.5 text-[15px] placeholder:text-suave focus:border-azul focus:shadow-[0_0_0_1px_var(--color-azul)] focus-visible:outline-none"
         {...input}
       />
       {ajuda && (

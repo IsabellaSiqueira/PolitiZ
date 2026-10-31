@@ -233,7 +233,7 @@ function SessaoConcluida({ total, fonte }: { total: number; fonte: "camara" | "e
           </p>
         </div>
         <div className="px-5 pt-8">
-          <BotaoPrincipal href="/" className="w-full">
+          <BotaoPrincipal href="/trilhas" className="w-full">
             Voltar pra trilha
             <Icone nome="seta" tamanho={20} />
           </BotaoPrincipal>

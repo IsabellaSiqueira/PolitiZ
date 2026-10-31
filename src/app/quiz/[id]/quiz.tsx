@@ -108,7 +108,7 @@ export default function Quiz({ aula }: { aula: Aula }) {
             )}
             <div className="flex flex-col items-center pt-2">
               <LinkTexto onClick={recomecar}>Refazer o quiz</LinkTexto>
-              <LinkTexto href="/">Voltar pra trilha</LinkTexto>
+              <LinkTexto href="/trilhas">Voltar pra trilha</LinkTexto>
             </div>
           </div>
         </main>

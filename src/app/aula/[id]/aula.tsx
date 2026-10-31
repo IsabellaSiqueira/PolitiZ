@@ -15,7 +15,7 @@ export default function Aula({ aula }: { aula: TAula }) {
         <CabecalhoTarefa contexto={`Aula ${aula.numero}`} />
         <main className="flex-1 px-5 pt-8">
           <p className="t-corpo">Esta aula libera depois que você concluir a aula {aula.numero - 1}.</p>
-          <BotaoPrincipal href="/" className="mt-6 w-full">Voltar pra trilha</BotaoPrincipal>
+          <BotaoPrincipal href="/trilhas" className="mt-6 w-full">Voltar pra trilha</BotaoPrincipal>
         </main>
       </Tela>
     );
@@ -50,7 +50,7 @@ export default function Aula({ aula }: { aula: TAula }) {
             </BotaoPrincipal>
           )}
           <div className="flex justify-center pt-2">
-            <LinkTexto href="/">Voltar pra trilha</LinkTexto>
+            <LinkTexto href="/trilhas">Voltar pra trilha</LinkTexto>
           </div>
         </div>
       </main>

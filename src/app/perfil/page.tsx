@@ -31,7 +31,7 @@ export default function Perfil() {
             {comTentativa.length === 0 ? (
               <div className="flex flex-col gap-4 px-5 pt-2 pb-5">
                 <p className="t-corpo">Você ainda não fez nenhum quiz. Leia a primeira aula e faça o quiz no final.</p>
-                <BotaoPrincipal href="/" className="w-full">
+                <BotaoPrincipal href="/trilhas" className="w-full">
                   Ir pra trilha
                   <Icone nome="seta" tamanho={20} />
                 </BotaoPrincipal>

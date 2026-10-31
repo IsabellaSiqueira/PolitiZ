@@ -1,99 +1,171 @@
 "use client";
 
+import { useId, useState } from "react";
 import Link from "next/link";
-import { modulo } from "@/data/trilha";
+import { modulo, type Aula } from "@/data/trilha";
 import { useProgresso } from "@/lib/progresso";
-import { Icone } from "@/components/icones";
-import { Cabecalho, Cartao, Etiqueta, Regua, Tela, Titulo } from "@/components/ui";
+import { Icone, type Nome } from "@/components/icones";
+import { BotaoPrincipal, Cabecalho, Cartao, Etiqueta, Tela, Titulo } from "@/components/ui";
 
-export default function Trilhas() {
-  const { aulasConcluidas, aulaLiberada, tentativas } = useProgresso();
-  const feitas = modulo.aulas.filter((a) => aulasConcluidas.includes(a.id)).length;
-  const proxima = modulo.aulas.find((a) => !aulasConcluidas.includes(a.id) && aulaLiberada(a.numero));
+const temas: { nome: string; icone: Nome; href?: string }[] = [
+  { nome: "Política", icone: "politica", href: "/trilhas" },
+  { nome: "Economia", icone: "economia" },
+  { nome: "Sociedade", icone: "sociedade" },
+  { nome: "Meio ambiente", icone: "ambiente" },
+];
 
+export default function Inicio() {
   return (
     <Tela>
       <Cabecalho />
       <main className="flex-1 pb-32">
-        <Titulo
-          rotulo={`Módulo ${String(modulo.numero).padStart(2, "0")} · ${modulo.tema}`}
-          titulo="Quem manda em "
-          destaque="quê?"
-          apoio={modulo.descricao}
-        />
-        <Regua
-          total={modulo.aulas.length}
-          feitos={feitas}
-          atual={proxima ? proxima.numero - 1 : undefined}
-          rotulo={`${feitas} de ${modulo.aulas.length} aulas concluídas`}
-        />
-
-        <section className="px-5 pt-5" aria-label="Sua trilha">
-          <Cartao rotulo="Sua trilha" etiqueta={`${feitas} de ${modulo.aulas.length} concluídas`}>
-            <ol className="pt-2">
-              {modulo.aulas.map((a, i) => {
-                const feita = aulasConcluidas.includes(a.id);
-                const liberada = aulaLiberada(a.numero);
-                const atual = proxima?.id === a.id;
-                const ultima = i === modulo.aulas.length - 1;
-                const linha = `flex min-h-[76px] items-center gap-4 px-5 py-3.5 ${ultima ? "rounded-b-2xl" : "border-b border-linha"}`;
-                const numero = (
-                  <span
-                    className={`flex size-10 shrink-0 items-center justify-center rounded-full text-lg font-extrabold ${
-                      atual ? "bg-amarelo text-tinta" : feita ? "bg-azul text-branco" : liberada ? "border border-linha" : "border border-linha text-suave"
-                    }`}
-                  >
-                    {feita ? <Icone nome="certo" tamanho={18} /> : a.numero}
-                  </span>
-                );
-                const textos = (
-                  <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-                    <span className={`text-base leading-tight font-bold ${liberada ? "" : "text-suave"}`}>{a.titulo}</span>
-                    <span className="text-sm text-suave">
-                      {!liberada
-                        ? `Libera depois da aula ${a.numero - 1}`
-                        : melhor(tentativas[a.id])
-                          ? `Melhor quiz: ${melhor(tentativas[a.id])}`
-                          : `Leitura + quiz de ${a.perguntas.length} perguntas`}
-                    </span>
-                  </span>
-                );
-                if (!liberada) {
-                  return (
-                    <li key={a.id} className={linha}>
-                      {numero}
-                      {textos}
-                      <Icone nome="cadeado" tamanho={20} className="text-suave" />
-                      <span className="sr-only">Bloqueada</span>
-                    </li>
-                  );
-                }
-                return (
-                  <li key={a.id}>
-                    <Link href={`/aula/${a.id}`} className={`${linha} active:bg-claro`}>
-                      {numero}
-                      {textos}
-                      {feita ? (
-                        <span className="text-[13px] font-semibold text-azul">Concluída</span>
-                      ) : atual ? (
-                        <Etiqueta>Agora</Etiqueta>
-                      ) : (
-                        <Icone nome="seta" tamanho={20} />
-                      )}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ol>
-          </Cartao>
-        </section>
+        <Titulo titulo="Oi, " destaque="tudo bem?" apoio="Hoje é um bom dia pra entender o que tá rolando." />
+        <Busca />
+        <Temas />
+        <CartaoDoDia />
       </main>
     </Tela>
   );
 }
 
-function melhor(t?: { acertos: number; total: number }[]) {
-  if (!t?.length) return null;
-  const m = t.reduce((a, b) => (b.acertos / b.total > a.acertos / a.total ? b : a));
-  return `${m.acertos} de ${m.total}`;
+/* ---------- Busca nas aulas ---------- */
+
+const normalizar = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+function Busca() {
+  const id = useId();
+  const [termo, setTermo] = useState("");
+  const t = normalizar(termo.trim());
+  const achadas = t.length < 2 ? [] : modulo.aulas.filter((a) => normalizar([a.titulo, a.resumo, ...a.texto].join(" ")).includes(t));
+
+  return (
+    <search className="block px-5 pt-5">
+      <label htmlFor={id} className="sr-only">
+        Buscar temas e palavras nas aulas
+      </label>
+      <div className="flex h-12 items-center gap-2.5 rounded-[14px] border border-linha bg-branco px-3.5 focus-within:border-azul focus-within:shadow-[0_0_0_1px_var(--color-azul)]">
+        <Icone nome="busca" tamanho={18} className="shrink-0 text-suave" />
+        <input
+          id={id}
+          type="search"
+          value={termo}
+          onChange={(e) => setTermo(e.target.value)}
+          placeholder="Buscar nas aulas"
+          className="h-full min-w-0 flex-1 bg-transparent text-[15px] placeholder:text-suave focus-visible:outline-none"
+        />
+      </div>
+      {t.length >= 2 && (
+        <div aria-live="polite" className="pt-2">
+          {achadas.length ? (
+            <ul className="flex flex-col">
+              {achadas.map((a) => (
+                <li key={a.id}>
+                  <Link href={`/aula/${a.id}`} className="flex min-h-11 items-center justify-between gap-3 border-b border-linha py-2 text-[15px] font-semibold">
+                    <span>
+                      Aula {a.numero} · {a.titulo}
+                    </span>
+                    <Icone nome="seta" tamanho={18} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="py-2 text-sm text-suave">Nenhuma aula fala de “{termo.trim()}” ainda.</p>
+          )}
+        </div>
+      )}
+    </search>
+  );
+}
+
+/* ---------- Temas ---------- */
+
+function Temas() {
+  return (
+    <section className="px-3 pt-5" aria-labelledby="temas-titulo">
+      <h2 id="temas-titulo" className="sr-only">
+        Temas
+      </h2>
+      <ul className="grid grid-cols-4">
+        {temas.map((t) => {
+          const conteudo = (
+            <>
+              <span
+                className={`flex size-14 items-center justify-center rounded-full border border-linha ${t.href ? "text-tinta" : "text-suave"}`}
+              >
+                <Icone nome={t.icone} tamanho={22} />
+              </span>
+              <span className={`text-center text-xs leading-tight font-medium ${t.href ? "" : "text-suave"}`}>{t.nome}</span>
+              {!t.href && <span className="text-[11px] leading-none text-suave">em breve</span>}
+            </>
+          );
+          return (
+            <li key={t.nome}>
+              {t.href ? (
+                <Link href={t.href} className="flex min-h-[96px] flex-col items-center gap-1.5 rounded-xl py-1 active:bg-claro">
+                  {conteudo}
+                </Link>
+              ) : (
+                <div className="flex min-h-[96px] flex-col items-center gap-1.5 py-1">{conteudo}</div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
+/* ---------- Quiz do dia (ou a primeira aula, para quem está começando) ---------- */
+
+/** Dia de hoje no horário de Brasília, contado desde 1970: muda o quiz à meia-noite. */
+function diaDeHoje() {
+  const ymd = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date());
+  return Math.floor(Date.parse(ymd) / 86_400_000);
+}
+
+function CartaoDoDia() {
+  const { aulasConcluidas, aulaLiberada, carregado } = useProgresso();
+  const concluidas = modulo.aulas.filter((a) => aulasConcluidas.includes(a.id));
+
+  // o quiz só abre depois da leitura: o quiz do dia sai das aulas já concluídas
+  if (carregado && concluidas.length) {
+    const aula = concluidas[diaDeHoje() % concluidas.length];
+    return (
+      <Destaque
+        etiqueta="Quiz do dia"
+        titulo={aula.perguntas[0].enunciado}
+        texto={`${aula.perguntas.length} perguntas sobre ${aula.titulo.toLowerCase()}. Teste o que você sabe.`}
+        acao="Jogar agora"
+        href={`/quiz/${aula.id}`}
+      />
+    );
+  }
+
+  const primeira: Aula = modulo.aulas.find((a) => !aulasConcluidas.includes(a.id) && aulaLiberada(a.numero)) ?? modulo.aulas[0];
+  return (
+    <Destaque
+      etiqueta="Para começar"
+      titulo={primeira.titulo}
+      texto={`${primeira.resumo}. Leia a aula e depois faça o quiz.`}
+      acao="Ler a aula"
+      href={`/aula/${primeira.id}`}
+    />
+  );
+}
+
+function Destaque({ etiqueta, titulo, texto, acao, href }: { etiqueta: string; titulo: string; texto: string; acao: string; href: string }) {
+  return (
+    <section className="px-5 pt-4" aria-label={etiqueta}>
+      <Cartao className="px-4 pt-4 pb-4">
+        <Etiqueta>{etiqueta}</Etiqueta>
+        <h2 className="mt-3 text-[21px] leading-[1.22] font-extrabold tracking-[-0.02em]">{titulo}</h2>
+        <p className="mt-1.5 text-sm leading-[1.4] text-suave">{texto}</p>
+        <BotaoPrincipal href={href} className="mt-4 w-full">
+          {acao}
+          <Icone nome="seta" tamanho={18} />
+        </BotaoPrincipal>
+      </Cartao>
+    </section>
+  );
 }

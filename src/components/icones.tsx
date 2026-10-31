@@ -3,7 +3,12 @@ export type Nome =
   | "inicio"
   | "trilhas"
   | "voto"
-  | "ferramentas"
+  | "jogos"
+  | "busca"
+  | "politica"
+  | "economia"
+  | "sociedade"
+  | "ambiente"
   | "perfil"
   | "cadeado"
   | "certo"
@@ -22,7 +27,27 @@ const caminhos: Record<Nome, React.ReactNode> = {
       <circle cx="12" cy="12" r="3" />
     </>
   ),
-  ferramentas: <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.6-.6-.6-2.6z" />,
+  jogos: (
+    <>
+      <path d="M7 7.5h10a4.5 4.5 0 0 1 4.4 5.5l-.9 4a2.5 2.5 0 0 1-4.3 1.1L14.5 16h-5l-1.7 2.1a2.5 2.5 0 0 1-4.3-1.1l-.9-4A4.5 4.5 0 0 1 7 7.5z" />
+      <path d="M8 10.5v3M6.5 12h3M15.5 11.5h.01M17.5 13h.01" />
+    </>
+  ),
+  busca: (
+    <>
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="m20 20-4.2-4.2" />
+    </>
+  ),
+  politica: <path d="M3.5 20.5h17M5 17.5h14M6.5 17.5v-7M10.5 17.5v-7M13.5 17.5v-7M17.5 17.5v-7M4 10.5h16L12 4.5z" />,
+  economia: <path d="M4 4v16h16M7.5 15l3.5-4 3 2.5 5-6" />,
+  sociedade: (
+    <>
+      <circle cx="9" cy="8.5" r="3.5" />
+      <path d="M2.5 20c0-3.3 2.9-5 6.5-5s6.5 1.7 6.5 5M15.5 5.2a3.5 3.5 0 0 1 0 6.6M18 15.4c2 .6 3.5 2 3.5 4.6" />
+    </>
+  ),
+  ambiente: <path d="M5 19c0-8 5-13 14-14 0 9-5 14-12 14H5zm0 0 7-7" />,
   perfil: (
     <>
       <circle cx="12" cy="8" r="4" />
