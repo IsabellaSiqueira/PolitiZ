@@ -13,7 +13,7 @@ Situação em 31/10/2026: o app roda só no navegador (progresso no `localStorag
 Sem estas respostas, partes grandes não podem começar. Em ordem de urgência.
 
 - [x] 🟣 **D1. Fonte das leis do Voto às Cegas:** opção B (31/10/2026). Leis escolhidas pela equipe, com resumo próprio, cadastradas no banco. O app mostra o resumo; a ementa oficial e o link ficam como apoio.
-- [ ] 🟣 **D1b. Critério de seleção das leis** (proposta em `docs/criterio-leis.md`, com 8 pontos para decidir), para a página pública `/criterio`: quem escolhe, com que regras (temas, equilíbrio entre partidos e regiões, só projetos em tramitação ou também aprovados) e de quanto em quanto tempo entram leis novas. Junto: quantas leis o piloto precisa ter no ar (cada sessão tem 15, e quem decide todas fica sem leis novas).
+- [x] 🟣 **D1b. Critério de seleção das leis** aprovado (31/10/2026) como está em `docs/criterio-leis.md`, com sorteio. Falta só o contato para correções (item 7 da seção 9 do critério). Era, para a página pública `/criterio`: quem escolhe, com que regras (temas, equilíbrio entre partidos e regiões, só projetos em tramitação ou também aprovados) e de quanto em quanto tempo entram leis novas. Junto: quantas leis o piloto precisa ter no ar (cada sessão tem 15, e quem decide todas fica sem leis novas).
 - [x] 🟣 **D2. As 5 decisões do banco aprovadas** (31/10/2026): aluno sem turma conta como gratuito; trocar de turma exige a coordenação; arquivar turma só desliga o código; professor vê o nome dos alunos; leis cadastradas no banco.
 - [ ] 🟣 **D3. Mandar o documento de requisitos** (33 RF, 13 RNF, 33 RN, glossário). Tudo abaixo foi deduzido do documento do MVP; o de requisitos pode acrescentar ou mudar regras.
 - [ ] 🟣 **D4. Tamanho do conteúdo no piloto:** quantos módulos e aulas precisam estar prontos no primeiro dia, e em que ritmo entram os outros.
@@ -70,7 +70,10 @@ O manual de identidade e as telas de abertura, início e revelação já existem
 
 ### 3.6 Leis (opção B)
 
-- [ ] Planilha modelo para a equipe preencher as leis e um jeito de importar para a tabela `leis` (ou passo a passo do painel do Supabase)
+- [x] Script do sorteio com cotas, semente, exclusões com motivo, planilha de resumos e geração do SQL (`scripts/leis`, passo a passo em `leis/README.md`), com testes no GitHub
+- [ ] 🔵 Primeira busca real na Câmara, conferindo os pontos marcados "A CONFERIR" em `leis/README.md` (precisa de uma máquina que alcance `dadosabertos.camara.leg.br`)
+- [ ] 🔵 Busca automática no Senado (hoje entra por planilha), depois de ver respostas reais da API do Senado
+- [ ] 🟣 Definir de onde vem a semente (recomendação: números do próximo concurso da Mega-Sena, depois de publicar a digital da lista)
 - [ ] Cadastrar as leis do piloto e marcar como publicadas
 - [ ] Tirar do app a busca na Câmara (`src/lib/camara.ts`, a rota `/api/autoria` e a Câmara simulada dos testes) quando o Voto às Cegas passar a vir do banco
 

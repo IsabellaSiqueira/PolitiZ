@@ -69,5 +69,5 @@ A lista completa e atualizada do que falta, com quem faz cada item e as decisõe
 1. Criar os projetos no Supabase, aplicar `supabase/migrations` e ligar o app (Auth, turmas, progresso) usando as funções RPC do banco. Conferir o banco contra o documento de requisitos quando ele chegar.
 2. Telas do aluno que faltam: cadastro, login, aceite dos termos, entrada na turma, vidas e limites do usuário gratuito.
 3. Painel do professor e da coordenação.
-4. Leis: a Isa define o critério de seleção; a equipe escreve os resumos; o app troca a Câmara pelo banco.
+4. Leis: critério aprovado (`docs/criterio-leis.md`); os lotes são sorteados com `npm run leis` (passo a passo em `leis/README.md`); a equipe escreve os resumos; o app troca a Câmara pelo banco.
 5. Testes de leitor de tela feitos por pessoas (NVDA e VoiceOver) e testes das telas novas conforme forem criadas.
