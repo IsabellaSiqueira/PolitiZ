@@ -9,7 +9,9 @@ Leia também `AGENTS.md` (avisos sobre esta versão do Next.js) e `README.md`.
 ## Documento de referência
 
 Tudo segue o documento **"politiQ · Proposta de desenvolvimento do MVP"**: https://claude.ai/artifact/HgXYneyGd2raPrpqpxEZvG
-Em caso de dúvida entre o código atual e o documento, vale o documento. Também chegaram o **PRD MVP v1.5** e o **Tech Brief v1.6**, que divergem em vários pontos da Proposta e das regras abaixo: a comparação está em `docs/divergencias-prd.md` e espera a resposta da Isa (decisão D12). Até lá, não implemente mecânica do PRD que não esteja aprovada, e nunca uma que quebre as regras inegociáveis. O **banco do Supabase** foi escrito nesta base a pedido da Isa: `supabase/` (migração, seed e 112 testes; ver `supabase/README.md`, que lista tabelas, funções e as decisões tomadas). O **documento de requisitos** (33 RF, 13 RNF, 33 regras de negócio) ainda não chegou: quando chegar, confira o banco contra ele. Não crie tabela ou função nova sem passar pela migração e pelos testes do banco.
+Em caso de dúvida entre o código atual e o documento, vale o documento. Também chegaram o **PRD MVP v1.5** e o **Tech Brief v1.6**. A Isa decidiu (D12, 31/10/2026) que **o MVP é o produto da Proposta, para escolas do Ensino Médio**; o curso Política Essencial não faz parte. O PRD vale só pelas mecânicas aprovadas em `docs/divergencias-prd.md` (seção "Respostas da Isa"): 70% no quiz para destravar, embaralhar questões, glossário, deslizar no Voto às Cegas, tela de entrada, pergunta da TRC anônima, impacto social, PWA, regras do código da turma, exclusão de conta e verificação semanal das leis. Nunca implemente uma mecânica do PRD que quebre as regras inegociáveis (analytics de terceiros, voto, razão ou opinião registrados, ranking, perfil público).
+
+**Design das telas:** o protótipo v5 no Figma (arquivo `izkGoAQyBueKwjQLeaHRFY`, página "App v5 · editorial colagem"), descrito tela a tela em https://claude.ai/artifact/D3TYxb1Q1NsVdoevJkEXS1. O painel do professor e da coordenação **ainda não tem desenho**: não invente o layout; monte só dados e rotas e avise a Isa. O **banco do Supabase** foi escrito nesta base a pedido da Isa: `supabase/` (migração, seed e 112 testes; ver `supabase/README.md`, que lista tabelas, funções e as decisões tomadas). O **documento de requisitos** (33 RF, 13 RNF, 33 regras de negócio) ainda não chegou: quando chegar, confira o banco contra ele. Não crie tabela ou função nova sem passar pela migração e pelos testes do banco.
 
 ## Regras inegociáveis (seção 5 do documento)
 
@@ -20,7 +22,7 @@ Em caso de dúvida entre o código atual e o documento, vale o documento. També
 5. Funciona no celular do aluno e no computador da escola, sem instalação.
 6. Turma de ~35 alunos simultâneos sem lentidão; escola de até 1.250 alunos sem mudar a arquitetura.
 
-**Fora do MVP:** pontos, ranking, resumo de leis por IA, tela de administração de conteúdo, plano pago, app nativo. O design é da Isa.
+**Fora do MVP:** pontos, XP e níveis, ranking, perfil público, timer no quiz, mini-jogos do glossário, resumo de leis por IA, tela de administração de conteúdo, plano completo, Pix e assinatura, app nativo, jogos além do Voto às Cegas, o curso Política Essencial. O design é da Isa.
 
 ## Comportamentos do MVP
 

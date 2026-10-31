@@ -34,7 +34,24 @@ Sem estas respostas, partes grandes não podem começar. Em ordem de urgência. 
 - [x] 🟣 **D11. Juntar este trabalho no ramo principal** (aprovada: [pull request #1](https://github.com/IsabellaSiqueira/PolitiZ/pull/1) aberto). Tudo desta fase está no ramo `claude/leia-esse-git-k3u06s`, e o site, quando for publicado, sai do `main`.
   - **Recomendação:** abrir agora o pull request para o `main`, revisar e juntar. Os testes do app e do banco já rodam no GitHub e estão passando; quanto mais tempo os ramos ficam separados, mais difícil fica juntar.
 
-- [ ] 🟣 **D12. Responder às divergências entre o PRD e o que existe** (`docs/divergencias-prd.md`), começando pela X0: qual é o produto do MVP (curso da FIAP, escola do Ensino Médio, ou os dois). As respostas viram tarefas neste plano.
+- [x] 🟣 **D12. Divergências entre o PRD e o que existe** (respondida em 31/10/2026; detalhes em `docs/divergencias-prd.md`). O MVP é o produto da Proposta, para escolas do Ensino Médio; o curso Política Essencial não faz parte. O PRD entra só como fonte das mecânicas aprovadas abaixo. X1 a X8 e Z1 a Z7 aprovadas como recomendado. Y1 (XP e níveis), Y2 (timer) e Y5 ficam para depois do piloto. As contradições W1 a W9 estão em `docs/correcoes-prd.md`, para a Isa corrigir os documentos.
+
+### Mecânicas aprovadas na D12
+
+- [ ] Y3: a próxima aula abre com a anterior lida **e** o quiz dela com 70% ou mais
+- [ ] Y4: questões e alternativas embaralhadas a cada tentativa
+- [ ] Y6: aba de glossário e termo sublinhado que abre a definição (mini-jogos ficam para depois)
+- [ ] Y7: deslizar como atalho no Voto às Cegas, igual para os dois lados; os botões continuam
+- [ ] Y8: tela de entrada com Concordo ou Discordo, sem registrar a resposta
+- [x] Y9: sessão de 15 leis (já era assim)
+- [ ] Y10: links do texto oficial e das votações do autor na revelação, sem registrar clique
+- [ ] Y11: pergunta da TRC no fim da sessão, só com a contagem total por opção
+- [ ] Y12: campo de impacto social (com base na tela D9 "Contexto da lei") e data de apresentação
+- [ ] Y13: PWA instalável, sem modo offline
+- [ ] Y14: o Visitante do PRD é o usuário gratuito
+- [ ] Y15 a Y17: código da turma com validade e limite de alunos, aceitando as duas formas de digitar, 5 tentativas a cada 10 minutos
+- [ ] Y18: excluir conta com anonimização, consentimento e prazo de guarda (a regra exata depende da base legal com o jurídico)
+- [ ] Y19: verificação semanal do status das leis
 
 ### Regra das vidas (Isa, 31/10/2026, conforme o protótipo)
 
@@ -42,20 +59,13 @@ Errar no quiz **não** tira vida. As vidas limitam **aulas novas por dia** no pl
 
 ## 1. Design (🟣 Isa, no Figma)
 
-O manual de identidade e as telas de abertura, início e revelação já existem. Faltam:
+O **protótipo v5** (Figma, arquivo `izkGoAQyBueKwjQLeaHRFY`, página "App v5 · editorial colagem") já tem as telas do aluno, descritas em [politiQ v5 · Todas as telas do protótipo](https://claude.ai/artifact/D3TYxb1Q1NsVdoevJkEXS1): A0 a A18 (entrada, cadastro, login, senha, termos, privacidade, autorização do responsável, código da turma e erros, boas-vindas), B (início, busca, busca vazia, notificações, sem internet), C (trilha, aula, aula bloqueada, quiz marcado, certo, errado, resultado), D (Voto às Cegas, com a D9 "Contexto da lei") e F (perfil, editar conta, minha turma, privacidade e dados, apagar conta, ajuda). Fora do MVP, mesmo estando no protótipo: jogos além do Voto às Cegas, plano completo, Pix e assinatura. As vidas não aparecem no Início (D6).
 
-- [ ] Tela de abertura completa (o manual mostra "Começar" e "Já tenho uma conta")
-- [ ] Cadastro (nome, e-mail, senha) e mensagem "confirme seu e-mail"
-- [ ] Login, "esqueci a senha" e nova senha
-- [ ] Aceite dos termos (primeiro acesso e quando sair versão nova)
-- [ ] Entrar na turma com o código (e os erros: código errado, já está em outra turma, escola sem acesso, muitas tentativas)
-- [ ] Vidas (aulas novas por dia) e decisões do usuário gratuito: onde aparecem (fora do Início, pela D6) e as telas de "acabaram por hoje"
-- [ ] Trilha com vários módulos
-- [ ] Perfil: nome, turma, sair da conta, histórico
-- [ ] **Painel do professor no computador** (hoje todo o app é desenhado para celular até 430px): lista de turmas, criar turma, mostrar o código grande para projetar na sala, indicadores com filtro de período, progresso por aula, desempenho por aluno, questões com mais erro, exportar CSV
+- [x] Telas do aluno (protótipo v5)
+- [ ] **Painel do professor no computador**: lista de turmas, criar turma, código grande para projetar na sala, indicadores com filtro de período, progresso por aula, desempenho por aluno, questões com mais erro, exportar CSV. Sem desenho, o app só monta os dados e as rotas
 - [ ] Painel da coordenação: todas as turmas e encerrar matrícula (com confirmação)
-- [ ] Estados vazios, carregando, sem internet e erro genérico; página 404
-- [ ] Ícones originais em SVG (hoje são redesenhados; o Figma bloqueado nesta máquina impediu baixar)
+- [ ] Revisar o desenho das telas novas da D12 que o protótipo não tem e que o app montou com os componentes do manual: tela de entrada (Y8), aba do glossário (Y6), pergunta da TRC (Y11) e o deslizar no Voto às Cegas (Y7)
+- [ ] Ícones originais em SVG (hoje são redesenhados no mesmo traço)
 
 ## 2. Conteúdo e textos (🟣 Isa e equipe)
 
@@ -75,7 +85,7 @@ O manual de identidade e as telas de abertura, início e revelação já existem
 - [x] Dados iniciais gerados do app e 112 testes do banco, rodando no GitHub
 - [x] Banco ajustado a D1 e D2: lei só vai ao ar com resumo e, se for real, com link oficial
 - [x] Banco ajustado à nova regra das vidas (aulas novas por dia) e à revisão obrigatória das questões (D4)
-- [ ] Ajustar o banco às respostas da D12
+- [ ] Ajustar o banco às respostas da D12 (Y3, Y4, Y6, Y11, Y12, Y15 a Y19)
 - [ ] Revisão de segurança independente (D7) e correções
 - [ ] 🟣 Criar a organização no Supabase e dois projetos: **teste** e **produção**, na região de São Paulo
 - [ ] 🟣 Plano pago no projeto de produção (o gratuito pausa projetos parados e não tem backup diário)
@@ -193,8 +203,8 @@ O público é quase todo menor de idade; isto precisa estar pronto antes do prim
 
 ## Ordem sugerida
 
-1. **Agora, em paralelo:** decisão D12 (🟣), jurídico (seção 9, 🟠) e design das telas que faltam (seção 1).
-2. **Assim que D12 sair:** ajustar o banco, criar os projetos no Supabase e publicar o app na Vercel (seções 3 e 7). A revisão de segurança (D7) pode correr junto.
+1. **Agora, em paralelo:** jurídico (seção 9, 🟠) e design do painel do professor (seção 1).
+2. **Já:** ajustar o banco à D12, criar os projetos no Supabase e publicar o app na Vercel (seções 3 e 7). A revisão de segurança (D7) pode correr junto.
 3. **Com o banco no ar:** ligar o app (seção 4), depois as telas do aluno (seção 5).
 4. **Em seguida:** telas do professor e da coordenação (seção 6).
 5. **Antes do piloto:** testes da seção 8, conteúdo final (seção 2) carregado em produção e documentos da seção 9 publicados.
@@ -202,4 +212,4 @@ O público é quase todo menor de idade; isto precisa estar pronto antes do prim
 
 ## Fora do MVP (não fazer agora)
 
-Pontos, ranking, resumo de leis por IA, tela de administração de conteúdo, plano pago e cobrança no sistema, cadastro aberto ao público, app nativo, os jogos além do Voto às Cegas.
+Pontos, XP e níveis (Y1), ranking e perfil público, timer no quiz (Y2), modo revisão sem XP (Y5), mini-jogos do glossário, resumo de leis por IA, tela de administração de conteúdo, plano completo, Pix, assinatura e cobrança no sistema, app nativo, os jogos além do Voto às Cegas e o curso Política Essencial.

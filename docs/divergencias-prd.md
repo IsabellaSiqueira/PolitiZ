@@ -6,7 +6,23 @@ Entrega da decisão D3 (31/10/2026). Compara o **PRD MVP v1.5** e o **Tech Brief
 - as **decisões já tomadas** (D1 a D11 em `docs/plano-mvp.md`, `docs/criterio-leis.md` e a regra nova das vidas);
 - o **app e o banco** que estão no repositório.
 
-Cada item tem um código (para responder "aprovo X3, mudo X7"), o que cada lado diz e uma **recomendação**. Nada foi mudado no código por causa do PRD: tudo aqui espera a sua resposta.
+## Respostas da Isa (31/10/2026)
+
+| Itens | Resposta |
+| --- | --- |
+| **X0** | O MVP é o produto da Proposta, para escolas do Ensino Médio, com professor, coordenação e usuário gratuito. O PRD entra só como fonte das mecânicas aprovadas abaixo. O curso Política Essencial não faz parte do MVP. |
+| **X1 a X8** | Aprovadas como recomendado: nenhum analytics de terceiros; nada de voto, razão ou opinião registrados; sem ranking nem perfil público; produção no plano pago. |
+| **Aprovadas** | Y3, Y4, Y6 (mini-jogos depois), Y7, Y8, Y9, Y10, Y11, Y12, Y13, Y14, Y15 a Y17, Y18 (pendente da base legal com o jurídico) e Y19, como recomendado. Y12 usa a tela D9 "Contexto da lei" do protótipo como base. |
+| **Depois do piloto** | Y1 (XP e níveis), Y2 (timer) e Y5 (modo revisão). |
+| **Y20** | Segue a D4: 2 módulos de 4 aulas para a escola. |
+| **Z1 a Z7** | Manter tudo. |
+| **W1 a W9** | Listadas em `docs/correcoes-prd.md` para a Isa corrigir os documentos. O app não muda por causa delas. |
+
+As tarefas que saem daqui estão em `docs/plano-mvp.md`, seção "Mecânicas aprovadas na D12".
+
+---
+
+Cada item abaixo tem um código, o que cada lado diz e a recomendação que foi respondida acima.
 
 ---
 
