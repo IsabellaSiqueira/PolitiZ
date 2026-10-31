@@ -1,5 +1,5 @@
 import { Icone } from "@/components/icones";
-import { BotaoPrincipal, Cabecalho, Cartao, Etiqueta, FotoRasgada, Tela, Titulo } from "@/components/ui";
+import { BotaoPrincipal, Cabecalho, Cartao, Etiqueta, FotoRasgada, Peca, Tela, Titulo } from "@/components/ui";
 import fotoBandeira from "@/assets/fotos/bandeira.jpg";
 
 type Jogo = { nome: string; descricao: string; estado: "liberada" | "em-breve" | "bloqueada"; href?: string };
@@ -27,9 +27,10 @@ export default function Jogos() {
               src={fotoBandeira}
               alt="Bandeira do Brasil hasteada contra o céu"
               className="h-36"
-              semente={17}
               posicao="center 38%"
             >
+              <Peca nome="papel-amarelo" className="-right-2 -bottom-3 w-28 rotate-12" />
+              <Peca nome="rabisco-preto" className="top-3 left-3 w-12" />
               <Etiqueta className="absolute -bottom-2 left-2">Liberado</Etiqueta>
             </FotoRasgada>
             <div className="px-2">

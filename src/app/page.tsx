@@ -5,7 +5,7 @@ import Link from "next/link";
 import { modulo, type Aula } from "@/data/trilha";
 import { useProgresso } from "@/lib/progresso";
 import { Icone, type Nome } from "@/components/icones";
-import { BotaoPrincipal, Cabecalho, Cartao, Etiqueta, FotoRasgada, Tela, Titulo } from "@/components/ui";
+import { BotaoPrincipal, Cabecalho, Cartao, Etiqueta, FotoRasgada, Peca, Tela, Titulo } from "@/components/ui";
 import fotoCongresso from "@/assets/fotos/congresso-nacional.jpg";
 
 const temas: { nome: string; icone: Nome; href?: string }[] = [
@@ -163,9 +163,10 @@ function Destaque({ etiqueta, titulo, texto, acao, href }: { etiqueta: string; t
           src={fotoCongresso}
           alt="Prédio do Congresso Nacional, em Brasília, refletido no espelho d'água"
           className="h-32"
-          semente={5}
           posicao="center 45%"
         >
+          <Peca nome="papel-azul" className="-top-3 -left-2 w-24 -rotate-8" />
+          <Peca nome="rabisco-azul" className="top-2 right-3 w-14" />
           <Etiqueta className="absolute -bottom-2 left-2">{etiqueta}</Etiqueta>
         </FotoRasgada>
         <div className="px-2">

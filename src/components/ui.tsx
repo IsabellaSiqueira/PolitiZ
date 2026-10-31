@@ -3,6 +3,11 @@
 import { useId } from "react";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
+import papelAzul from "@/assets/colagem/papel-azul.png";
+import papelAmarelo from "@/assets/colagem/papel-amarelo.png";
+import rabiscoAzul from "@/assets/colagem/rabisco-azul.png";
+import rabiscoPreto from "@/assets/colagem/rabisco-preto.png";
+import coroa from "@/assets/colagem/coroa.png";
 import { usePathname } from "next/navigation";
 import { Icone, type Nome } from "./icones";
 
@@ -265,25 +270,10 @@ export function Carimbo({ voto, className = "" }: { voto: "aprovo" | "rejeito"; 
   );
 }
 
-/* ---------- Foto documental com borda rasgada ---------- */
-
-/** Recorte irregular em cima e embaixo, sempre igual para a mesma semente (sem diferença entre servidor e navegador). */
-function bordaRasgada(semente: number) {
-  let x = semente;
-  const sorteio = () => ((x = (x * 9301 + 49297) % 233280) / 233280);
-  const passos = 22;
-  const cima: string[] = [];
-  const baixo: string[] = [];
-  for (let i = 0; i <= passos; i++) {
-    const px = ((i / passos) * 100).toFixed(1);
-    cima.push(`${px}% ${(sorteio() * 3.2).toFixed(1)}%`);
-    baixo.unshift(`${px}% ${(100 - sorteio() * 3.2).toFixed(1)}%`);
-  }
-  return `polygon(${[...cima, ...baixo].join(",")})`;
-}
+/* ---------- Colagem: foto documental com borda rasgada e peças por cima ---------- */
 
 /**
- * Foto em preto e branco, granulada, com borda rasgada.
+ * Foto em preto e branco, granulada, com a borda rasgada do manual (máscara exportada do Figma).
  * Só em abertura, capas e cards de jogos; nunca em aulas, formulários ou perguntas do quiz.
  * As fotos já são tratadas (preto e branco e granulação) em src/assets/fotos.
  */
@@ -291,7 +281,6 @@ export function FotoRasgada({
   src,
   alt,
   className = "h-40",
-  semente = 3,
   posicao = "center",
   preload = false,
   children,
@@ -299,19 +288,39 @@ export function FotoRasgada({
   src: StaticImageData;
   alt: string;
   className?: string;
-  semente?: number;
   posicao?: string;
   preload?: boolean;
   children?: React.ReactNode;
 }) {
   return (
     <figure className={`relative ${className}`}>
-      <div className="absolute inset-0" style={{ clipPath: bordaRasgada(semente) }}>
-        <Image src={src} alt={alt} fill sizes="(max-width: 430px) 100vw, 430px" preload={preload} placeholder="blur" className="object-cover" style={{ objectPosition: posicao }} />
+      <div className="absolute inset-0 drop-shadow-[0_2px_3px_rgb(0_0_0/0.22)]">
+        <div className="absolute inset-0 [mask-image:url(/colagem/mascara-foto.png)] [mask-size:100%_100%] [mask-repeat:no-repeat]">
+          <Image
+            src={src}
+            alt={alt}
+            fill
+            sizes="(max-width: 430px) 100vw, 430px"
+            preload={preload}
+            placeholder="blur"
+            className="object-cover"
+            style={{ objectPosition: posicao }}
+          />
+        </div>
       </div>
       {children}
     </figure>
   );
+}
+
+const pecas = { "papel-azul": papelAzul, "papel-amarelo": papelAmarelo, "rabisco-azul": rabiscoAzul, "rabisco-preto": rabiscoPreto, coroa };
+
+/**
+ * Peça de colagem do manual, só decorativa. Use no máximo três na mesma composição.
+ * Rabiscos sempre num canto, nunca sobre texto; coroa para cargos e poder.
+ */
+export function Peca({ nome, className }: { nome: keyof typeof pecas; className: string }) {
+  return <Image src={pecas[nome]} alt="" aria-hidden="true" className={`pointer-events-none absolute h-auto select-none ${className}`} />;
 }
 
 /* ---------- Formulário ---------- */

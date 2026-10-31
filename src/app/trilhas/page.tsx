@@ -4,7 +4,7 @@ import Link from "next/link";
 import { modulo } from "@/data/trilha";
 import { useProgresso } from "@/lib/progresso";
 import { Icone } from "@/components/icones";
-import { Cabecalho, Cartao, Etiqueta, FotoRasgada, Regua, Tela, Titulo } from "@/components/ui";
+import { Cabecalho, Cartao, Etiqueta, FotoRasgada, Peca, Regua, Tela, Titulo } from "@/components/ui";
 import fotoCapa from "@/assets/fotos/candangos-congresso.jpg";
 
 export default function Trilhas() {
@@ -20,10 +20,11 @@ export default function Trilhas() {
           src={fotoCapa}
           alt="Escultura Os Candangos e as torres do Congresso Nacional, na Praça dos Três Poderes, em Brasília"
           className="mx-5 mt-2 h-44"
-          semente={11}
           posicao="center 40%"
           preload
         >
+          <Peca nome="papel-azul" className="-top-3 -left-3 w-28 -rotate-6" />
+          <Peca nome="coroa" className="top-3 right-4 w-14 rotate-8" />
           <Etiqueta className="absolute -bottom-2 left-3">Módulo {String(modulo.numero).padStart(2, "0")}</Etiqueta>
         </FotoRasgada>
         <Titulo
