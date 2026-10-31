@@ -11,6 +11,15 @@ npm run dev
 
 Abra http://localhost:3000. O app é pensado para celular (até 430px de largura).
 
+## Testes
+
+```bash
+npx playwright install chromium
+npm test
+```
+
+A suíte (`tests/e2e`) sobe o app em modo produção ligado a uma Câmara simulada (`tests/camara-simulada.mjs`), então não precisa de internet. Ela confere as regras do MVP, como "o voto nunca é gravado", e a acessibilidade de todas as telas (axe, WCAG 2.1 AA). Roda também no GitHub a cada envio.
+
 ## Telas
 
 | Rota | O que faz |

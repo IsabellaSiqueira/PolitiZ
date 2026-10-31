@@ -57,7 +57,7 @@ Fonte da verdade: o manual no Figma, https://www.figma.com/design/izkGoAQyBueKwj
 
 - Rodar: `npm install` e `npm run dev`. Antes de entregar: `npm run lint` e `npm run build`.
 - Teste local sem internet: `CAMARA_API_URL` aponta a integração para um servidor que imite a API da Câmara.
-- **Testes:** ainda não há suíte no repositório. Nas sessões anteriores os fluxos foram conferidos com Playwright em 390x844, incluindo a checagem de que nenhum "aprov"/"rejeit" aparece em localStorage, sessionStorage ou requisições de rede. Criar essa suíte de verdade (pacote P7 do documento) é um bom próximo passo.
+- **Testes:** `npm test` roda a suíte Playwright (`tests/e2e`, 390x844) contra o app em modo produção, apontando para a Câmara simulada de `tests/camara-simulada.mjs`. Cobre: o voto nunca é gravado nem enviado (storage, cookies, requisições, console), autoria fora do HTML até a decisão, sessão de 15 com pular e lei decidida, mesmo peso visual de Aprovo e Rejeito, sequência de aulas, quiz e histórico, busca, axe WCAG 2.1 AA em todas as telas, alvos de 44px, 320px sem rolagem lateral, voto pelo teclado e nenhuma requisição a terceiros. Roda também no GitHub Actions (`.github/workflows/testes.yml`). Toda tela nova entra na lista `telas` de `tests/e2e/acessibilidade.spec.ts`. `@playwright/test` e `playwright-core` ficam fixos na versão do Chromium da máquina (1.63.0); ao atualizar um, atualize o outro.
 - Commits em português, mensagens descritivas. O repositório é https://github.com/IsabellaSiqueira/PolitiZ (o ramo `versao-antiga` guarda o código anterior).
 
 ## Próximos passos
@@ -66,4 +66,4 @@ Fonte da verdade: o manual no Figma, https://www.figma.com/design/izkGoAQyBueKwj
 2. Telas do aluno que faltam: cadastro, login, aceite dos termos, entrada na turma, vidas e limites do usuário gratuito.
 3. Painel do professor e da coordenação.
 4. Decidir com a Isa a fonte das leis (Câmara ao vivo ou cadastro no Supabase com resumo da equipe).
-5. Suíte de testes de ponta a ponta e de acessibilidade.
+5. Testes de leitor de tela feitos por pessoas (NVDA e VoiceOver) e testes das telas novas conforme forem criadas.
