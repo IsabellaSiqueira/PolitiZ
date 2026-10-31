@@ -229,7 +229,7 @@ create table public.leis (
   rotulo text not null,
   tema text,
   ementa text not null,
-  -- resumo escrito pela equipe
+  -- resumo escrito pela equipe; o app mostra este texto, e a ementa oficial fica como apoio
   resumo text,
   apresentada_em date,
   -- escondidos até a decisão (função registrar_decisao / revelar_autoria)
@@ -238,7 +238,10 @@ create table public.leis (
   coautores integer not null default 0 check (coautores >= 0),
   link text,
   publicada boolean not null default false,
-  unique (fonte, id_externo)
+  unique (fonte, id_externo),
+  -- leis escolhidas pela equipe: só vão ao ar com resumo e, se forem reais, com o link oficial
+  check (not publicada or length(trim(coalesce(resumo, ''))) > 0),
+  check (not publicada or fonte = 'exemplo' or link is not null)
 );
 create index leis_publicadas_idx on public.leis (apresentada_em desc nulls last, id) where publicada;
 comment on column public.leis.partido is 'Partido atual do autor. A tela avisa que pode ser diferente do partido na época do projeto.';

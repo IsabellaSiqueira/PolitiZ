@@ -9,7 +9,7 @@ Leia também `AGENTS.md` (avisos sobre esta versão do Next.js) e `README.md`.
 ## Documento de referência
 
 Tudo segue o documento **"politiQ · Proposta de desenvolvimento do MVP"**: https://claude.ai/artifact/HgXYneyGd2raPrpqpxEZvG
-Em caso de dúvida entre o código atual e o documento, vale o documento. O **banco do Supabase** foi escrito nesta base a pedido da Isa: `supabase/` (migração, seed e 104 testes; ver `supabase/README.md`, que lista tabelas, funções e as decisões tomadas). O **documento de requisitos** (33 RF, 13 RNF, 33 regras de negócio) ainda não chegou: quando chegar, confira o banco contra ele. Não crie tabela ou função nova sem passar pela migração e pelos testes do banco.
+Em caso de dúvida entre o código atual e o documento, vale o documento. O **banco do Supabase** foi escrito nesta base a pedido da Isa: `supabase/` (migração, seed e 107 testes; ver `supabase/README.md`, que lista tabelas, funções e as decisões tomadas). O **documento de requisitos** (33 RF, 13 RNF, 33 regras de negócio) ainda não chegou: quando chegar, confira o banco contra ele. Não crie tabela ou função nova sem passar pela migração e pelos testes do banco.
 
 ## Regras inegociáveis (seção 5 do documento)
 
@@ -34,7 +34,7 @@ Em caso de dúvida entre o código atual e o documento, vale o documento. O **ba
 
 - **Next.js 16 (App Router) + TypeScript + Tailwind 4**, hospedagem na Vercel. O documento sugeria React + Vite; ficou Next porque a revelação da autoria precisa de uma rota no servidor (ver abaixo). `cacheComponents` está ligado: leia `node_modules/next/dist/docs/` antes de mexer em cache, rotas ou dados.
 - **Supabase** (Auth com e-mail e senha, RLS, pg_cron) entra no lugar do `localStorage` de `src/lib/progresso.tsx`. Hoje o progresso fica só no navegador.
-- **Leis:** hoje vêm da API de Dados Abertos da Câmara (`src/lib/camara.ts`): os 15 PLs mais recentes por id, critério mecânico de propósito. O documento prevê leis cadastradas no Supabase com resumo escrito pela equipe; **pergunte à Isa** antes de trocar a fonte. Se a Câmara falhar, o app usa `src/data/leis.ts` (exemplos fictícios, marcados "Exemplo ilustrativo"). A busca acontece no acesso (`connection()`), não no build.
+- **Leis:** decidido (31/10/2026) que vêm do banco, escolhidas pela equipe e com resumo próprio (tabela `leis`; só vai ao ar com resumo e link oficial). O app mostra o resumo; a ementa oficial e o link ficam como apoio. **Enquanto o app não está ligado ao Supabase**, ele ainda busca os 15 PLs mais recentes na API da Câmara (`src/lib/camara.ts`), com `src/data/leis.ts` (fictícios, marcados "Exemplo ilustrativo") se a Câmara falhar. Essa integração sai quando o Voto às Cegas passar a usar o banco. O critério de seleção para a página `/criterio` ainda vai ser definido pela Isa.
 - **Autoria escondida até a decisão:** a lista de leis vai ao aparelho sem autor/partido (`LeiCartao` em `src/lib/tipos.ts`). Autor e partido vêm de `GET /api/autoria/[id]`, chamada só depois da decisão e que recebe apenas o id. O partido mostrado é o atual do deputado, e a tela diz isso.
 - Textos das aulas em `src/data/trilha.ts` são **provisórios**; o conteúdo final é da Isa. Ao escrever conteúdo educacional, explique todo termo técnico na primeira vez que aparecer.
 
@@ -69,5 +69,5 @@ A lista completa e atualizada do que falta, com quem faz cada item e as decisõe
 1. Criar os projetos no Supabase, aplicar `supabase/migrations` e ligar o app (Auth, turmas, progresso) usando as funções RPC do banco. Conferir o banco contra o documento de requisitos quando ele chegar.
 2. Telas do aluno que faltam: cadastro, login, aceite dos termos, entrada na turma, vidas e limites do usuário gratuito.
 3. Painel do professor e da coordenação.
-4. Decidir com a Isa a fonte das leis (Câmara ao vivo ou cadastro no Supabase com resumo da equipe).
+4. Leis: a Isa define o critério de seleção; a equipe escreve os resumos; o app troca a Câmara pelo banco.
 5. Testes de leitor de tela feitos por pessoas (NVDA e VoiceOver) e testes das telas novas conforme forem criadas.

@@ -12,8 +12,9 @@ Situação em 31/10/2026: o app roda só no navegador (progresso no `localStorag
 
 Sem estas respostas, partes grandes não podem começar. Em ordem de urgência.
 
-- [ ] 🟣 **D1. Fonte das leis do Voto às Cegas.** (A) os 15 PLs mais recentes da Câmara, automático, com a ementa oficial; ou (B) leis escolhidas pela equipe, com resumo próprio, cadastradas no banco. Muda o P3, o conteúdo e a página `/criterio`. Se for A, falta um importador da Câmara para o banco (ver 3.6).
-- [ ] 🟣 **D2. Conferir as 5 decisões do banco** (`supabase/README.md`, "Decisões que valem conferir"): aluno sem turma conta como gratuito; trocar de turma exige a coordenação; arquivar turma só desliga o código; professor vê o nome dos alunos; tabela de leis pronta para a opção B.
+- [x] 🟣 **D1. Fonte das leis do Voto às Cegas:** opção B (31/10/2026). Leis escolhidas pela equipe, com resumo próprio, cadastradas no banco. O app mostra o resumo; a ementa oficial e o link ficam como apoio.
+- [ ] 🟣 **D1b. Critério de seleção das leis**, para a página pública `/criterio`: quem escolhe, com que regras (temas, equilíbrio entre partidos e regiões, só projetos em tramitação ou também aprovados) e de quanto em quanto tempo entram leis novas. Junto: quantas leis o piloto precisa ter no ar (cada sessão tem 15, e quem decide todas fica sem leis novas).
+- [x] 🟣 **D2. As 5 decisões do banco aprovadas** (31/10/2026): aluno sem turma conta como gratuito; trocar de turma exige a coordenação; arquivar turma só desliga o código; professor vê o nome dos alunos; leis cadastradas no banco.
 - [ ] 🟣 **D3. Mandar o documento de requisitos** (33 RF, 13 RNF, 33 RN, glossário). Tudo abaixo foi deduzido do documento do MVP; o de requisitos pode acrescentar ou mudar regras.
 - [ ] 🟣 **D4. Tamanho do conteúdo no piloto:** quantos módulos e aulas precisam estar prontos no primeiro dia, e em que ritmo entram os outros.
 - [ ] 🟣 **D5. O que fazer com a aba Jogos.** Hoje ela lista o Voto às Cegas e 4 jogos "em breve" e "bloqueado" que estão fora do MVP. Manter assim, esconder os futuros, ou voltar ao nome "Ferramentas"?
@@ -44,7 +45,8 @@ O manual de identidade e as telas de abertura, início e revelação já existem
 - [ ] Aulas finais do(s) módulo(s) do piloto (as 4 atuais são provisórias), explicando todo termo técnico na primeira vez
 - [ ] Questões com 4 alternativas e explicação de cada uma
 - [ ] Revisão pedagógica e de neutralidade política (combinado 05: pessoas, não lados)
-- [ ] Se D1 = B: escolher as leis, escrever os resumos, registrar autor, partido e link oficial; atualizar a página `/criterio` com o novo critério
+- [ ] Escolher as leis do piloto e escrever os resumos (linguagem de quem começa do zero, sem tomar partido), com autor, partido atual, coautores e link oficial
+- [ ] Texto novo da página `/criterio`, a partir de D1b
 - [ ] E-mails em português: confirmação de conta e redefinição de senha
 - [ ] Mensagens de erro de cada código do banco (`sem_vidas`, `escola_lotada` etc.; lista em `supabase/README.md`)
 - [ ] Guia rápido para o professor (como criar turma, passar o código, ler o painel)
@@ -52,8 +54,9 @@ O manual de identidade e as telas de abertura, início e revelação já existem
 ## 3. Banco e Supabase (🔵, pacotes P1 e P2)
 
 - [x] Esquema, funções, RLS, auditoria e rotina diária (`supabase/migrations`)
-- [x] Dados iniciais gerados do app e 104 testes do banco, rodando no GitHub
-- [ ] Ajustar o banco ao documento de requisitos (D3) e às decisões D1 e D2
+- [x] Dados iniciais gerados do app e 107 testes do banco, rodando no GitHub
+- [x] Banco ajustado a D1 e D2: lei só vai ao ar com resumo e, se for real, com link oficial
+- [ ] Ajustar o banco ao documento de requisitos (D3)
 - [ ] Revisão de segurança independente (D7) e correções
 - [ ] 🟣 Criar a organização no Supabase e dois projetos: **teste** e **produção**, na região de São Paulo
 - [ ] 🟣 Plano pago no projeto de produção (o gratuito pausa projetos parados e não tem backup diário)
@@ -65,11 +68,11 @@ O manual de identidade e as telas de abertura, início e revelação já existem
 - [ ] Direitos do titular (LGPD): como atender pedido de acesso e de exclusão de dados (função ou processo manual documentado)
 - [ ] Prazo de guarda: o que acontece com os dados de quem saiu da escola e de quem não usa mais a conta
 
-### 3.6 Leis (depende de D1)
+### 3.6 Leis (opção B)
 
-- [ ] Se A: importador que copia os PLs da Câmara para a tabela `leis` todo dia (função agendada), porque a decisão agora é registrada no banco
-- [ ] Se B: cadastrar as leis pelo painel e marcar como publicadas
-- [ ] Em qualquer caso: tirar a rota `/api/autoria` do app quando a revelação passar a vir do banco
+- [ ] Planilha modelo para a equipe preencher as leis e um jeito de importar para a tabela `leis` (ou passo a passo do painel do Supabase)
+- [ ] Cadastrar as leis do piloto e marcar como publicadas
+- [ ] Tirar do app a busca na Câmara (`src/lib/camara.ts`, a rota `/api/autoria` e a Câmara simulada dos testes) quando o Voto às Cegas passar a vir do banco
 
 ## 4. Ligar o app ao banco (🔵, pacote P3)
 
@@ -77,7 +80,7 @@ O manual de identidade e as telas de abertura, início e revelação já existem
 - [ ] Tipos gerados do banco (`supabase gen types`)
 - [ ] Um módulo de acesso a dados usado por todas as telas, com as mensagens de erro em português
 - [ ] Trocar o `localStorage` de `src/lib/progresso.tsx` pelas funções do banco (trilha, aulas, quiz, histórico, decisões)
-- [ ] Voto às Cegas pela sessão do banco (`sessao_voto`, `pular_lei`, `registrar_decisao`, `revelar_autoria`), mantendo o voto só na memória da tela
+- [ ] Voto às Cegas pela sessão do banco (`sessao_voto`, `pular_lei`, `registrar_decisao`, `revelar_autoria`), mostrando o resumo da equipe e mantendo o voto só na memória da tela
 - [ ] Rotas protegidas por papel (aluno, professor, coordenação) e redirecionamento de quem não está logado
 - [ ] Geração do CSV do relatório da turma no navegador
 - [ ] Aulas e questões vindas do banco (hoje estão em `src/data/trilha.ts`)
@@ -124,7 +127,7 @@ Já existem sem login: trilha, aula, quiz com explicação e refazer, histórico
 ## 8. Testes (🔵, pacote P7)
 
 - [x] Testes automáticos das telas atuais: regra do voto, sessão de 15, aulas em sequência, quiz, acessibilidade (axe, 44px, 320px, teclado) e nenhuma requisição a terceiros, rodando no GitHub
-- [x] Testes do banco (104 casos)
+- [x] Testes do banco (107 casos)
 - [ ] Testes de ponta a ponta dos fluxos novos contra o Supabase local: cadastro, entrar na turma, quiz, Voto às Cegas, limites do gratuito, painel, CSV, encerrar matrícula
 - [ ] Rodar o Supabase local no GitHub para esses testes
 - [ ] Acessibilidade feita por pessoas: leitor de tela (NVDA no Windows, VoiceOver no iPhone, TalkBack no Android), zoom de 200%, só teclado, e a lista de problemas encontrados
@@ -162,8 +165,8 @@ O público é quase todo menor de idade; isto precisa estar pronto antes do prim
 
 ## Ordem sugerida
 
-1. **Agora, em paralelo:** decisões D1 a D9 (🟣), jurídico (seção 9, 🟠) e design das telas que faltam (seção 1).
-2. **Assim que D1, D2 e D3 saírem:** ajustar o banco, criar os projetos no Supabase e publicar o app na Vercel (seções 3 e 7). A revisão de segurança (D7) pode correr junto.
+1. **Agora, em paralelo:** decisões que faltam (D1b e D3 a D9, 🟣), jurídico (seção 9, 🟠) e design das telas que faltam (seção 1).
+2. **Assim que D3 sair** (D1 e D2 já decididas): ajustar o banco, criar os projetos no Supabase e publicar o app na Vercel (seções 3 e 7). A revisão de segurança (D7) pode correr junto.
 3. **Com o banco no ar:** ligar o app (seção 4), depois as telas do aluno (seção 5).
 4. **Em seguida:** telas do professor e da coordenação (seção 6).
 5. **Antes do piloto:** testes da seção 8, conteúdo final (seção 2) carregado em produção e documentos da seção 9 publicados.

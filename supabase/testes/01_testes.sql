@@ -408,6 +408,21 @@ select teste.negado($$ select public.sessao_voto() $$, 'sem login: não chama fu
 select teste.negado($$ select * from public.perfis $$, 'sem login: não lê perfis');
 reset role;
 
+-- opção B: lei escolhida pela equipe só vai ao ar com resumo e link oficial
+do $$ begin
+  insert into public.leis (fonte, id_externo, rotulo, ementa, autoria, publicada) values ('camara', '999', 'PL 999/2026', 'Ementa.', 'Dep. X', true);
+  perform teste.registrar('leis: não publica sem resumo da equipe', false, 'publicou');
+exception when check_violation then perform teste.registrar('leis: não publica sem resumo da equipe', true);
+end $$;
+do $$ begin
+  insert into public.leis (fonte, id_externo, rotulo, ementa, resumo, autoria, publicada) values ('camara', '999', 'PL 999/2026', 'Ementa.', 'Resumo.', 'Dep. X', true);
+  perform teste.registrar('leis: lei real não publica sem link oficial', false, 'publicou');
+exception when check_violation then perform teste.registrar('leis: lei real não publica sem link oficial', true);
+end $$;
+insert into public.leis (fonte, id_externo, rotulo, ementa, resumo, autoria, link, publicada)
+values ('camara', '999', 'PL 999/2026', 'Ementa.', 'Resumo.', 'Dep. X', 'https://www.camara.leg.br/', true);
+select teste.ok(true, 'leis: com resumo e link, publica');
+
 update public.leis set resumo = 'Resumo revisado pela equipe.' where id_externo = 'exemplo-0418';
 select teste.ok(exists (select 1 from public.auditoria where tabela = 'leis' and operacao = 'UPDATE'
   and antes ->> 'resumo' <> depois ->> 'resumo'), 'auditoria: registra o antes e o depois de cada mudança');

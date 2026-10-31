@@ -9,7 +9,7 @@ Tudo o que o app guarda e todas as regras de negócio ficam aqui. O frontend nã
 | `migrations/20261031120000_esquema_inicial.sql` | Esquema completo: 22 tabelas, funções, RLS, auditoria e rotina diária |
 | `seed.sql` | Dados iniciais: termos v1, módulo 01 com 4 aulas e 17 questões, 15 leis de exemplo. Gerado por `npm run banco:seed` a partir de `src/data` |
 | `testes/00_simula_supabase.sql` | Imita o Supabase (papéis, `auth.users`, `auth.uid()`) para testar num PostgreSQL comum |
-| `testes/01_testes.sql` | 104 testes: regras do MVP, isolamento entre escolas, papéis, limites e painel |
+| `testes/01_testes.sql` | 107 testes: regras do MVP, isolamento entre escolas, papéis, limites e painel |
 
 ## Como aplicar no Supabase
 
@@ -75,9 +75,10 @@ Erros de regra voltam com um código curto na mensagem (ex.: `sem_vidas`) e uma 
 | Coordenação | `painel_escola(de, ate)` | Indicadores de todas as turmas da escola |
 | Coordenação | `encerrar_matricula(aluno)` | Tira o aluno da turma; ele vira usuário gratuito |
 
-## Decisões que valem conferir
+## Decisões aprovadas pela Isa (31/10/2026)
 
-- **Leis no banco.** A tabela `leis` está pronta para o cadastro com resumo da equipe. Hoje o app ainda busca as leis na Câmara; a troca depende da decisão sobre a fonte.
+- **Leis escolhidas pela equipe, cadastradas no banco.** Uma lei só pode ser publicada com o resumo da equipe e, se for real (Câmara ou Senado), com o link do texto oficial. Leis `exemplo` são fictícias e servem só para testes. A sessão traz as publicadas mais recentes (`apresentada_em`) que o aluno ainda não decidiu.
 - **Aluno sem turma é gratuito.** Como o cadastro aberto ao público está fora do MVP, quem cria conta e ainda não entrou numa turma já tem os limites do usuário gratuito.
 - **Trocar de turma** exige que a coordenação encerre a matrícula anterior.
 - **Arquivar turma** só desativa o código; os alunos continuam matriculados até a coordenação encerrar.
+- **Professor vê o nome dos alunos** no painel. O banco não guarda CPF, data de nascimento nem outro dado pessoal além do nome e do e-mail (este no Auth).
