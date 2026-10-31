@@ -19,7 +19,8 @@ test.describe("Voto às Cegas", () => {
     const html = (await resposta?.text()) ?? "";
     expect(html).not.toContain("Simulada 9015");
     expect(html).not.toContain("PSIM");
-    await expect(page.getByText("Oculto até a sua decisão", { exact: true })).toBeVisible();
+    // só a região visível: durante o streaming o Next guarda uma cópia escondida da tela
+    await expect(page.getByRole("region", { name: "Quem propôs" }).getByText("Oculto até a sua decisão", { exact: true })).toBeVisible();
     expect(pedidosDeAutoria).toEqual([]);
 
     await page.getByRole("button", { name: "Aprovo" }).click();
