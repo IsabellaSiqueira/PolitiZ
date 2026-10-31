@@ -4,7 +4,8 @@ import Link from "next/link";
 import { modulo } from "@/data/trilha";
 import { useProgresso } from "@/lib/progresso";
 import { Icone } from "@/components/icones";
-import { Cabecalho, Cartao, Etiqueta, Regua, Tela, Titulo } from "@/components/ui";
+import { Cabecalho, Cartao, Etiqueta, FotoRasgada, Regua, Tela, Titulo } from "@/components/ui";
+import fotoCapa from "@/assets/fotos/candangos-congresso.jpg";
 
 export default function Trilhas() {
   const { aulasConcluidas, aulaLiberada, tentativas } = useProgresso();
@@ -15,8 +16,18 @@ export default function Trilhas() {
     <Tela>
       <Cabecalho />
       <main className="flex-1 pb-32">
+        <FotoRasgada
+          src={fotoCapa}
+          alt="Escultura Os Candangos e as torres do Congresso Nacional, na Praça dos Três Poderes, em Brasília"
+          className="mx-5 mt-2 h-44"
+          semente={11}
+          posicao="center 40%"
+          preload
+        >
+          <Etiqueta className="absolute -bottom-2 left-3">Módulo {String(modulo.numero).padStart(2, "0")}</Etiqueta>
+        </FotoRasgada>
         <Titulo
-          rotulo={`Módulo ${String(modulo.numero).padStart(2, "0")} · ${modulo.tema}`}
+          rotulo={modulo.tema}
           titulo="Quem manda em "
           destaque="quê?"
           apoio={modulo.descricao}

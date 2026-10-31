@@ -59,7 +59,7 @@ Segue o Manual de identidade v1 (Figma, outubro de 2026).
 - **Fundo branco** e quatro cores com função: azul em ações e destaques, amarelo em etiquetas, marca-texto e no botão principal, tinta nos textos e contornos.
 - **Tipografia:** só Plus Jakarta Sans, servida pelo próprio app. A personalidade vem do peso ExtraBold e do espaçamento apertado.
 - **Componentes:** botão principal amarelo (um por tela), botão secundário com contorno, campo, alternativas do quiz em quatro estados, cartões de cantos arredondados e barra de abas.
-- **Elementos gráficos:** etiqueta inclinada, marca-texto e carimbo. A colagem (papel rasgado, rabiscos, coroa, foto) ainda vai ser exportada do Figma.
+- **Elementos gráficos:** etiqueta inclinada, marca-texto e carimbo. Fotos documentais em preto e branco com borda rasgada (`FotoRasgada`, fotos em `src/assets/fotos`) nas capas e cards. Papel rasgado, rabiscos e coroa ainda vão ser exportados do Figma.
 - **Movimento:** respeita "reduzir movimento" do sistema.
 
 ## Próximos passos

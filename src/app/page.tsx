@@ -5,7 +5,8 @@ import Link from "next/link";
 import { modulo, type Aula } from "@/data/trilha";
 import { useProgresso } from "@/lib/progresso";
 import { Icone, type Nome } from "@/components/icones";
-import { BotaoPrincipal, Cabecalho, Cartao, Etiqueta, Tela, Titulo } from "@/components/ui";
+import { BotaoPrincipal, Cabecalho, Cartao, Etiqueta, FotoRasgada, Tela, Titulo } from "@/components/ui";
+import fotoCongresso from "@/assets/fotos/congresso-nacional.jpg";
 
 const temas: { nome: string; icone: Nome; href?: string }[] = [
   { nome: "Política", icone: "politica", href: "/trilhas" },
@@ -157,14 +158,24 @@ function CartaoDoDia() {
 function Destaque({ etiqueta, titulo, texto, acao, href }: { etiqueta: string; titulo: string; texto: string; acao: string; href: string }) {
   return (
     <section className="px-5 pt-4" aria-label={etiqueta}>
-      <Cartao className="px-4 pt-4 pb-4">
-        <Etiqueta>{etiqueta}</Etiqueta>
-        <h2 className="mt-3 text-[21px] leading-[1.22] font-extrabold tracking-[-0.02em]">{titulo}</h2>
-        <p className="mt-1.5 text-sm leading-[1.4] text-suave">{texto}</p>
-        <BotaoPrincipal href={href} className="mt-4 w-full">
-          {acao}
-          <Icone nome="seta" tamanho={18} />
-        </BotaoPrincipal>
+      <Cartao className="px-2 pt-2 pb-4">
+        <FotoRasgada
+          src={fotoCongresso}
+          alt="Prédio do Congresso Nacional, em Brasília, refletido no espelho d'água"
+          className="h-32"
+          semente={5}
+          posicao="center 45%"
+        >
+          <Etiqueta className="absolute -bottom-2 left-2">{etiqueta}</Etiqueta>
+        </FotoRasgada>
+        <div className="px-2">
+          <h2 className="mt-5 text-[21px] leading-[1.22] font-extrabold tracking-[-0.02em]">{titulo}</h2>
+          <p className="mt-1.5 text-sm leading-[1.4] text-suave">{texto}</p>
+          <BotaoPrincipal href={href} className="mt-4 w-full">
+            {acao}
+            <Icone nome="seta" tamanho={18} />
+          </BotaoPrincipal>
+        </div>
       </Cartao>
     </section>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useId } from "react";
+import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icone, type Nome } from "./icones";
@@ -261,6 +262,55 @@ export function Carimbo({ voto, className = "" }: { voto: "aprovo" | "rejeito"; 
       <span className="t-anotacao text-[15px] leading-[1.05]">você</span>
       <span className="t-anotacao text-[15px] leading-[1.05]">{voto === "aprovo" ? "aprovou" : "rejeitou"}</span>
     </div>
+  );
+}
+
+/* ---------- Foto documental com borda rasgada ---------- */
+
+/** Recorte irregular em cima e embaixo, sempre igual para a mesma semente (sem diferença entre servidor e navegador). */
+function bordaRasgada(semente: number) {
+  let x = semente;
+  const sorteio = () => ((x = (x * 9301 + 49297) % 233280) / 233280);
+  const passos = 22;
+  const cima: string[] = [];
+  const baixo: string[] = [];
+  for (let i = 0; i <= passos; i++) {
+    const px = ((i / passos) * 100).toFixed(1);
+    cima.push(`${px}% ${(sorteio() * 3.2).toFixed(1)}%`);
+    baixo.unshift(`${px}% ${(100 - sorteio() * 3.2).toFixed(1)}%`);
+  }
+  return `polygon(${[...cima, ...baixo].join(",")})`;
+}
+
+/**
+ * Foto em preto e branco, granulada, com borda rasgada.
+ * Só em abertura, capas e cards de jogos; nunca em aulas, formulários ou perguntas do quiz.
+ * As fotos já são tratadas (preto e branco e granulação) em src/assets/fotos.
+ */
+export function FotoRasgada({
+  src,
+  alt,
+  className = "h-40",
+  semente = 3,
+  posicao = "center",
+  preload = false,
+  children,
+}: {
+  src: StaticImageData;
+  alt: string;
+  className?: string;
+  semente?: number;
+  posicao?: string;
+  preload?: boolean;
+  children?: React.ReactNode;
+}) {
+  return (
+    <figure className={`relative ${className}`}>
+      <div className="absolute inset-0" style={{ clipPath: bordaRasgada(semente) }}>
+        <Image src={src} alt={alt} fill sizes="(max-width: 430px) 100vw, 430px" preload={preload} placeholder="blur" className="object-cover" style={{ objectPosition: posicao }} />
+      </div>
+      {children}
+    </figure>
   );
 }
 

@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { Icone } from "@/components/icones";
-import { Cabecalho, Cartao, Tela, Titulo } from "@/components/ui";
+import { BotaoPrincipal, Cabecalho, Cartao, Etiqueta, FotoRasgada, Tela, Titulo } from "@/components/ui";
+import fotoBandeira from "@/assets/fotos/bandeira.jpg";
 
 type Jogo = { nome: string; descricao: string; estado: "liberada" | "em-breve" | "bloqueada"; href?: string };
 
@@ -14,35 +14,48 @@ const jogos: Jogo[] = [
 
 export default function Jogos() {
   const liberadas = jogos.filter((f) => f.estado === "liberada").length;
+  // o jogo liberado ganha o card com foto; a lista mostra o que vem depois
+  const proximos = jogos.filter((f) => f.estado !== "liberada");
   return (
     <Tela>
       <Cabecalho />
       <main className="flex-1 pb-32">
         <Titulo rotulo="Cada módulo libera um novo" titulo="Seus " destaque="jogos" />
-        <section className="px-5 pt-5" aria-label="Jogos">
-          <Cartao rotulo="Jogos do politiQ" etiqueta={`${liberadas} liberado${liberadas > 1 ? "s" : ""}`}>
+        <section className="px-5 pt-5" aria-label="Pra jogar agora">
+          <Cartao className="px-2 pt-2 pb-4">
+            <FotoRasgada
+              src={fotoBandeira}
+              alt="Bandeira do Brasil hasteada contra o céu"
+              className="h-36"
+              semente={17}
+              posicao="center 38%"
+            >
+              <Etiqueta className="absolute -bottom-2 left-2">Liberado</Etiqueta>
+            </FotoRasgada>
+            <div className="px-2">
+              <h2 className="t-titulo mt-5">Voto às Cegas</h2>
+              <p className="mt-1.5 text-sm leading-[1.4] text-suave">
+                Leia um projeto de lei de verdade, aprove ou rejeite, e só depois descubra quem propôs.
+              </p>
+              <BotaoPrincipal href="/voto" className="mt-4 w-full">
+                Jogar agora
+                <Icone nome="seta" tamanho={18} />
+              </BotaoPrincipal>
+            </div>
+          </Cartao>
+        </section>
+        <section className="px-5 pt-5" aria-label="Próximos jogos">
+          <Cartao rotulo="Próximos jogos" etiqueta={`${liberadas} de ${jogos.length} liberado${liberadas > 1 ? "s" : ""}`}>
             <ul className="pt-1">
-              {jogos.map((f, i) => {
-                const ultima = i === jogos.length - 1;
+              {proximos.map((f, i) => {
+                const ultima = i === proximos.length - 1;
                 const linha = `flex min-h-[84px] items-center gap-4 px-5 py-4 ${ultima ? "rounded-b-2xl" : "border-b border-linha"}`;
                 const textos = (
                   <span className="flex min-w-0 flex-1 flex-col gap-1">
-                    <span className={`t-subtitulo ${f.estado === "liberada" ? "" : "text-suave"}`}>{f.nome}</span>
+                    <span className="t-subtitulo text-suave">{f.nome}</span>
                     <span className="text-sm leading-snug text-suave">{f.descricao}</span>
                   </span>
                 );
-                if (f.estado === "liberada" && f.href) {
-                  return (
-                    <li key={f.nome}>
-                      <Link href={f.href} className={`${linha} active:bg-claro`}>
-                        {textos}
-                        <span className="flex size-11 shrink-0 items-center justify-center rounded-full border-[1.5px] border-tinta">
-                          <Icone nome="seta" tamanho={20} />
-                        </span>
-                      </Link>
-                    </li>
-                  );
-                }
                 return (
                   <li key={f.nome} className={linha}>
                     {textos}
