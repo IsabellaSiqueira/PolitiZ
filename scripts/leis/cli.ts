@@ -9,7 +9,7 @@ import { join } from "node:path";
 import { candidatosCamara, detalharCamara } from "./camara.ts";
 import { escreverCsv, lerCsv } from "./csv.ts";
 import { REGRAS } from "./regras.ts";
-import { chave, conferencia, digital, inicioJanela, sortear, type Candidato, type Detalhe } from "./sorteio.ts";
+import { chave, conferencia, digital, inicioJanela, sementeMegaSena, sortear, type Candidato, type Detalhe } from "./sorteio.ts";
 
 const PASTA = "leis";
 const args = process.argv.slice(2);
@@ -97,7 +97,8 @@ function jaSorteadas(menos: string) {
 async function sortearLote() {
   const arquivo = obrigatoria("candidatos");
   const lote = obrigatoria("lote");
-  const semente = obrigatoria("semente");
+  const semente = sementeMegaSena(obrigatoria("semente"));
+  if (!semente) parar('A semente é o resultado de um concurso da Mega-Sena, com o número do concurso e as 6 dezenas. Ex.: --semente "Mega-Sena 2850: 04 11 23 35 47 58"');
   const lista = lerJson<Lista>(arquivo);
   if (digital(lista.candidatos) !== lista.digital) parar("A lista de candidatos foi alterada depois de gerada (a digital não confere).");
 

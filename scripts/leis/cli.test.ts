@@ -72,21 +72,26 @@ test("candidatos → sortear → resumos → sql", async () => {
     const lista = JSON.parse(readFileSync(join(pasta, "leis/candidatos/2026-10-31.json"), "utf8"));
     assert.equal(lista.candidatos.length, 110);
 
-    await cli("sortear", "--candidatos", "leis/candidatos/2026-10-31.json", "--lote", "01", "--semente", "teste 1");
+    await cli("sortear", "--candidatos", "leis/candidatos/2026-10-31.json", "--lote", "01", "--semente", "Mega-Sena 2850: 04 11 23 35 47 58");
     const registro = JSON.parse(readFileSync(join(pasta, "leis/lotes/01/registro.json"), "utf8"));
     assert.equal(registro.leis.length, 15);
     assert.ok(registro.conferencia.maiorQuantidadePorPartido <= 2);
     assert.ok(!registro.leis.some((l: { idExterno: string }) => l.idExterno === "3000" || l.idExterno === "3001"));
 
-    // refazer com a mesma semente dá o mesmo lote (e usa os detalhes guardados)
-    await cli("sortear", "--candidatos", "leis/candidatos/2026-10-31.json", "--lote", "01", "--semente", "teste 1");
+    assert.equal(registro.semente, "Mega-Sena 2850: 04 11 23 35 47 58");
+
+    // semente que não é resultado da Mega-Sena é recusada
+    await assert.rejects(cli("sortear", "--candidatos", "leis/candidatos/2026-10-31.json", "--lote", "09", "--semente", "qualquer coisa"), /Mega-Sena/);
+
+    // refazer com a mesma semente, escrita de outro jeito, dá o mesmo lote (e usa os detalhes guardados)
+    await cli("sortear", "--candidatos", "leis/candidatos/2026-10-31.json", "--lote", "01", "--semente", "mega sena 2850 - 58, 47, 35, 23, 11, 4");
     const de_novo = JSON.parse(readFileSync(join(pasta, "leis/lotes/01/registro.json"), "utf8"));
     assert.deepEqual(de_novo.leis.map((l: { idExterno: string }) => l.idExterno), registro.leis.map((l: { idExterno: string }) => l.idExterno));
 
     // a equipe exclui uma lei com motivo: ela sai e o motivo fica registrado
     const alvo = registro.leis[0];
     writeFileSync(join(pasta, "exclusoes.csv"), escreverCsv(["casa", "id_externo", "motivo"], [[alvo.casa, alvo.idExterno, "cita o nome do autor no texto"]]));
-    await cli("sortear", "--candidatos", "leis/candidatos/2026-10-31.json", "--lote", "01", "--semente", "teste 1", "--exclusoes", "exclusoes.csv");
+    await cli("sortear", "--candidatos", "leis/candidatos/2026-10-31.json", "--lote", "01", "--semente", "Mega-Sena 2850: 04 11 23 35 47 58", "--exclusoes", "exclusoes.csv");
     const sem_alvo = JSON.parse(readFileSync(join(pasta, "leis/lotes/01/registro.json"), "utf8"));
     assert.ok(!sem_alvo.leis.some((l: { idExterno: string }) => l.idExterno === alvo.idExterno));
     assert.ok(sem_alvo.excluidas.some((x: { motivo: string }) => x.motivo === "cita o nome do autor no texto"));
@@ -107,7 +112,7 @@ test("candidatos → sortear → resumos → sql", async () => {
     assert.match(sql, /"com aspas"/);
 
     // o lote 02 não repete leis do lote 01
-    await cli("sortear", "--candidatos", "leis/candidatos/2026-10-31.json", "--lote", "02", "--semente", "teste 2", "--exclusoes", "exclusoes.csv");
+    await cli("sortear", "--candidatos", "leis/candidatos/2026-10-31.json", "--lote", "02", "--semente", "Mega-Sena 2851: 02 09 17 30 44 60", "--exclusoes", "exclusoes.csv");
     const lote2 = JSON.parse(readFileSync(join(pasta, "leis/lotes/02/registro.json"), "utf8"));
     const ids1 = new Set(sem_alvo.leis.map((l: { idExterno: string }) => l.idExterno));
     assert.ok(!lote2.leis.some((l: { idExterno: string }) => ids1.has(l.idExterno)));

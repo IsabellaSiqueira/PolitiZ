@@ -12,14 +12,14 @@ npm run leis -- candidatos --ate 2026-11-03 --senado leis/senado.csv
 
 Busca na Câmara todos os PLs apresentados nos 24 meses anteriores à data e junta os do Senado da planilha (ver "Senado" abaixo). Gera `leis/candidatos/2026-11-03.json` e mostra a **digital da lista**, um código que muda se qualquer candidato for acrescentado ou tirado.
 
-### 2. Publicar a digital e só depois escolher a semente
+### 2. Publicar a digital e esperar o próximo concurso da Mega-Sena
 
-A semente é o texto que alimenta o sorteio. Para ninguém da equipe poder escolher o resultado, a recomendação é:
+A semente do sorteio é **o resultado do primeiro concurso da Mega-Sena realizado depois que a digital foi publicada** (decisão de 31/10/2026). Assim ninguém da equipe controla o resultado:
 
-1. publicar (por exemplo, enviar às escolas) a digital da lista antes de saber a semente;
-2. usar como semente algo que ninguém controla e que só existe depois, como os números do próximo concurso da Mega-Sena: `--semente "Mega-Sena 2850: 04 11 23 35 47 58"`.
+1. publique a digital da lista (por exemplo, envie às escolas), com a data;
+2. espere o próximo concurso e use o número dele e as 6 dezenas: `--semente "Mega-Sena 2850: 04 11 23 35 47 58"`.
 
-Assim qualquer pessoa confere que a lista não mudou e que a semente não foi escolhida a dedo.
+O script só aceita semente nesse formato (número do concurso e 6 dezenas diferentes de 1 a 60) e guarda no registro sempre do mesmo jeito, com as dezenas em ordem. Qualquer pessoa confere o resultado no site da Caixa e refaz o sorteio.
 
 ### 3. Sortear
 

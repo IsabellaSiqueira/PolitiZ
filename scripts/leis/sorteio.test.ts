@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { REGRAS } from "./regras.ts";
-import { chave, conferencia, embaralhar, inicioJanela, sortear, type Candidato, type Detalhe } from "./sorteio.ts";
+import { chave, conferencia, embaralhar, inicioJanela, sementeMegaSena, sortear, type Candidato, type Detalhe } from "./sorteio.ts";
 
 const PARTIDOS = ["PAA", "PBB", "PCC", "PDD", "PEE", "PFF", "PGG", "PHH", "PII", "PJJ", "PKK", "PLL"];
 const UFS = ["AC", "BA", "DF", "SP", "RS", "PE", "MG", "AM", "PR", "GO"];
@@ -113,6 +113,16 @@ test("sem projetos do Senado, o sorteio avisa que não fecha as cotas", async ()
   const r = await sortear(opcoes({ candidatos: candidatos().filter((c) => c.casa === "camara"), regras: { ...REGRAS, maxTentativas: 5 } }));
   assert.equal(r.ok, false);
   assert.ok(!r.ok && /Senado/.test(r.motivo));
+});
+
+test("semente da Mega-Sena: aceita jeitos diferentes de escrever e recusa resultado inválido", () => {
+  const certa = "Mega-Sena 2850: 04 11 23 35 47 58";
+  assert.equal(sementeMegaSena(certa), certa);
+  assert.equal(sementeMegaSena("mega sena concurso 2850 - 58, 47, 35, 23, 11, 4"), certa);
+  assert.equal(sementeMegaSena("Mega-Sena 2850: 04 11 23 35 47"), null, "5 dezenas");
+  assert.equal(sementeMegaSena("Mega-Sena 2850: 04 11 23 35 47 61"), null, "dezena acima de 60");
+  assert.equal(sementeMegaSena("Mega-Sena 2850: 04 04 23 35 47 58"), null, "dezena repetida");
+  assert.equal(sementeMegaSena("lote de outubro"), null);
 });
 
 test("embaralhar não depende da ordem de entrada", () => {

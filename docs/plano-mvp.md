@@ -73,7 +73,7 @@ O manual de identidade e as telas de abertura, início e revelação já existem
 - [x] Script do sorteio com cotas, semente, exclusões com motivo, planilha de resumos e geração do SQL (`scripts/leis`, passo a passo em `leis/README.md`), com testes no GitHub
 - [ ] 🔵 Primeira busca real na Câmara, conferindo os pontos marcados "A CONFERIR" em `leis/README.md` (precisa de uma máquina que alcance `dadosabertos.camara.leg.br`)
 - [ ] 🔵 Busca automática no Senado (hoje entra por planilha), depois de ver respostas reais da API do Senado
-- [ ] 🟣 Definir de onde vem a semente (recomendação: números do próximo concurso da Mega-Sena, depois de publicar a digital da lista)
+- [x] 🟣 Semente do sorteio: resultado do primeiro concurso da Mega-Sena depois de publicada a digital da lista (31/10/2026); o script só aceita esse formato
 - [ ] Cadastrar as leis do piloto e marcar como publicadas
 - [ ] Tirar do app a busca na Câmara (`src/lib/camara.ts`, a rota `/api/autoria` e a Câmara simulada dos testes) quando o Voto às Cegas passar a vir do banco
 

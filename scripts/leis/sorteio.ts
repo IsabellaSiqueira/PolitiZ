@@ -57,6 +57,20 @@ export function gerador(semente: string) {
   return proximo;
 }
 
+/**
+ * A semente é o resultado de um concurso da Mega-Sena (decisão da Isa, 31/10/2026), sorteado
+ * depois de publicada a digital da lista. Aceita o texto do jeito que a pessoa digitar e devolve
+ * sempre a mesma forma, ex.: "Mega-Sena 2850: 04 11 23 35 47 58". Nulo se não for um resultado válido.
+ */
+export function sementeMegaSena(texto: string): string | null {
+  const m = texto.match(/mega[\s-]*sena\D*(\d{1,5})\s*[:\-–]?\s*(.*)$/i);
+  if (!m) return null;
+  const numeros = (m[2].match(/\d+/g) ?? []).map(Number);
+  if (numeros.length !== 6 || new Set(numeros).size !== 6 || numeros.some((n) => n < 1 || n > 60)) return null;
+  const dezenas = numeros.sort((a, b) => a - b).map((n) => String(n).padStart(2, "0")).join(" ");
+  return `Mega-Sena ${Number(m[1])}: ${dezenas}`;
+}
+
 /** Embaralha (Fisher-Yates) sem mudar a lista original. A ordem de entrada é fixada por chave. */
 export function embaralhar<T extends { casa: Casa; idExterno: string }>(itens: T[], semente: string): T[] {
   const r = gerador(semente);

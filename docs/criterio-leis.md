@@ -52,7 +52,7 @@ Os temas seguem a classificação oficial da Câmara (Educação, Saúde, Trabal
 
 1. **Lista de candidatos (automática):** um script busca nos dados abertos os PLs que cumprem a seção 2.
 2. **Filtros (equipe):** duas pessoas aplicam a seção 3. Cada exclusão fica registrada com o número do projeto e o motivo.
-3. **Sorteio:** entre os candidatos que sobraram, um sorteio monta o lote respeitando as cotas da seção 4. A semente do sorteio é publicada, para qualquer pessoa conseguir refazer e chegar ao mesmo resultado.
+3. **Sorteio:** entre os candidatos que sobraram, um sorteio monta o lote respeitando as cotas da seção 4. A semente é o resultado do primeiro concurso da Mega-Sena depois da publicação da lista (decidido em 31/10/2026): ninguém da equipe controla, e qualquer pessoa consegue refazer o sorteio e chegar ao mesmo resultado.
 4. **Resumo:** uma pessoa escreve o resumo de cada lei e outra revisa, seguindo a lista da seção 6.
 5. **Publicação:** o lote entra no banco e o registro do lote (candidatos, exclusões com motivo, semente e lista final) fica disponível para quem pedir, e para as escolas.
 
@@ -94,7 +94,7 @@ O partido mostrado é o **atual** do autor, e a tela avisa que pode ser diferent
 >
 > **Como mantemos o equilíbrio.** As leis entram em grupos de 15. Em cada grupo, nenhum partido tem mais de 2 leis, aparecem pelo menos 8 partidos, pelo menos 4 regiões do país e pelo menos 5 temas diferentes.
 >
-> **Quem escolhe.** Ninguém escolhe lei por lei. Depois dos filtros, um sorteio monta cada grupo seguindo essas regras. Publicamos o número usado no sorteio, para qualquer pessoa conferir.
+> **Quem escolhe.** Ninguém escolhe lei por lei. Primeiro publicamos a lista de projetos que podem entrar. Depois, um sorteio monta cada grupo seguindo essas regras, usando como ponto de partida os números do concurso seguinte da Mega-Sena. Assim ninguém da equipe controla o resultado, e qualquer pessoa pode refazer o sorteio e conferir.
 >
 > **O resumo.** A equipe do politiQ escreve um resumo curto de cada projeto: o que muda e para quem, sem opinião. Outra pessoa revisa. A ementa oficial e o link para o texto completo aparecem logo abaixo.
 >
