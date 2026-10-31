@@ -9,7 +9,7 @@ Leia também `AGENTS.md` (avisos sobre esta versão do Next.js) e `README.md`.
 ## Documento de referência
 
 Tudo segue o documento **"politiQ · Proposta de desenvolvimento do MVP"**: https://claude.ai/artifact/HgXYneyGd2raPrpqpxEZvG
-Em caso de dúvida entre o código atual e o documento, vale o documento. A Isa ainda vai mandar o **script SQL do Supabase** e o **documento de requisitos** (33 RF, 13 RNF, 33 regras de negócio). Não invente nomes de tabelas ou funções do banco antes de recebê-los.
+Em caso de dúvida entre o código atual e o documento, vale o documento. O **banco do Supabase** foi escrito nesta base a pedido da Isa: `supabase/` (migração, seed e 104 testes; ver `supabase/README.md`, que lista tabelas, funções e as decisões tomadas). O **documento de requisitos** (33 RF, 13 RNF, 33 regras de negócio) ainda não chegou: quando chegar, confira o banco contra ele. Não crie tabela ou função nova sem passar pela migração e pelos testes do banco.
 
 ## Regras inegociáveis (seção 5 do documento)
 
@@ -28,7 +28,7 @@ Em caso de dúvida entre o código atual e o documento, vale o documento. A Isa 
 - **Voto às Cegas:** sessão de 15 leis com posição na tela ("3 de 15"). Aprovar, rejeitar ou pular. Pular não conta e a lei volta no fim. Lei decidida não volta. Autor e partido aparecem logo após a decisão, com link para o texto oficial.
 - **Página pública** com o critério de seleção das leis (`/criterio`).
 - **Papéis (ainda não implementados, dependem do Supabase):** aluno escolar (entra na turma com código de 8 caracteres), usuário gratuito (ex-aluno: 5 vidas por dia no quiz, 5 decisões por dia, recarga à meia-noite de Brasília), professor (turmas, código, painel com 4 indicadores, progresso por aula, desempenho por aluno, questões com mais erro, CSV; nunca vê o voto, só a contagem), coordenação (painel de todas as turmas, encerra matrícula), administração (sem tela; cadastro direto no Supabase).
-- O frontend não grava direto nas tabelas: chama funções do banco (RPC) como `entrar_na_turma`, `responder_questao`, `registrar_decisao`, `painel_indicadores`.
+- O frontend não grava direto nas tabelas: chama funções do banco (RPC) como `entrar_na_turma`, `responder_questao`, `registrar_decisao`, `painel_indicadores` (lista completa em `supabase/README.md`). O banco nega escrita direta e esconde gabarito e autoria até o momento certo.
 
 ## Stack e decisões
 
@@ -57,12 +57,13 @@ Fonte da verdade: o manual no Figma, https://www.figma.com/design/izkGoAQyBueKwj
 
 - Rodar: `npm install` e `npm run dev`. Antes de entregar: `npm run lint` e `npm run build`.
 - Teste local sem internet: `CAMARA_API_URL` aponta a integração para um servidor que imite a API da Câmara.
+- **Banco:** `npm run banco:testar` aplica migração e seed num PostgreSQL limpo (`BANCO_URL`, padrão local) e roda os testes de `supabase/testes`. Mudou `src/data`? Rode `npm run banco:seed`. Toda regra nova do banco ganha um teste ali.
 - **Testes:** `npm test` roda a suíte Playwright (`tests/e2e`, 390x844) contra o app em modo produção, apontando para a Câmara simulada de `tests/camara-simulada.mjs`. Cobre: o voto nunca é gravado nem enviado (storage, cookies, requisições, console), autoria fora do HTML até a decisão, sessão de 15 com pular e lei decidida, mesmo peso visual de Aprovo e Rejeito, sequência de aulas, quiz e histórico, busca, axe WCAG 2.1 AA em todas as telas, alvos de 44px, 320px sem rolagem lateral, voto pelo teclado e nenhuma requisição a terceiros. Roda também no GitHub Actions (`.github/workflows/testes.yml`). Toda tela nova entra na lista `telas` de `tests/e2e/acessibilidade.spec.ts`. `@playwright/test` e `playwright-core` ficam fixos na versão do Chromium da máquina (1.63.0); ao atualizar um, atualize o outro.
 - Commits em português, mensagens descritivas. O repositório é https://github.com/IsabellaSiqueira/PolitiZ (o ramo `versao-antiga` guarda o código anterior).
 
 ## Próximos passos
 
-1. Receber o script SQL e o documento de requisitos; ligar Supabase (Auth, turmas, progresso) usando as funções RPC do banco.
+1. Criar os projetos no Supabase, aplicar `supabase/migrations` e ligar o app (Auth, turmas, progresso) usando as funções RPC do banco. Conferir o banco contra o documento de requisitos quando ele chegar.
 2. Telas do aluno que faltam: cadastro, login, aceite dos termos, entrada na turma, vidas e limites do usuário gratuito.
 3. Painel do professor e da coordenação.
 4. Decidir com a Isa a fonte das leis (Câmara ao vivo ou cadastro no Supabase com resumo da equipe).

@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "playwright test"
+    "test": "playwright test",
+    "banco:seed": "node --experimental-strip-types --no-warnings scripts/gerar-seed.ts",
+    "banco:testar": "scripts/testar-banco.sh"
   },
   "dependencies": {
     "@fontsource/plus-jakarta-sans": "^5.3.0",
