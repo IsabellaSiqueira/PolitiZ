@@ -63,6 +63,9 @@ Fonte da verdade: o manual no Figma, https://www.figma.com/design/izkGoAQyBueKwj
 
 ## Próximos passos
 
+A lista completa e atualizada do que falta, com quem faz cada item e as decisões pendentes, está em `docs/plano-mvp.md`. Marque os itens ao concluir. Resumo:
+
+
 1. Criar os projetos no Supabase, aplicar `supabase/migrations` e ligar o app (Auth, turmas, progresso) usando as funções RPC do banco. Conferir o banco contra o documento de requisitos quando ele chegar.
 2. Telas do aluno que faltam: cadastro, login, aceite dos termos, entrada na turma, vidas e limites do usuário gratuito.
 3. Painel do professor e da coordenação.
