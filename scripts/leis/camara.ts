@@ -84,5 +84,12 @@ export async function detalharCamara(c: Candidato): Promise<Detalhe> {
     uf,
     coautores: Math.max(0, autores.length - 1),
     apresentadaEm: p.dataApresentacao?.slice(0, 10),
+    linkAutor: dep ? `https://www.camara.leg.br/deputados/${dep}` : null,
   };
+}
+
+/** Só a situação atual, para a verificação semanal (Y19). */
+export async function situacaoCamara(id: string): Promise<string | null> {
+  const p = await get<Proposicao>(`/proposicoes/${id}`);
+  return p.statusProposicao?.descricaoSituacao ?? null;
 }

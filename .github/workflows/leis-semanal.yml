@@ -1,0 +1,29 @@
+name: Verificação semanal das leis
+
+# Y19: toda madrugada de sexta para sábado (02h em Brasília = 05h UTC) confere a situação
+# das leis publicadas e tira do ar as arquivadas ou que já viraram lei.
+on:
+  schedule:
+    - cron: "0 5 * * 6"
+  workflow_dispatch:
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # sem os segredos (banco ainda não criado), o passo avisa e não falha
+      - name: Conferir as leis
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "Segredos SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY ainda não cadastrados: nada a conferir." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          npm run leis -- verificar

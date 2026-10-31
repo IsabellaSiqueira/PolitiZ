@@ -15,6 +15,8 @@ export type Detalhe = {
   partido: string | null;
   uf: string | null;
   coautores: number;
+  /** página do autor no portal oficial, para o link "Ver votações" (Y10) */
+  linkAutor?: string | null;
   /** data exata de apresentação, quando só o detalhe traz (AAAA-MM-DD) */
   apresentadaEm?: string;
 };

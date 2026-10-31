@@ -82,7 +82,7 @@ O **protótipo v5** (Figma, arquivo `izkGoAQyBueKwjQLeaHRFY`, página "App v5 ·
 ## 3. Banco e Supabase (🔵, pacotes P1 e P2)
 
 - [x] Esquema, funções, RLS, auditoria e rotina diária (`supabase/migrations`)
-- [x] Dados iniciais gerados do app e 112 testes do banco, rodando no GitHub
+- [x] Dados iniciais gerados do app e 153 testes do banco, rodando no GitHub
 - [x] Banco ajustado a D1 e D2: lei só vai ao ar com resumo e, se for real, com link oficial
 - [x] Banco ajustado à nova regra das vidas (aulas novas por dia) e à revisão obrigatória das questões (D4)
 - [ ] Ajustar o banco às respostas da D12 (Y3, Y4, Y6, Y11, Y12, Y15 a Y19)
@@ -163,7 +163,7 @@ Já existem sem login: trilha, aula, quiz com explicação e refazer, histórico
 ## 8. Testes (🔵, pacote P7)
 
 - [x] Testes automáticos das telas atuais: regra do voto, sessão de 15, aulas em sequência, quiz, acessibilidade (axe, 44px, 320px, teclado) e nenhuma requisição a terceiros, rodando no GitHub
-- [x] Testes do banco (112 casos)
+- [x] Testes do banco (153 casos)
 - [ ] Testes de ponta a ponta dos fluxos novos contra o Supabase local: cadastro, entrar na turma, quiz, Voto às Cegas, limites do gratuito, painel, CSV, encerrar matrícula
 - [ ] Rodar o Supabase local no GitHub para esses testes
 - [ ] Acessibilidade feita por pessoas: leitor de tela (NVDA no Windows, VoiceOver no iPhone, TalkBack no Android), zoom de 200%, só teclado, e a lista de problemas encontrados

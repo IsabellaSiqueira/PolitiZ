@@ -13,7 +13,7 @@ Abra http://localhost:3000. O app é pensado para celular (até 430px de largura
 
 ## Banco de dados
 
-O esquema do Supabase está em `supabase/` (tabelas, funções, segurança por linha e rotina diária), com 112 testes. Como aplicar e o que cada função faz: `supabase/README.md`.
+O esquema do Supabase está em `supabase/` (tabelas, funções, segurança por linha e rotina diária), com 153 testes. Como aplicar e o que cada função faz: `supabase/README.md`.
 
 ```bash
 npm run banco:testar

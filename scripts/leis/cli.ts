@@ -10,6 +10,7 @@ import { candidatosCamara, detalharCamara } from "./camara.ts";
 import { escreverCsv, lerCsv } from "./csv.ts";
 import { REGRAS } from "./regras.ts";
 import { chave, conferencia, digital, inicioJanela, sementeMegaSena, sortear, type Candidato, type Detalhe } from "./sorteio.ts";
+import { verificar } from "./verificar.ts";
 
 const PASTA = "leis";
 const args = process.argv.slice(2);
@@ -63,6 +64,7 @@ async function candidatos() {
         partido: l.partido || null,
         uf: l.uf || null,
         coautores: Number(l.coautores || 0),
+        linkAutor: l.link_autor || null,
       };
       if (!l.id_externo || !l.rotulo || !l.ementa || !l.apresentada_em || !l.link || !l.autoria) {
         parar(`Linha incompleta na planilha do Senado: ${JSON.stringify(l)}`);
@@ -158,10 +160,10 @@ async function sortearLote() {
   writeFileSync(
     resumos,
     escreverCsv(
-      ["casa", "id_externo", "rotulo", "tema", "apresentada_em", "ementa", "link", "autoria", "partido", "uf", "coautores", "resumo", "escrito_por", "revisado_por"],
+      ["casa", "id_externo", "rotulo", "tema", "apresentada_em", "ementa", "link", "link_autor", "autoria", "partido", "uf", "coautores", "resumo", "impacto_social", "escrito_por", "revisado_por"],
       r.lote.map((e) => {
         const a = anteriores.get(chave(e));
-        return [e.casa, e.idExterno, e.rotulo, e.tema, e.apresentadaEm, e.ementa, e.link, e.autoria, e.partido, e.uf, e.coautores, a?.resumo, a?.escrito_por, a?.revisado_por];
+        return [e.casa, e.idExterno, e.rotulo, e.tema, e.apresentadaEm, e.ementa, e.link, e.linkAutor, e.autoria, e.partido, e.uf, e.coautores, a?.resumo, a?.impacto_social, a?.escrito_por, a?.revisado_por];
       }),
     ),
   );
@@ -185,6 +187,8 @@ function gerarSql() {
     if (!l.resumo) problemas.push(`${l.rotulo}: falta o resumo`);
     else if (palavras(l.resumo) > 60) problemas.push(`${l.rotulo}: resumo com ${palavras(l.resumo)} palavras (máximo 60)`);
     if (l.resumo && /\u2014/.test(l.resumo)) problemas.push(`${l.rotulo}: resumo com travessão`);
+    if (l.impacto_social && /\u2014/.test(l.impacto_social)) problemas.push(`${l.rotulo}: contexto com travessão`);
+    if (l.link_autor && !/^https?:\/\//.test(l.link_autor)) problemas.push(`${l.rotulo}: link do autor precisa começar com https://`);
     if (!l.escrito_por || !l.revisado_por) problemas.push(`${l.rotulo}: falta quem escreveu ou quem revisou`);
     else if (l.escrito_por.trim().toLowerCase() === l.revisado_por.trim().toLowerCase()) problemas.push(`${l.rotulo}: a revisão precisa ser de outra pessoa`);
   }
@@ -192,20 +196,37 @@ function gerarSql() {
 
   const sql = [
     `-- Lote ${lote} do Voto às Cegas. Gerado por "npm run leis -- sql --lote ${lote}". Rode no SQL Editor do Supabase.`,
-    "insert into public.leis (fonte, id_externo, rotulo, tema, ementa, resumo, apresentada_em, autoria, partido, coautores, link, publicada) values",
+    "insert into public.leis (fonte, id_externo, rotulo, tema, ementa, resumo, impacto_social, apresentada_em, autoria, partido, coautores, link, link_autor, publicada) values",
     linhas
       .map((l) => {
         const partido = l.partido ? `${l.partido}${l.uf ? `-${l.uf}` : ""}` : null;
-        return `  (${q(l.casa)}, ${q(l.id_externo)}, ${q(l.rotulo)}, ${q(l.tema)}, ${q(l.ementa)}, ${q(l.resumo)}, ${q(l.apresentada_em)}, ${q(l.autoria)}, ${q(partido)}, ${Number(l.coautores || 0)}, ${q(l.link)}, true)`;
+        return `  (${q(l.casa)}, ${q(l.id_externo)}, ${q(l.rotulo)}, ${q(l.tema)}, ${q(l.ementa)}, ${q(l.resumo)}, ${q(l.impacto_social)}, ${q(l.apresentada_em)}, ${q(l.autoria)}, ${q(partido)}, ${Number(l.coautores || 0)}, ${q(l.link)}, ${q(l.link_autor)}, true)`;
       })
       .join(",\n"),
-    "on conflict (fonte, id_externo) do update set resumo = excluded.resumo, tema = excluded.tema, publicada = true;",
+    "on conflict (fonte, id_externo) do update set resumo = excluded.resumo, impacto_social = excluded.impacto_social, tema = excluded.tema, publicada = true;",
     "",
   ].join("\n");
   writeFileSync(join(pastaLote, "leis.sql"), sql);
   console.log(`SQL do lote ${lote}: ${join(pastaLote, "leis.sql")}`);
 }
 
-const comandos: Record<string, () => unknown> = { candidatos, sortear: sortearLote, sql: gerarSql };
-if (!comando || !comandos[comando]) parar("Comandos: candidatos, sortear, sql. Passo a passo em leis/README.md.");
+/* ---------- 4. verificar: confere toda semana a situação das leis publicadas (Y19) ---------- */
+
+async function verificarLeis() {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const chave = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!supabaseUrl || !chave) parar("Defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY (segredos do GitHub).");
+  const r = await verificar({ supabaseUrl, chave });
+  const linhas = [
+    `Leis conferidas: ${r.conferidas}`,
+    `Tiradas do ar: ${r.despublicadas.length}`,
+    ...r.despublicadas.map((d) => `- ${d.rotulo}: ${d.situacao}`),
+    ...(r.puladas.length ? [`Sem busca automática (Senado ou exemplo): ${r.puladas.join(", ")}`] : []),
+  ];
+  console.log(linhas.join("\n"));
+  if (process.env.GITHUB_STEP_SUMMARY) writeFileSync(process.env.GITHUB_STEP_SUMMARY, `## Verificação semanal das leis\n\n${linhas.join("\n\n")}\n`, { flag: "a" });
+}
+
+const comandos: Record<string, () => unknown> = { candidatos, sortear: sortearLote, sql: gerarSql, verificar: verificarLeis };
+if (!comando || !comandos[comando]) parar("Comandos: candidatos, sortear, sql, verificar. Passo a passo em leis/README.md.");
 await comandos[comando]();

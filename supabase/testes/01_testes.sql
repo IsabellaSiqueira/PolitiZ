@@ -190,8 +190,13 @@ reset role;
 select set_config('request.jwt.claim.sub', :livre, false); set role authenticated;
 select public.atualizar_nome('Fê');
 select teste.igual((select nome from public.minha_conta()), 'Fê', 'conta: aluno muda o próprio nome');
-select count(*) from generate_series(1, 10) i, public.entrar_na_turma('ERRADO' || i);
-select teste.erro(format($$ select public.entrar_na_turma(%L) $$, teste.valor('codigo1')), 'muitas_tentativas', 'turma: 10 códigos errados bloqueiam por uma hora');
+select count(*) from generate_series(1, 5) i, public.entrar_na_turma('ERRADO' || i);
+select teste.erro(format($$ select public.entrar_na_turma(%L) $$, teste.valor('codigo1')), 'muitas_tentativas', 'turma: 5 códigos errados bloqueiam por 10 minutos (Y17)');
+reset role;
+-- passados 10 minutos, pode tentar de novo
+update public.tentativas_codigo set em = em - interval '11 minutes' where usuario_id = :livre;
+select set_config('request.jwt.claim.sub', :livre, false); set role authenticated;
+select teste.igual((select count(*)::int from public.entrar_na_turma('ERRADO-6')), 0, 'turma: depois de 10 minutos, volta a tentar (Y17)');
 reset role;
 
 -- escola sem contrato, turma arquivada, código renovado e limite de alunos
@@ -232,14 +237,16 @@ select teste.guardar('aula1', (select id::text from public.aulas where slug = 't
 select teste.guardar('aula2', (select id::text from public.aulas where slug = 'quem-faz-as-leis'));
 select teste.negado($$ select correta from public.alternativas limit 1 $$, 'quiz: aluno não lê qual alternativa é a certa');
 select teste.negado($$ select explicacao from public.questoes limit 1 $$, 'quiz: aluno não lê a explicação antes de responder');
-select teste.ok(not exists (select 1 from public.questoes_da_aula(teste.valor('aula1')::uuid) q, jsonb_array_elements(q.alternativas) a where a ? 'correta'), 'quiz: perguntas chegam sem a resposta certa');
 select teste.ok((select liberada from public.minha_trilha() where slug = 'tres-poderes') and not (select liberada from public.minha_trilha() where slug = 'quem-faz-as-leis'), 'aulas: só a primeira começa liberada');
 select teste.erro(format($$ select public.concluir_aula(%L) $$, teste.valor('aula2')), 'aula_bloqueada', 'aulas: liberam em sequência');
 select teste.erro(format($$ select public.iniciar_tentativa(%L) $$, teste.valor('aula1')), 'aula_nao_concluida', 'quiz: só depois de concluir a aula');
 select public.concluir_aula(teste.valor('aula1')::uuid);
-select teste.ok((select liberada from public.minha_trilha() where slug = 'quem-faz-as-leis'), 'aulas: concluir a 1 libera a 2');
+select teste.ok(not (select liberada from public.minha_trilha() where slug = 'quem-faz-as-leis'), 'aulas: só ler a 1 não libera a 2, falta o quiz com 70% (Y3)');
 
 select teste.guardar('tentativa1', public.iniciar_tentativa(teste.valor('aula1')::uuid)::text);
+select teste.ok(not exists (select 1 from public.questoes_da_tentativa(teste.valor('tentativa1')::uuid) q, jsonb_array_elements(q.alternativas) a where a ? 'correta' or a ? 'letra'), 'quiz: perguntas chegam sem a resposta certa nem a letra original');
+select teste.igual((select string_agg(questao_id::text || (alternativas::text), '|' order by ordem) from public.questoes_da_tentativa(teste.valor('tentativa1')::uuid)),
+  (select string_agg(questao_id::text || (alternativas::text), '|' order by ordem) from public.questoes_da_tentativa(teste.valor('tentativa1')::uuid)), 'quiz: a ordem não muda se a página recarregar (Y4)');
 -- responde a 1ª errado e as outras certo
 select teste.guardar('q1', (select id::text from public.questoes where aula_id = teste.valor('aula1')::uuid and ordem = 1));
 select teste.guardar('q2', (select id::text from public.questoes where aula_id = teste.valor('aula1')::uuid and ordem = 2));
@@ -261,14 +268,18 @@ select set_config('request.jwt.claim.sub', :aluno1, false); set role authenticat
 select count(*) from (select public.responder_questao(teste.valor('tentativa1')::uuid, split_part(x, ':', 1)::uuid, split_part(x, ':', 2)::uuid)
   from unnest(string_to_array(teste.valor('respostas_certas'), ',')) x) r;
 select teste.ok((select acertos = total - 1 from public.finalizar_tentativa(teste.valor('tentativa1')::uuid)), 'quiz: resultado conta os acertos');
+select teste.ok((select liberada and (select quiz_aprovado from public.minha_trilha() where slug = 'tres-poderes') from public.minha_trilha() where slug = 'quem-faz-as-leis'), 'aulas: aula lida e quiz com 70% ou mais liberam a próxima (Y3)');
 select teste.erro(format($$ select public.responder_questao(%L, %L, %L) $$, teste.valor('tentativa1'), teste.valor('q1'), teste.valor('certa_q1')), 'tentativa_finalizada', 'quiz: tentativa encerrada não aceita resposta');
 select teste.guardar('tentativa1b', public.iniciar_tentativa(teste.valor('aula1')::uuid)::text);
+select teste.ok((select string_agg(questao_id::text || (alternativas::text), '|' order by ordem) from public.questoes_da_tentativa(teste.valor('tentativa1')::uuid))
+  <> (select string_agg(questao_id::text || (alternativas::text), '|' order by ordem) from public.questoes_da_tentativa(teste.valor('tentativa1b')::uuid)), 'quiz: cada tentativa embaralha questões e alternativas (Y4)');
 select teste.igual((select tentativas from public.minha_trilha() where slug = 'tres-poderes'), 1, 'quiz: pode refazer, e o histórico guarda as tentativas');
 reset role;
 
 select set_config('request.jwt.claim.sub', :aluno2, false); set role authenticated;
 select teste.erro(format($$ select public.responder_questao(%L, %L, %L) $$, teste.valor('tentativa1b'), teste.valor('q1'), teste.valor('certa_q1')), 'tentativa_invalida', 'quiz: ninguém responde pela tentativa de outro aluno');
 select teste.igual((select count(*)::int from public.tentativas_quiz), 0, 'privacidade: aluno não vê o quiz de outro aluno');
+select teste.igual((select count(*)::int from public.questoes_da_tentativa(teste.valor('tentativa1b')::uuid)), 0, 'privacidade: aluno não lê as perguntas da tentativa de outro');
 select teste.igual((select count(*)::int from public.perfis), 1, 'privacidade: aluno só vê o próprio perfil');
 select teste.igual((select count(*)::int from public.turmas), 1, 'privacidade: aluno vê só a própria turma');
 reset role;
@@ -276,7 +287,7 @@ reset role;
 -- revisão de conteúdo (D4): questão sem revisão não chega ao aluno
 insert into public.questoes (aula_id, ordem, enunciado, explicacao) values (teste.valor('aula1')::uuid, 99, 'Pergunta ainda sem revisão?', 'Explicação.');
 select set_config('request.jwt.claim.sub', :aluno1, false); set role authenticated;
-select teste.igual((select count(*)::int from public.questoes_da_aula(teste.valor('aula1')::uuid) where enunciado like 'Pergunta ainda%'), 0, 'revisão: questão sem revisão não aparece no quiz');
+select teste.igual((select count(*)::int from public.questoes_da_tentativa(public.iniciar_tentativa(teste.valor('aula1')::uuid)) where enunciado like 'Pergunta ainda%'), 0, 'revisão: questão sem revisão não aparece no quiz');
 select teste.igual((select count(*)::int from public.questoes where ordem = 99), 0, 'revisão: nem por leitura direta');
 select public.concluir_aula(teste.valor('aula2')::uuid);
 reset role;
@@ -355,6 +366,17 @@ begin
   end loop;
 end $$;
 select teste.igual((select vidas_restantes from public.meus_limites()), 4, 'gratuito: errar no quiz não gasta vida');
+reset role;
+select set_config('request.jwt.claim.sub', :sem_termo, false); set role authenticated;
+-- passa no quiz da aula 1, para a aula 2 ficar liberada
+do $$
+declare t uuid := public.iniciar_tentativa(teste.valor('aula1')::uuid);
+begin
+  perform public.responder_questao(t, teste.valor('q1')::uuid, teste.valor('certa_q1')::uuid);
+  perform public.responder_questao(t, split_part(x, ':', 1)::uuid, split_part(x, ':', 2)::uuid)
+  from unnest(string_to_array(teste.valor('respostas_certas'), ',')) x;
+  perform public.finalizar_tentativa(t);
+end $$;
 reset role;
 update public.uso_diario set vidas_usadas = 5 where usuario_id = :sem_termo and dia = privado.dia_brasilia();
 select set_config('request.jwt.claim.sub', :sem_termo, false); set role authenticated;
@@ -447,11 +469,3 @@ select set_config('request.jwt.claim.sub', :coord_a, false); set role authentica
 select teste.negado($$ select * from public.auditoria $$, 'auditoria: o app não lê a auditoria');
 reset role;
 
--- ---------------------------------------------------------------------
--- Resultado
--- ---------------------------------------------------------------------
-\o
-select format('%s %s%s', case when passou then '  ok  ' else 'FALHOU' end, nome, case when not passou then '  (' || coalesce(detalhe, '') || ')' else '' end)
-from teste.resultados order by n;
-select format(E'\n%s testes, %s falharam', count(*), count(*) filter (where not passou)) from teste.resultados;
-do $$ begin if exists (select 1 from teste.resultados where not passou) then raise exception 'há testes falhando'; end if; end $$;

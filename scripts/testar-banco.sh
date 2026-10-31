@@ -11,8 +11,10 @@ TESTE="${URL%/*}/$BANCO"
 psql "$URL" -qc "create database $BANCO"
 trap 'psql "$URL" -qc "drop database if exists $BANCO" >/dev/null' EXIT
 
-psql "$TESTE" -q -v ON_ERROR_STOP=1 \
-  -f supabase/testes/00_simula_supabase.sql \
-  -f supabase/migrations/20261031120000_esquema_inicial.sql \
-  -f supabase/seed.sql \
-  -f supabase/testes/01_testes.sql 2>&1 | grep -v "pg_cron não está ativo"
+# todas as migrações, na ordem do nome (que começa pela data)
+arquivos=(-f supabase/testes/00_simula_supabase.sql)
+for m in supabase/migrations/*.sql; do arquivos+=(-f "$m"); done
+arquivos+=(-f supabase/seed.sql)
+for t in supabase/testes/[0-9][0-9]_*.sql; do [ "$t" = supabase/testes/00_simula_supabase.sql ] || arquivos+=(-f "$t"); done
+
+psql "$TESTE" -q -v ON_ERROR_STOP=1 "${arquivos[@]}" 2>&1 | grep -v "pg_cron não está ativo"

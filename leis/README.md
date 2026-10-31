@@ -37,7 +37,7 @@ Duas pessoas leem as 15 leis contra a seção 3 do critério (cita o autor, caso
 
 ### 5. Escrever e revisar os resumos
 
-Abra `leis/lotes/01/resumos.csv` no Google Planilhas ou no Excel e preencha `resumo`, `escrito_por` e `revisado_por`, seguindo a lista da seção 6 do critério. Sortear de novo não apaga o que já foi escrito.
+Abra `leis/lotes/01/resumos.csv` no Google Planilhas ou no Excel e preencha `resumo`, `impacto_social` (o "Contexto da lei": quem ganha, quem paga e o que muda na prática, opcional), `escrito_por` e `revisado_por`, seguindo a lista da seção 6 do critério. Sortear de novo não apaga o que já foi escrito.
 
 ### 6. Gerar o SQL e publicar
 
@@ -65,6 +65,7 @@ Os dados abertos do Senado ainda não estão ligados ao script (o ambiente onde 
 | `autoria` | `Sen. Fulana de Tal` |
 | `partido`, `uf` | partido atual e estado do autor |
 | `coautores` | número de coautores |
+| `link_autor` | página do autor no site do Senado, para o link "Ver votações" (opcional) |
 
 Sem pelo menos 4 projetos do Senado elegíveis, o sorteio avisa que não consegue fechar as cotas.
 
@@ -72,6 +73,10 @@ Sem pelo menos 4 projetos do Senado elegíveis, o sorteio avisa que não consegu
 
 - Os filtros de data da Câmara (`dataApresentacaoInicio` e `dataApresentacaoFim`) e o campo de situação no detalhe (`statusProposicao.descricaoSituacao`). Se a busca trouxer projetos fora da janela, ou se nenhum arquivado for excluído, um desses nomes está errado.
 - Os nomes dos temas em `scripts/leis/regras.ts` (`temasEstudante`) contra os temas que a Câmara devolve.
+
+## Verificação semanal (Y19)
+
+Toda madrugada de sexta para sábado, o GitHub Actions (`.github/workflows/leis-semanal.yml`) roda `npm run leis -- verificar`: confere a situação de cada lei publicada da Câmara e tira do ar a arquivada ou que já virou lei. O resumo aparece na página da execução. Precisa dos segredos `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` no repositório; sem eles, a execução avisa e não faz nada. Leis do Senado ainda são conferidas à mão.
 
 ## Testes
 

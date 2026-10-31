@@ -6,10 +6,13 @@ Tudo o que o app guarda e todas as regras de negócio ficam aqui. O frontend nã
 
 | Arquivo | O que é |
 | --- | --- |
-| `migrations/20261031120000_esquema_inicial.sql` | Esquema completo: 22 tabelas, funções, RLS, auditoria e rotina diária |
+| `migrations/20261031120000_esquema_inicial.sql` | Esquema inicial: 22 tabelas, funções, RLS, auditoria e rotina diária |
+| `migrations/20261101120000_mecanicas_d12.sql` | Mecânicas aprovadas na D12: 70% no quiz, embaralhar, glossário, TRC, contexto da lei, regras do código, apagar conta e prazo de guarda, status das leis |
 | `seed.sql` | Dados iniciais: termos v1, módulo 01 com 4 aulas e 17 questões, 15 leis de exemplo. Gerado por `npm run banco:seed` a partir de `src/data` |
 | `testes/00_simula_supabase.sql` | Imita o Supabase (papéis, `auth.users`, `auth.uid()`) para testar num PostgreSQL comum |
-| `testes/01_testes.sql` | 112 testes: regras do MVP, isolamento entre escolas, papéis, limites e painel |
+| `testes/01_testes.sql` | Regras do MVP, isolamento entre escolas, papéis, limites e painel |
+| `testes/02_mecanicas_d12.sql` | Mecânicas da D12 |
+| `testes/99_resultado.sql` | Resumo dos 153 testes (roda por último) |
 
 ## Como aplicar no Supabase
 
@@ -37,7 +40,11 @@ Precisa de um PostgreSQL 15 ou mais novo. Por padrão usa `postgresql://postgres
 - **Revisão de conteúdo.** Questão só chega ao aluno com `revisada_por` e `revisada_em` preenchidos (no quiz, na leitura direta e no total de questões). Aula sem nenhuma questão revisada devolve `quiz_em_revisao`.
 - **Logs.** Nenhum erro do banco leva argumento das funções na mensagem: só o código. Chame as funções sempre por POST (padrão do `supabase-js`), nunca com `{ get: true }`, para os argumentos não irem para a URL.
 - **Auditoria.** Mudanças da administração em escolas, contratos, perfis, termos, professores de turma, módulos, aulas, questões, alternativas e leis ficam em `auditoria`, com antes e depois.
-- **Código da turma.** 8 caracteres sem letras que se confundem (0, O, 1, I, L), gerados com aleatoriedade forte; no máximo 10 códigos errados por hora por conta.
+- **Código da turma.** 8 caracteres sem letras que se confundem (0, O, 1, I, L), gerados com aleatoriedade forte, aceitos com ou sem hífen e espaços. Vale até `valido_ate` (padrão: 31 de dezembro) e respeita o `limite_alunos` da turma, se houver. No máximo 5 códigos errados a cada 10 minutos por conta.
+- **Quiz para destravar.** A próxima aula abre com a anterior lida **e** um quiz dela com 70% ou mais. Aula sem questão revisada ainda não tem quiz e só pede a leitura. Questões e alternativas vêm embaralhadas por tentativa (`questoes_da_tentativa`), na mesma ordem se a página recarregar.
+- **Pergunta da TRC.** `contagem_trc` guarda só totais (respostas, com intenção, por opção). Não tem quem respondeu, quando nem em que sessão; `sessoes_voto.trc_respondida` só impede responder duas vezes.
+- **Apagar a conta e prazo de guarda.** `apagar_minha_conta` remove conta, perfil e todo o progresso; as tentativas de quiz ficam sem dono, para as estatísticas das questões. A rotina diária apaga quem está sem turma e parado há mais de 12 meses (`privado.prazo_guarda`, a conferir com o jurídico). A auditoria nunca guarda nomes.
+- **Status das leis.** A verificação semanal (`npm run leis -- verificar`) tira do ar a lei arquivada ou que já virou lei; ela some das sessões abertas, e as já decididas continuam contando.
 
 ## Papéis
 
@@ -57,18 +64,20 @@ Erros de regra voltam com um código curto na mensagem (ex.: `sem_vidas`) e uma 
 | Todos | `minha_conta()` | Nome, papel, turma, se é gratuito, se falta aceitar os termos |
 | Todos | `meus_limites()` | Vidas (aulas novas) e decisões restantes hoje (nulos para quem não tem limite) |
 | Todos | `atualizar_nome(nome)` | Muda o nome de exibição |
-| Aluno | `entrar_na_turma(codigo)` | Entra com o código de 8 caracteres. Código errado devolve zero linhas. Erros: `ja_em_outra_turma`, `escola_sem_contrato`, `escola_lotada`, `muitas_tentativas` |
+| Aluno | `entrar_na_turma(codigo)` | Entra com o código de 8 caracteres. Código errado devolve zero linhas. Erros: `codigo_expirado`, `turma_lotada`, `ja_em_outra_turma`, `escola_sem_contrato`, `escola_lotada`, `muitas_tentativas` |
 | Aluno | `minha_trilha()` | Aulas em ordem, com liberada, concluída, melhor resultado e número de tentativas |
 | Aluno | `concluir_aula(aula)` | Marca como concluída (`aula_bloqueada` se a anterior não foi; `sem_vidas` se o gratuito já concluiu 5 aulas novas hoje) |
-| Aluno | `questoes_da_aula(aula)` | Perguntas e alternativas, sem o gabarito |
+| Aluno | `questoes_da_tentativa(tentativa)` | Perguntas e alternativas da tentativa, embaralhadas e sem o gabarito nem a letra original |
 | Aluno | `iniciar_tentativa(aula)` | Começa (ou refaz) o quiz (`aula_nao_concluida`, `quiz_em_revisao`) |
 | Aluno | `responder_questao(tentativa, questao, alternativa)` | Devolve se acertou, a alternativa certa e a explicação |
 | Aluno | `finalizar_tentativa(tentativa)` | Acertos e total; entra no histórico |
 | Aluno | `sessao_voto()` | Abre ou retoma a sessão de até 15 leis, sem autoria; as decididas vêm primeiro |
 | Aluno | `pular_lei(sessao, lei)` | Manda a lei para o fim da fila (não conta) |
-| Aluno | `registrar_decisao(sessao, lei)` | Registra que houve decisão e devolve autor, partido e link (`sem_decisoes` no limite) |
-| Aluno | `revelar_autoria(lei)` | Mostra de novo a autoria de uma lei já decidida |
-| Professor | `criar_turma(nome, serie)`, `editar_turma`, `arquivar_turma`, `renovar_codigo` | Gestão das turmas e do código |
+| Aluno | `registrar_decisao(sessao, lei)` | Registra que houve decisão e devolve autor, partido, contexto da lei, link oficial e link das votações do autor (`sem_decisoes` no limite) |
+| Aluno | `revelar_autoria(lei)` | Mostra de novo a autoria, o contexto e os links de uma lei já decidida |
+| Aluno | `responder_trc(sessao, opcoes)` | Pergunta da TRC no fim da sessão: soma 1 em cada opção escolhida (`opcao_invalida`, `sessao_invalida`) |
+| Aluno | `apagar_minha_conta()` | Apaga a conta (professor e coordenação: só pela administração) |
+| Professor | `criar_turma(nome, serie, valido_ate, limite_alunos)`, `editar_turma`, `arquivar_turma`, `renovar_codigo`, `ajustar_codigo_turma(turma, valido_ate, limite_alunos)` | Gestão das turmas e do código |
 | Professor | `professores_da_escola()`, `adicionar_professor(turma, professor)` | Chamar outro professor da mesma escola |
 | Professor, coordenação | `painel_indicadores(turma, de, ate)` | Matriculados, ativos, aulas concluídas, % de acerto e decisões (padrão: últimos 7 dias) |
 | Professor, coordenação | `progresso_por_aula(turma)`, `desempenho_alunos(turma, de, ate)` | Progresso por aula e por aluno |
