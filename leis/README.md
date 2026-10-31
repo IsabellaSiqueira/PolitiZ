@@ -37,7 +37,7 @@ Duas pessoas leem as 15 leis contra a seção 3 do critério (cita o autor, caso
 
 ### 5. Escrever e revisar os resumos
 
-Abra `leis/lotes/01/resumos.csv` no Google Planilhas ou no Excel e preencha `resumo`, `impacto_social` (o "Contexto da lei": quem ganha, quem paga e o que muda na prática, opcional), `escrito_por` e `revisado_por`, seguindo a lista da seção 6 do critério. Sortear de novo não apaga o que já foi escrito.
+Abra `leis/lotes/01/resumos.csv` no Google Planilhas ou no Excel e preencha `resumo`, as cinco colunas do "Contexto da lei" (tela D9 do protótipo, opcionais: `contexto_problema`, `contexto_muda`, `contexto_afetados`, `contexto_argumentos` com a favor **e** contra, e `contexto_situacao`), `escrito_por` e `revisado_por`, seguindo a lista da seção 6 do critério. Sortear de novo não apaga o que já foi escrito.
 
 ### 6. Gerar o SQL e publicar
 

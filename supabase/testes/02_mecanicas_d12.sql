@@ -23,7 +23,8 @@ reset role;
 -- Y10 e Y12: link das votações do autor, contexto e data
 -- ---------------------------------------------------------------------
 select teste.guardar('lei_y12', (select id::text from public.leis where id_externo = 'exemplo-0420'));
-update public.leis set link_autor = 'https://www.camara.leg.br/deputados/0000', impacto_social = 'Quem ganha e quem paga a conta, em linguagem simples.'
+update public.leis set link_autor = 'https://www.camara.leg.br/deputados/0000',
+  contexto_problema = 'Quem trabalha de dia não chega ao posto antes de ele fechar.', contexto_argumentos = 'A favor: mais acesso. Contra: custo para as cidades.'
 where id = teste.valor('lei_y12')::uuid;
 do $$ begin
   update public.leis set link_autor = 'javascript:alert(1)' where id = teste.valor('lei_y12')::uuid;
@@ -33,12 +34,12 @@ end $$;
 
 -- aluno1 já decidiu todas as leis de exemplo
 select set_config('request.jwt.claim.sub', :aluno1, false); set role authenticated;
-select teste.ok((select link_autor like 'https://%' and length(impacto_social) > 10 from public.revelar_autoria(teste.valor('lei_y12')::uuid)),
+select teste.ok((select link_autor like 'https://%' and length(contexto_problema) > 10 and contexto_argumentos like 'A favor%' from public.revelar_autoria(teste.valor('lei_y12')::uuid)),
   'voto: depois da decisão, vêm o contexto da lei e o link das votações do autor (Y10, Y12)');
 reset role;
 
 select set_config('request.jwt.claim.sub', :aluno2, false); set role authenticated;
-select teste.negado($$ select impacto_social from public.leis limit 1 $$, 'voto: o contexto não é lido direto da tabela');
+select teste.negado($$ select contexto_problema from public.leis limit 1 $$, 'voto: o contexto não é lido direto da tabela');
 select teste.negado($$ select link_autor from public.leis limit 1 $$, 'voto: o link do autor não é lido antes da decisão');
 select teste.igual((select count(*)::int from public.revelar_autoria(teste.valor('lei_y12')::uuid)), 0, 'voto: quem não decidiu não vê o contexto nem o autor');
 select teste.ok((select bool_and(apresentada_em is not null) from public.sessao_voto()), 'voto: a sessão traz a data de apresentação (Y12)');

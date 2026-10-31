@@ -73,7 +73,7 @@ Erros de regra voltam com um código curto na mensagem (ex.: `sem_vidas`) e uma 
 | Aluno | `finalizar_tentativa(tentativa)` | Acertos e total; entra no histórico |
 | Aluno | `sessao_voto()` | Abre ou retoma a sessão de até 15 leis, sem autoria; as decididas vêm primeiro |
 | Aluno | `pular_lei(sessao, lei)` | Manda a lei para o fim da fila (não conta) |
-| Aluno | `registrar_decisao(sessao, lei)` | Registra que houve decisão e devolve autor, partido, contexto da lei, link oficial e link das votações do autor (`sem_decisoes` no limite) |
+| Aluno | `registrar_decisao(sessao, lei)` | Registra que houve decisão e devolve autor, partido, contexto da lei (problema, o que muda, quem é afetado, argumentos dos dois lados, onde está), link oficial e link das votações do autor (`sem_decisoes` no limite) |
 | Aluno | `revelar_autoria(lei)` | Mostra de novo a autoria, o contexto e os links de uma lei já decidida |
 | Aluno | `responder_trc(sessao, opcoes)` | Pergunta da TRC no fim da sessão: soma 1 em cada opção escolhida (`opcao_invalida`, `sessao_invalida`) |
 | Aluno | `apagar_minha_conta()` | Apaga a conta (professor e coordenação: só pela administração) |

@@ -7,7 +7,8 @@
 --   Y6   glossário
 --   Y10  link para as votações do autor, revelado só depois da decisão
 --   Y11  pergunta da TRC no fim da sessão: só a contagem total por opção
---   Y12  contexto da lei (impacto social) e data de apresentação
+--   Y12  contexto da lei (tela D9 do protótipo: problema, o que muda, quem é afetado,
+--        argumentos e onde está agora) e data de apresentação
 --   Y15  código da turma com validade e limite de alunos
 --   Y16  código aceito com ou sem hífen e espaços, maiúsculas ou minúsculas
 --   Y17  no máximo 5 códigos errados a cada 10 minutos
@@ -127,8 +128,13 @@ create trigger auditar after insert or update or delete on public.glossario
 alter table public.leis
   -- página do autor no portal oficial ("Ver votações de ..."), revelada só depois da decisão
   add column link_autor text check (link_autor ~ '^https?://'),
-  -- contexto da lei escrito pela equipe (tela D9 do protótipo), mostrado depois da decisão
-  add column impacto_social text check (length(trim(impacto_social)) > 0),
+  -- contexto da lei escrito pela equipe (tela D9 "Contexto da lei" do protótipo), mostrado
+  -- depois da decisão. Os argumentos trazem sempre os dois lados: a favor e contra.
+  add column contexto_problema text check (length(trim(contexto_problema)) > 0),
+  add column contexto_muda text check (length(trim(contexto_muda)) > 0),
+  add column contexto_afetados text check (length(trim(contexto_afetados)) > 0),
+  add column contexto_argumentos text check (length(trim(contexto_argumentos)) > 0),
+  add column contexto_situacao text check (length(trim(contexto_situacao)) > 0),
   -- Y19: situação na fonte oficial, conferida toda semana
   add column situacao text,
   add column situacao_conferida_em timestamptz;
@@ -179,7 +185,8 @@ drop function public.registrar_decisao(uuid, uuid);
 -- REGRA 1: recebe só a lei. O voto fica na tela do aluno e nunca chega aqui.
 create function public.registrar_decisao(p_sessao uuid, p_lei uuid)
 returns table (
-  autoria text, partido text, coautores integer, link text, link_autor text, impacto_social text,
+  autoria text, partido text, coautores integer, link text, link_autor text,
+  contexto_problema text, contexto_muda text, contexto_afetados text, contexto_argumentos text, contexto_situacao text,
   exemplo boolean, sessao_concluida boolean, decisoes_restantes integer
 )
 language plpgsql security definer set search_path = ''
@@ -222,7 +229,8 @@ begin
     update public.sessoes_voto set concluida_em = now() where id = p_sessao;
   end if;
 
-  return query select l.autoria, l.partido, l.coautores, l.link, l.link_autor, l.impacto_social,
+  return query select l.autoria, l.partido, l.coautores, l.link, l.link_autor,
+    l.contexto_problema, l.contexto_muda, l.contexto_afetados, l.contexto_argumentos, l.contexto_situacao,
     l.fonte = 'exemplo', v_concluida, case when v_gratuito then 5 - v_usadas end
   from public.leis l where l.id = p_lei;
 end
@@ -230,10 +238,15 @@ $$;
 
 drop function public.revelar_autoria(uuid);
 create function public.revelar_autoria(p_lei uuid)
-returns table (autoria text, partido text, coautores integer, link text, link_autor text, impacto_social text, exemplo boolean)
+returns table (
+  autoria text, partido text, coautores integer, link text, link_autor text,
+  contexto_problema text, contexto_muda text, contexto_afetados text, contexto_argumentos text, contexto_situacao text,
+  exemplo boolean
+)
 language sql stable security definer set search_path = ''
 as $$
-  select l.autoria, l.partido, l.coautores, l.link, l.link_autor, l.impacto_social, l.fonte = 'exemplo'
+  select l.autoria, l.partido, l.coautores, l.link, l.link_autor,
+    l.contexto_problema, l.contexto_muda, l.contexto_afetados, l.contexto_argumentos, l.contexto_situacao, l.fonte = 'exemplo'
   from public.leis l
   where l.id = p_lei and exists (select 1 from public.decisoes d where d.aluno_id = auth.uid() and d.lei_id = p_lei)
 $$;

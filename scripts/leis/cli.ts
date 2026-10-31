@@ -160,10 +160,10 @@ async function sortearLote() {
   writeFileSync(
     resumos,
     escreverCsv(
-      ["casa", "id_externo", "rotulo", "tema", "apresentada_em", "ementa", "link", "link_autor", "autoria", "partido", "uf", "coautores", "resumo", "impacto_social", "escrito_por", "revisado_por"],
+      ["casa", "id_externo", "rotulo", "tema", "apresentada_em", "ementa", "link", "link_autor", "autoria", "partido", "uf", "coautores", "resumo", "contexto_problema", "contexto_muda", "contexto_afetados", "contexto_argumentos", "contexto_situacao", "escrito_por", "revisado_por"],
       r.lote.map((e) => {
         const a = anteriores.get(chave(e));
-        return [e.casa, e.idExterno, e.rotulo, e.tema, e.apresentadaEm, e.ementa, e.link, e.linkAutor, e.autoria, e.partido, e.uf, e.coautores, a?.resumo, a?.impacto_social, a?.escrito_por, a?.revisado_por];
+        return [e.casa, e.idExterno, e.rotulo, e.tema, e.apresentadaEm, e.ementa, e.link, e.linkAutor, e.autoria, e.partido, e.uf, e.coautores, a?.resumo, a?.contexto_problema, a?.contexto_muda, a?.contexto_afetados, a?.contexto_argumentos, a?.contexto_situacao, a?.escrito_por, a?.revisado_por];
       }),
     ),
   );
@@ -175,6 +175,7 @@ async function sortearLote() {
 
 /* ---------- 3. sql: transforma os resumos revisados em cadastro no banco ---------- */
 
+const CONTEXTO = ["contexto_problema", "contexto_muda", "contexto_afetados", "contexto_argumentos", "contexto_situacao"] as const;
 const palavras = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
 const q = (s: string | null | undefined) => (s == null || s === "" ? "null" : `'${String(s).replaceAll("'", "''")}'`);
 
@@ -187,7 +188,10 @@ function gerarSql() {
     if (!l.resumo) problemas.push(`${l.rotulo}: falta o resumo`);
     else if (palavras(l.resumo) > 60) problemas.push(`${l.rotulo}: resumo com ${palavras(l.resumo)} palavras (máximo 60)`);
     if (l.resumo && /\u2014/.test(l.resumo)) problemas.push(`${l.rotulo}: resumo com travessão`);
-    if (l.impacto_social && /\u2014/.test(l.impacto_social)) problemas.push(`${l.rotulo}: contexto com travessão`);
+    for (const c of CONTEXTO) if (l[c] && /\u2014/.test(l[c])) problemas.push(`${l.rotulo}: ${c} com travessão`);
+    if (l.contexto_argumentos && !(/a favor/i.test(l.contexto_argumentos) && /contra/i.test(l.contexto_argumentos))) {
+      problemas.push(`${l.rotulo}: os argumentos precisam trazer os dois lados (a favor e contra)`);
+    }
     if (l.link_autor && !/^https?:\/\//.test(l.link_autor)) problemas.push(`${l.rotulo}: link do autor precisa começar com https://`);
     if (!l.escrito_por || !l.revisado_por) problemas.push(`${l.rotulo}: falta quem escreveu ou quem revisou`);
     else if (l.escrito_por.trim().toLowerCase() === l.revisado_por.trim().toLowerCase()) problemas.push(`${l.rotulo}: a revisão precisa ser de outra pessoa`);
@@ -196,14 +200,14 @@ function gerarSql() {
 
   const sql = [
     `-- Lote ${lote} do Voto às Cegas. Gerado por "npm run leis -- sql --lote ${lote}". Rode no SQL Editor do Supabase.`,
-    "insert into public.leis (fonte, id_externo, rotulo, tema, ementa, resumo, impacto_social, apresentada_em, autoria, partido, coautores, link, link_autor, publicada) values",
+    "insert into public.leis (fonte, id_externo, rotulo, tema, ementa, resumo, contexto_problema, contexto_muda, contexto_afetados, contexto_argumentos, contexto_situacao, apresentada_em, autoria, partido, coautores, link, link_autor, publicada) values",
     linhas
       .map((l) => {
         const partido = l.partido ? `${l.partido}${l.uf ? `-${l.uf}` : ""}` : null;
-        return `  (${q(l.casa)}, ${q(l.id_externo)}, ${q(l.rotulo)}, ${q(l.tema)}, ${q(l.ementa)}, ${q(l.resumo)}, ${q(l.impacto_social)}, ${q(l.apresentada_em)}, ${q(l.autoria)}, ${q(partido)}, ${Number(l.coautores || 0)}, ${q(l.link)}, ${q(l.link_autor)}, true)`;
+        return `  (${q(l.casa)}, ${q(l.id_externo)}, ${q(l.rotulo)}, ${q(l.tema)}, ${q(l.ementa)}, ${q(l.resumo)}, ${CONTEXTO.map((c) => q(l[c])).join(", ")}, ${q(l.apresentada_em)}, ${q(l.autoria)}, ${q(partido)}, ${Number(l.coautores || 0)}, ${q(l.link)}, ${q(l.link_autor)}, true)`;
       })
       .join(",\n"),
-    "on conflict (fonte, id_externo) do update set resumo = excluded.resumo, impacto_social = excluded.impacto_social, tema = excluded.tema, publicada = true;",
+    "on conflict (fonte, id_externo) do update set resumo = excluded.resumo, ${CONTEXTO.map((c) => `${c} = excluded.${c}`).join(", ")}, tema = excluded.tema, publicada = true;",
     "",
   ].join("\n");
   writeFileSync(join(pastaLote, "leis.sql"), sql);
