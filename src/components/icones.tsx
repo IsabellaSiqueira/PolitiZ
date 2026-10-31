@@ -5,10 +5,6 @@ export type Nome =
   | "voto"
   | "jogos"
   | "busca"
-  | "politica"
-  | "economia"
-  | "sociedade"
-  | "ambiente"
   | "perfil"
   | "cadeado"
   | "certo"
@@ -39,15 +35,6 @@ const caminhos: Record<Nome, React.ReactNode> = {
       <path d="m20 20-4.2-4.2" />
     </>
   ),
-  politica: <path d="M3.5 20.5h17M5 17.5h14M6.5 17.5v-7M10.5 17.5v-7M13.5 17.5v-7M17.5 17.5v-7M4 10.5h16L12 4.5z" />,
-  economia: <path d="M4 4v16h16M7.5 15l3.5-4 3 2.5 5-6" />,
-  sociedade: (
-    <>
-      <circle cx="9" cy="8.5" r="3.5" />
-      <path d="M2.5 20c0-3.3 2.9-5 6.5-5s6.5 1.7 6.5 5M15.5 5.2a3.5 3.5 0 0 1 0 6.6M18 15.4c2 .6 3.5 2 3.5 4.6" />
-    </>
-  ),
-  ambiente: <path d="M5 19c0-8 5-13 14-14 0 9-5 14-12 14H5zm0 0 7-7" />,
   perfil: (
     <>
       <circle cx="12" cy="8" r="4" />

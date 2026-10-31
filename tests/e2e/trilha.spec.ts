@@ -39,6 +39,9 @@ test.describe("Trilha, aulas e quiz", () => {
       const errada = p.alternativas.find((a) => a.letra !== p.correta)!;
       const escolha = i === 0 ? errada : p.alternativas.find((a) => a.letra === p.correta)!;
       await page.getByRole("button", { name: new RegExp(`^${escolha.letra}\\s*${escolha.texto}`) }).click();
+      // marcar não responde: só o botão confirma (D10)
+      await expect(page.getByText(p.explicacao)).toHaveCount(0);
+      await page.getByRole("button", { name: "Responder" }).click();
       if (i === 0) {
         await expect(page.getByText(`A resposta é a ${p.correta}`)).toBeVisible();
         // a cor nunca vem sozinha: errada e certa também são anunciadas em texto

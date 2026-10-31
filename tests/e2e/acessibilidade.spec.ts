@@ -16,6 +16,7 @@ const telas: { nome: string; abrir: (page: Page) => Promise<void> }[] = [
       await comProgresso(p, { aulasConcluidas: [aula1.id] });
       await p.goto(`/quiz/${aula1.id}`);
       await p.locator("fieldset button").first().click();
+      await p.getByRole("button", { name: "Responder" }).click();
       await expect(p.getByRole("button", { name: /Próxima pergunta/ })).toBeVisible();
     },
   },

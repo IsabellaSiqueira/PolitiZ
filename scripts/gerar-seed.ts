@@ -25,7 +25,8 @@ for (const a of modulo.aulas) {
   );
   a.perguntas.forEach((p, i) => {
     linhas.push(
-      `insert into public.questoes (aula_id, ordem, enunciado, explicacao) select id, ${i + 1}, ${q(p.enunciado)}, ${q(p.explicacao)} from public.aulas where slug = ${q(a.id)};`,
+      // só para desenvolvimento: em produção a revisão é registrada por quem revisou de fato
+      `insert into public.questoes (aula_id, ordem, enunciado, explicacao, revisada_por, revisada_em) select id, ${i + 1}, ${q(p.enunciado)}, ${q(p.explicacao)}, 'seed de desenvolvimento', now() from public.aulas where slug = ${q(a.id)};`,
       `insert into public.alternativas (questao_id, letra, texto, correta) select q.id, v.letra, v.texto, v.letra = ${q(p.correta)} from public.questoes q join public.aulas a on a.id = q.aula_id, (values ${p.alternativas
         .map((alt) => `(${q(alt.letra)}, ${q(alt.texto)})`)
         .join(", ")}) as v(letra, texto) where a.slug = ${q(a.id)} and q.ordem = ${i + 1};`,

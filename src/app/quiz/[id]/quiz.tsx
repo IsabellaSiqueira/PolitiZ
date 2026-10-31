@@ -24,6 +24,8 @@ type Letra = Alternativa["letra"];
 export default function Quiz({ aula }: { aula: Aula }) {
   const { aulasConcluidas, registrarTentativa, tentativas, carregado } = useProgresso();
   const [indice, setIndice] = useState(0);
+  // marcar e confirmar (D10): o passo extra ajuda quem usa leitor de tela e evita chute
+  const [marcada, setMarcada] = useState<Letra | null>(null);
   const [escolha, setEscolha] = useState<Letra | null>(null);
   const [acertos, setAcertos] = useState(0);
   const [fim, setFim] = useState(false);
@@ -53,20 +55,22 @@ export default function Quiz({ aula }: { aula: Aula }) {
 
   const recomecar = () => {
     setIndice(0);
+    setMarcada(null);
     setEscolha(null);
     setAcertos(0);
     setFim(false);
   };
 
-  const responder = (letra: Letra) => {
-    if (respondida) return;
-    setEscolha(letra);
-    if (letra === pergunta.correta) setAcertos((n) => n + 1);
+  const responder = () => {
+    if (respondida || !marcada) return;
+    setEscolha(marcada);
+    if (marcada === pergunta.correta) setAcertos((n) => n + 1);
   };
 
   const continuar = () => {
     if (indice + 1 < total) {
       setIndice(indice + 1);
+      setMarcada(null);
       setEscolha(null);
     } else {
       registrarTentativa(aula.id, acertos, total);
@@ -117,7 +121,7 @@ export default function Quiz({ aula }: { aula: Aula }) {
   }
 
   const estadoDe = (letra: Letra): EstadoOpcao => {
-    if (!respondida) return "padrao";
+    if (!respondida) return letra === marcada ? "selecionada" : "padrao";
     if (letra === pergunta.correta) return "correta";
     if (letra === escolha) return "errada";
     return "padrao";
@@ -138,11 +142,20 @@ export default function Quiz({ aula }: { aula: Aula }) {
               letra={alt.letra}
               texto={alt.texto}
               estado={estadoDe(alt.letra)}
-              onClick={() => responder(alt.letra)}
+              onClick={() => setMarcada(alt.letra)}
               disabled={respondida}
             />
           ))}
         </fieldset>
+
+        {!respondida && (
+          <div className="px-5 pt-5">
+            <BotaoPrincipal onClick={responder} disabled={!marcada} className="w-full">
+              Responder
+            </BotaoPrincipal>
+            {!marcada && <p className="pt-2 text-center text-[13px] text-suave">Escolha uma alternativa para responder.</p>}
+          </div>
+        )}
 
         {respondida && (
           <div className="anim-revela px-5 pt-6">

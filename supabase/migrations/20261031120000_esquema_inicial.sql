@@ -167,7 +167,11 @@ create table public.questoes (
   enunciado text not null,
   -- só aparece depois da resposta (função responder_questao)
   explicacao text not null,
-  unique (aula_id, ordem)
+  -- a questão só chega ao aluno depois da revisão de conteúdo (decisão D4)
+  revisada_por text,
+  revisada_em timestamptz,
+  unique (aula_id, ordem),
+  check ((revisada_por is null) = (revisada_em is null))
 );
 
 create table public.alternativas (
@@ -285,6 +289,7 @@ comment on table public.decisoes is 'Registra só que o aluno decidiu sobre a le
 create table public.uso_diario (
   usuario_id uuid not null references public.perfis (id) on delete cascade,
   dia date not null,
+  -- cada vida é uma aula nova concluída no dia; errar no quiz não gasta vida
   vidas_usadas smallint not null default 0 check (vidas_usadas between 0 and 5),
   decisoes smallint not null default 0 check (decisoes between 0 and 5),
   primary key (usuario_id, dia)
@@ -618,7 +623,7 @@ returns table (
 language sql stable security definer set search_path = ''
 as $$
   select m.numero, m.titulo, a.id, a.slug, a.numero, a.titulo, a.resumo,
-    (select count(*)::int from public.questoes q where q.aula_id = a.id),
+    (select count(*)::int from public.questoes q where q.aula_id = a.id and q.revisada_em is not null),
     privado.aula_liberada(auth.uid(), a.id),
     exists (select 1 from public.aulas_concluidas c where c.aluno_id = auth.uid() and c.aula_id = a.id),
     (select max(t.acertos) from public.tentativas_quiz t where t.aluno_id = auth.uid() and t.aula_id = a.id),
@@ -628,15 +633,31 @@ as $$
   order by m.numero, a.numero
 $$;
 
+-- Usuário gratuito: cada aula nova concluída gasta uma das 5 vidas do dia.
+-- Rever aula já concluída e errar no quiz não gastam nada. Aluno de turma não tem limite.
 create function public.concluir_aula(p_aula uuid) returns void
 language plpgsql security definer set search_path = ''
 as $$
-declare v_aluno uuid := privado.exigir(array['aluno']::public.papel_usuario[]);
+declare
+  v_aluno uuid := privado.exigir(array['aluno']::public.papel_usuario[]);
+  v_usadas integer;
 begin
   if not privado.aula_liberada(v_aluno, p_aula) then
     perform privado.erro('aula_bloqueada', 'Conclua a aula anterior primeiro.');
   end if;
-  insert into public.aulas_concluidas (aluno_id, aula_id) values (v_aluno, p_aula) on conflict do nothing;
+  if exists (select 1 from public.aulas_concluidas where aluno_id = v_aluno and aula_id = p_aula) then
+    return;
+  end if;
+  if privado.eh_gratuito(v_aluno) then
+    insert into public.uso_diario (usuario_id, dia) values (v_aluno, privado.dia_brasilia()) on conflict do nothing;
+    update public.uso_diario set vidas_usadas = vidas_usadas + 1
+    where usuario_id = v_aluno and dia = privado.dia_brasilia() and vidas_usadas < 5
+    returning vidas_usadas into v_usadas;
+    if v_usadas is null then
+      perform privado.erro('sem_vidas', 'Suas aulas novas de hoje acabaram. Elas voltam à meia-noite.');
+    end if;
+  end if;
+  insert into public.aulas_concluidas (aluno_id, aula_id) values (v_aluno, p_aula);
 end
 $$;
 
@@ -650,7 +671,7 @@ as $$
      from public.alternativas al where al.questao_id = q.id)
   from public.questoes q
   join public.aulas a on a.id = q.aula_id and a.publicado
-  where q.aula_id = p_aula and auth.uid() is not null
+  where q.aula_id = p_aula and q.revisada_em is not null and auth.uid() is not null
   order by q.ordem
 $$;
 
@@ -665,9 +686,8 @@ begin
   if not exists (select 1 from public.aulas_concluidas where aluno_id = v_aluno and aula_id = p_aula) then
     perform privado.erro('aula_nao_concluida', 'Leia a aula e marque como concluída antes do quiz.');
   end if;
-  if privado.eh_gratuito(v_aluno) and coalesce((select vidas_usadas from public.uso_diario
-      where usuario_id = v_aluno and dia = privado.dia_brasilia()), 0) >= 5 then
-    perform privado.erro('sem_vidas', 'Suas vidas de hoje acabaram. Elas voltam à meia-noite.');
+  if not exists (select 1 from public.questoes where aula_id = p_aula and revisada_em is not null) then
+    perform privado.erro('quiz_em_revisao', 'O quiz desta aula ainda está em revisão.');
   end if;
   insert into public.tentativas_quiz (aluno_id, aula_id) values (v_aluno, p_aula) returning id into v_id;
   return v_id;
@@ -675,7 +695,7 @@ end
 $$;
 
 create function public.responder_questao(p_tentativa uuid, p_questao uuid, p_alternativa uuid)
-returns table (correta boolean, alternativa_correta uuid, explicacao text, vidas_restantes integer)
+returns table (correta boolean, alternativa_correta uuid, explicacao text)
 language plpgsql security definer set search_path = ''
 as $$
 declare
@@ -683,8 +703,6 @@ declare
   v_tentativa public.tentativas_quiz;
   v_certa uuid;
   v_acertou boolean;
-  v_gratuito boolean := privado.eh_gratuito(v_aluno);
-  v_usadas integer;
 begin
   select * into v_tentativa from public.tentativas_quiz where id = p_tentativa and aluno_id = v_aluno for update;
   if v_tentativa.id is null then
@@ -693,7 +711,7 @@ begin
   if v_tentativa.finalizada_em is not null then
     perform privado.erro('tentativa_finalizada', 'Este quiz já terminou. Comece outra tentativa.');
   end if;
-  if not exists (select 1 from public.questoes where id = p_questao and aula_id = v_tentativa.aula_id) then
+  if not exists (select 1 from public.questoes where id = p_questao and aula_id = v_tentativa.aula_id and revisada_em is not null) then
     perform privado.erro('questao_invalida', 'Essa pergunta não é deste quiz.');
   end if;
   if not exists (select 1 from public.alternativas where id = p_alternativa and questao_id = p_questao) then
@@ -703,29 +721,13 @@ begin
     perform privado.erro('ja_respondida', 'Você já respondeu esta pergunta nesta tentativa.');
   end if;
 
-  if v_gratuito then
-    insert into public.uso_diario (usuario_id, dia) values (v_aluno, privado.dia_brasilia()) on conflict do nothing;
-    select vidas_usadas into v_usadas from public.uso_diario
-    where usuario_id = v_aluno and dia = privado.dia_brasilia() for update;
-    if v_usadas >= 5 then
-      perform privado.erro('sem_vidas', 'Suas vidas de hoje acabaram. Elas voltam à meia-noite.');
-    end if;
-  end if;
-
   select id into v_certa from public.alternativas where questao_id = p_questao and alternativas.correta;
   v_acertou := v_certa = p_alternativa;
   insert into public.respostas (tentativa_id, questao_id, alternativa_id, correta)
   values (p_tentativa, p_questao, p_alternativa, v_acertou);
 
-  -- cada erro gasta uma vida do usuário gratuito
-  if v_gratuito and not v_acertou then
-    update public.uso_diario set vidas_usadas = vidas_usadas + 1
-    where usuario_id = v_aluno and dia = privado.dia_brasilia()
-    returning vidas_usadas into v_usadas;
-  end if;
-
-  return query select v_acertou, v_certa, (select q.explicacao from public.questoes q where q.id = p_questao),
-    case when v_gratuito then 5 - coalesce(v_usadas, 0) end;
+  -- errar não gasta vida: as vidas só limitam aulas novas por dia
+  return query select v_acertou, v_certa, (select q.explicacao from public.questoes q where q.id = p_questao);
 end
 $$;
 
@@ -745,7 +747,7 @@ begin
     return query select v_tentativa.acertos, v_tentativa.total;
     return;
   end if;
-  select count(*) into v_total from public.questoes where aula_id = v_tentativa.aula_id;
+  select count(*) into v_total from public.questoes where aula_id = v_tentativa.aula_id and revisada_em is not null;
   if (select count(*) from public.respostas where tentativa_id = p_tentativa) < v_total then
     perform privado.erro('quiz_incompleto', 'Responda todas as perguntas antes de terminar.');
   end if;
@@ -1232,10 +1234,11 @@ create policy "matriculas: o aluno e quem acompanha a turma" on public.matricula
 create policy "modulos: publicados" on public.modulos for select to authenticated using (publicado);
 create policy "aulas: publicadas" on public.aulas for select to authenticated
   using (publicado and exists (select 1 from public.modulos m where m.id = modulo_id and m.publicado));
-create policy "questoes: de aulas publicadas" on public.questoes for select to authenticated
-  using (exists (select 1 from public.aulas a where a.id = aula_id and a.publicado));
+create policy "questoes: revisadas, de aulas publicadas" on public.questoes for select to authenticated
+  using (revisada_em is not null and exists (select 1 from public.aulas a where a.id = aula_id and a.publicado));
 create policy "alternativas: de questões visíveis" on public.alternativas for select to authenticated
-  using (exists (select 1 from public.questoes q join public.aulas a on a.id = q.aula_id where q.id = questao_id and a.publicado));
+  using (exists (select 1 from public.questoes q join public.aulas a on a.id = q.aula_id
+                 where q.id = questao_id and q.revisada_em is not null and a.publicado));
 
 create policy "aulas_concluidas: o aluno e quem acompanha" on public.aulas_concluidas for select to authenticated
   using (privado.pode_ver_aluno(aluno_id));

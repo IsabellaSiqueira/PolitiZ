@@ -9,7 +9,7 @@ Tudo o que o app guarda e todas as regras de negócio ficam aqui. O frontend nã
 | `migrations/20261031120000_esquema_inicial.sql` | Esquema completo: 22 tabelas, funções, RLS, auditoria e rotina diária |
 | `seed.sql` | Dados iniciais: termos v1, módulo 01 com 4 aulas e 17 questões, 15 leis de exemplo. Gerado por `npm run banco:seed` a partir de `src/data` |
 | `testes/00_simula_supabase.sql` | Imita o Supabase (papéis, `auth.users`, `auth.uid()`) para testar num PostgreSQL comum |
-| `testes/01_testes.sql` | 107 testes: regras do MVP, isolamento entre escolas, papéis, limites e painel |
+| `testes/01_testes.sql` | 112 testes: regras do MVP, isolamento entre escolas, papéis, limites e painel |
 
 ## Como aplicar no Supabase
 
@@ -33,7 +33,9 @@ Precisa de um PostgreSQL 15 ou mais novo. Por padrão usa `postgresql://postgres
 - **Gabarito escondido.** O app não lê `alternativas.correta` nem `questoes.explicacao`; eles voltam por `responder_questao`, depois da resposta.
 - **Isolamento entre escolas.** Professor vê só as próprias turmas; coordenação, só a própria escola; aluno, só os próprios dados. Professor e coordenação nunca leem `decisoes`: o painel devolve só contagens.
 - **Sem escrita direta.** `anon` e `authenticated` não têm `insert`, `update` nem `delete` em tabela nenhuma.
-- **Limites do usuário gratuito.** 5 vidas (cada erro gasta uma) e 5 decisões por dia; o dia é o de Brasília, então a recarga à meia-noite é automática.
+- **Limites do usuário gratuito.** 5 vidas por dia, em que cada vida é uma **aula nova concluída** (errar no quiz e rever aula já concluída não gastam nada), e 5 decisões por dia. O dia é o de Brasília, então a recarga à meia-noite é automática. Aluno de turma não tem limite.
+- **Revisão de conteúdo.** Questão só chega ao aluno com `revisada_por` e `revisada_em` preenchidos (no quiz, na leitura direta e no total de questões). Aula sem nenhuma questão revisada devolve `quiz_em_revisao`.
+- **Logs.** Nenhum erro do banco leva argumento das funções na mensagem: só o código. Chame as funções sempre por POST (padrão do `supabase-js`), nunca com `{ get: true }`, para os argumentos não irem para a URL.
 - **Auditoria.** Mudanças da administração em escolas, contratos, perfis, termos, professores de turma, módulos, aulas, questões, alternativas e leis ficam em `auditoria`, com antes e depois.
 - **Código da turma.** 8 caracteres sem letras que se confundem (0, O, 1, I, L), gerados com aleatoriedade forte; no máximo 10 códigos errados por hora por conta.
 
@@ -53,14 +55,14 @@ Erros de regra voltam com um código curto na mensagem (ex.: `sem_vidas`) e uma 
 | --- | --- | --- |
 | Todos | `aceitar_termos(versao)` | Aceite da versão vigente (exigido antes das outras funções) |
 | Todos | `minha_conta()` | Nome, papel, turma, se é gratuito, se falta aceitar os termos |
-| Todos | `meus_limites()` | Vidas e decisões restantes hoje (nulos para quem não tem limite) |
+| Todos | `meus_limites()` | Vidas (aulas novas) e decisões restantes hoje (nulos para quem não tem limite) |
 | Todos | `atualizar_nome(nome)` | Muda o nome de exibição |
 | Aluno | `entrar_na_turma(codigo)` | Entra com o código de 8 caracteres. Código errado devolve zero linhas. Erros: `ja_em_outra_turma`, `escola_sem_contrato`, `escola_lotada`, `muitas_tentativas` |
 | Aluno | `minha_trilha()` | Aulas em ordem, com liberada, concluída, melhor resultado e número de tentativas |
-| Aluno | `concluir_aula(aula)` | Marca como concluída (`aula_bloqueada` se a anterior não foi) |
+| Aluno | `concluir_aula(aula)` | Marca como concluída (`aula_bloqueada` se a anterior não foi; `sem_vidas` se o gratuito já concluiu 5 aulas novas hoje) |
 | Aluno | `questoes_da_aula(aula)` | Perguntas e alternativas, sem o gabarito |
-| Aluno | `iniciar_tentativa(aula)` | Começa (ou refaz) o quiz (`aula_nao_concluida`, `sem_vidas`) |
-| Aluno | `responder_questao(tentativa, questao, alternativa)` | Devolve se acertou, a alternativa certa, a explicação e as vidas restantes |
+| Aluno | `iniciar_tentativa(aula)` | Começa (ou refaz) o quiz (`aula_nao_concluida`, `quiz_em_revisao`) |
+| Aluno | `responder_questao(tentativa, questao, alternativa)` | Devolve se acertou, a alternativa certa e a explicação |
 | Aluno | `finalizar_tentativa(tentativa)` | Acertos e total; entra no histórico |
 | Aluno | `sessao_voto()` | Abre ou retoma a sessão de até 15 leis, sem autoria; as decididas vêm primeiro |
 | Aluno | `pular_lei(sessao, lei)` | Manda a lei para o fim da fila (não conta) |

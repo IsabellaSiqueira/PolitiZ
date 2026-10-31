@@ -273,6 +273,19 @@ select teste.igual((select count(*)::int from public.perfis), 1, 'privacidade: a
 select teste.igual((select count(*)::int from public.turmas), 1, 'privacidade: aluno vê só a própria turma');
 reset role;
 
+-- revisão de conteúdo (D4): questão sem revisão não chega ao aluno
+insert into public.questoes (aula_id, ordem, enunciado, explicacao) values (teste.valor('aula1')::uuid, 99, 'Pergunta ainda sem revisão?', 'Explicação.');
+select set_config('request.jwt.claim.sub', :aluno1, false); set role authenticated;
+select teste.igual((select count(*)::int from public.questoes_da_aula(teste.valor('aula1')::uuid) where enunciado like 'Pergunta ainda%'), 0, 'revisão: questão sem revisão não aparece no quiz');
+select teste.igual((select count(*)::int from public.questoes where ordem = 99), 0, 'revisão: nem por leitura direta');
+select public.concluir_aula(teste.valor('aula2')::uuid);
+reset role;
+update public.questoes set revisada_por = null, revisada_em = null where aula_id = teste.valor('aula2')::uuid;
+select set_config('request.jwt.claim.sub', :aluno1, false); set role authenticated;
+select teste.erro(format($$ select public.iniciar_tentativa(%L) $$, teste.valor('aula2')), 'quiz_em_revisao', 'revisão: aula sem questão revisada não abre quiz');
+reset role;
+update public.questoes set revisada_por = 'Equipe de conteúdo', revisada_em = now() where aula_id = teste.valor('aula2')::uuid;
+
 -- ---------------------------------------------------------------------
 -- Aluno: Voto às Cegas
 -- ---------------------------------------------------------------------
@@ -313,7 +326,7 @@ select teste.igual((select decisoes_voto from public.painel_indicadores(teste.va
 reset role;
 
 -- ---------------------------------------------------------------------
--- Usuário gratuito: 5 vidas e 5 decisões por dia
+-- Usuário gratuito: 5 vidas (aulas novas) e 5 decisões por dia
 -- ---------------------------------------------------------------------
 select set_config('request.jwt.claim.sub', :sem_termo, false);
 -- aluno da escola A sai da turma pela coordenação e vira gratuito
@@ -328,24 +341,28 @@ select teste.igual((select gratuito from public.minha_conta()), true, 'gratuito:
 select teste.igual((select vidas_restantes from public.meus_limites()), 5, 'gratuito: começa o dia com 5 vidas');
 select teste.igual((select decisoes_restantes from public.meus_limites()), 5, 'gratuito: começa o dia com 5 decisões');
 select teste.ok((select recarrega_em = ((now() at time zone 'America/Sao_Paulo')::date + 1)::timestamp at time zone 'America/Sao_Paulo' from public.meus_limites()), 'gratuito: recarga à meia-noite de Brasília');
+-- as vidas limitam aulas novas por dia: cada aula nova concluída gasta uma
 select public.concluir_aula(teste.valor('aula1')::uuid);
--- 5 erros gastam as 5 vidas (cada erro numa tentativa nova, para ter perguntas livres)
+select teste.igual((select vidas_restantes from public.meus_limites()), 4, 'gratuito: cada aula nova concluída gasta uma vida');
+select public.concluir_aula(teste.valor('aula1')::uuid);
+select teste.igual((select vidas_restantes from public.meus_limites()), 4, 'gratuito: rever aula já concluída não gasta vida');
 do $$
 declare t uuid;
 begin
-  for i in 1..5 loop
+  for i in 1..3 loop
     t := public.iniciar_tentativa(teste.valor('aula1')::uuid);
     perform public.responder_questao(t, teste.valor('q1')::uuid, teste.valor('errada_q1')::uuid);
   end loop;
 end $$;
-select teste.igual((select vidas_restantes from public.meus_limites()), 0, 'gratuito: cada erro gasta uma vida');
-select teste.erro(format($$ select public.iniciar_tentativa(%L) $$, teste.valor('aula1')), 'sem_vidas', 'gratuito: sem vidas, o quiz trava');
+select teste.igual((select vidas_restantes from public.meus_limites()), 4, 'gratuito: errar no quiz não gasta vida');
+reset role;
+update public.uso_diario set vidas_usadas = 5 where usuario_id = :sem_termo and dia = privado.dia_brasilia();
+select set_config('request.jwt.claim.sub', :sem_termo, false); set role authenticated;
+select teste.erro(format($$ select public.concluir_aula(%L) $$, teste.valor('aula2')), 'sem_vidas', 'gratuito: sem vidas, não conclui aula nova no dia');
+select teste.ok(public.iniciar_tentativa(teste.valor('aula1')::uuid) is not null, 'gratuito: sem vidas, ainda refaz o quiz de aula concluída');
 reset role;
 
--- acerto não gasta vida
 select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-0000000000f3', false); set role authenticated;
-select public.concluir_aula(teste.valor('aula1')::uuid);
-select teste.igual((select vidas_restantes from public.responder_questao(public.iniciar_tentativa(teste.valor('aula1')::uuid), teste.valor('q1')::uuid, teste.valor('certa_q1')::uuid)), 5, 'gratuito: acerto não gasta vida');
 -- decisões: pular não conta, a 6ª decisão é recusada
 select teste.guardar('sessao_livre', (select sessao_id::text from public.sessao_voto() limit 1));
 select public.pular_lei(sessao_id, lei_id) from public.sessao_voto() where posicao = 1;
@@ -363,7 +380,7 @@ reset role;
 -- Painel do professor e da coordenação
 -- ---------------------------------------------------------------------
 select set_config('request.jwt.claim.sub', :prof_a, false); set role authenticated;
-select teste.ok((select alunos_matriculados = 2 and alunos_ativos = 1 and aulas_concluidas = 1 and acerto_quizzes is not null
+select teste.ok((select alunos_matriculados = 2 and alunos_ativos = 1 and aulas_concluidas = 2 and acerto_quizzes is not null
   from public.painel_indicadores(teste.valor('turma1')::uuid)), 'painel: quatro indicadores dos últimos 7 dias');
 select teste.igual((select alunos_ativos from public.painel_indicadores(teste.valor('turma1')::uuid, current_date - 60, current_date - 30)), 0, 'painel: filtro de período');
 select teste.igual((select alunos_concluiram from public.progresso_por_aula(teste.valor('turma1')::uuid) where numero = 1), 1, 'painel: progresso por aula');

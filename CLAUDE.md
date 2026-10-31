@@ -9,7 +9,7 @@ Leia também `AGENTS.md` (avisos sobre esta versão do Next.js) e `README.md`.
 ## Documento de referência
 
 Tudo segue o documento **"politiQ · Proposta de desenvolvimento do MVP"**: https://claude.ai/artifact/HgXYneyGd2raPrpqpxEZvG
-Em caso de dúvida entre o código atual e o documento, vale o documento. O **banco do Supabase** foi escrito nesta base a pedido da Isa: `supabase/` (migração, seed e 107 testes; ver `supabase/README.md`, que lista tabelas, funções e as decisões tomadas). O **documento de requisitos** (33 RF, 13 RNF, 33 regras de negócio) ainda não chegou: quando chegar, confira o banco contra ele. Não crie tabela ou função nova sem passar pela migração e pelos testes do banco.
+Em caso de dúvida entre o código atual e o documento, vale o documento. Também chegaram o **PRD MVP v1.5** e o **Tech Brief v1.6**, que divergem em vários pontos da Proposta e das regras abaixo: a comparação está em `docs/divergencias-prd.md` e espera a resposta da Isa (decisão D12). Até lá, não implemente mecânica do PRD que não esteja aprovada, e nunca uma que quebre as regras inegociáveis. O **banco do Supabase** foi escrito nesta base a pedido da Isa: `supabase/` (migração, seed e 112 testes; ver `supabase/README.md`, que lista tabelas, funções e as decisões tomadas). O **documento de requisitos** (33 RF, 13 RNF, 33 regras de negócio) ainda não chegou: quando chegar, confira o banco contra ele. Não crie tabela ou função nova sem passar pela migração e pelos testes do banco.
 
 ## Regras inegociáveis (seção 5 do documento)
 
@@ -24,11 +24,14 @@ Em caso de dúvida entre o código atual e o documento, vale o documento. O **ba
 
 ## Comportamentos do MVP
 
-- **Aula:** texto da aula, "marcar como concluída", depois o quiz (com explicação após cada resposta, pode ser refeito, histórico de tentativas). Aulas liberam em sequência.
+- **Aula:** texto da aula, "marcar como concluída", depois o quiz (com explicação após cada resposta, pode ser refeito, histórico de tentativas). Aulas liberam em sequência. No quiz o aluno **marca e confirma** com "Responder" (acessibilidade e evitar chute). Toda questão passa por **revisão de conteúdo** antes de chegar a alunos (o banco só entrega questão com `revisada_em`).
 - **Voto às Cegas:** sessão de 15 leis com posição na tela ("3 de 15"). Aprovar, rejeitar ou pular. Pular não conta e a lei volta no fim. Lei decidida não volta. Autor e partido aparecem logo após a decisão, com link para o texto oficial.
 - **Página pública** com o critério de seleção das leis (`/criterio`).
-- **Papéis (ainda não implementados, dependem do Supabase):** aluno escolar (entra na turma com código de 8 caracteres), usuário gratuito (ex-aluno: 5 vidas por dia no quiz, 5 decisões por dia, recarga à meia-noite de Brasília), professor (turmas, código, painel com 4 indicadores, progresso por aula, desempenho por aluno, questões com mais erro, CSV; nunca vê o voto, só a contagem), coordenação (painel de todas as turmas, encerra matrícula), administração (sem tela; cadastro direto no Supabase).
+- **Papéis (ainda não implementados, dependem do Supabase):** aluno escolar (entra na turma com código de 8 caracteres), usuário gratuito (ex-aluno: 5 vidas por dia, em que **cada vida é uma aula nova concluída**; errar no quiz não tira vida; 5 decisões por dia; recarga à meia-noite de Brasília; aluno de turma não tem esses limites), professor (turmas, código, painel com 4 indicadores, progresso por aula, desempenho por aluno, questões com mais erro, CSV; nunca vê o voto, só a contagem), coordenação (painel de todas as turmas, encerra matrícula), administração (sem tela; cadastro direto no Supabase).
 - O frontend não grava direto nas tabelas: chama funções do banco (RPC) como `entrar_na_turma`, `responder_questao`, `registrar_decisao`, `painel_indicadores` (lista completa em `supabase/README.md`). O banco nega escrita direta e esconde gabarito e autoria até o momento certo.
+
+- **Piloto:** uma escola, 2 ou 3 turmas, 6 semanas, em fevereiro ou março de 2027, depois do jurídico pronto. A mesma escola testa o kit físico do Plenário.
+- **Logs (D8):** sem Sentry no piloto. Nenhum conteúdo de resposta, alternativa marcada ou voto pode aparecer nos logs da Vercel ou do Supabase: sem `console` no app (o lint barra), funções do banco sempre por POST, erros do banco só com código.
 
 ## Stack e decisões
 
