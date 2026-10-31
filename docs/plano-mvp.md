@@ -31,7 +31,7 @@ Sem estas respostas, partes grandes não podem começar. Em ordem de urgência. 
   - **Recomendação:** 1 escola, 2 ou 3 turmas do 1º ou 2º ano (de 70 a 105 alunos), 1 ou 2 professores de Sociologia, Filosofia ou História que queiram participar, e 1 pessoa da coordenação que acompanhe. A escola precisa de internet que alcance o site e de celulares ou laboratório. Duração de 6 semanas, começando só depois de a seção 9 (jurídico) estar pronta. Combinar com a escola, antes de começar, o que conta como sucesso, por exemplo: pelo menos 60% dos alunos ativos por semana; a turma conclui pelo menos 6 aulas; o professor abre o painel toda semana; nenhum incidente com dados; e, na conversa final, professores e alunos querem continuar.
 - [x] 🟣 **D10. Quiz: marcar e confirmar** (aprovada e feita). O motivo é acessibilidade e evitar chute. Era: marcar e confirmar, ou responder no toque? O manual tem o estado "marcada" na alternativa; hoje o app responde no primeiro toque.
   - **Recomendação:** marcar e confirmar (toque na alternativa, depois "Responder"). O passo extra ajuda quem usa leitor de tela ou tem dificuldade motora e evita o chute.
-- [x] 🟣 **D11. Juntar este trabalho no ramo principal** (aprovada: pull request aberto). Tudo desta fase está no ramo `claude/leia-esse-git-k3u06s`, e o site, quando for publicado, sai do `main`.
+- [x] 🟣 **D11. Juntar este trabalho no ramo principal** (aprovada: [pull request #1](https://github.com/IsabellaSiqueira/PolitiZ/pull/1) aberto). Tudo desta fase está no ramo `claude/leia-esse-git-k3u06s`, e o site, quando for publicado, sai do `main`.
   - **Recomendação:** abrir agora o pull request para o `main`, revisar e juntar. Os testes do app e do banco já rodam no GitHub e estão passando; quanto mais tempo os ramos ficam separados, mais difícil fica juntar.
 
 - [ ] 🟣 **D12. Responder às divergências entre o PRD e o que existe** (`docs/divergencias-prd.md`), começando pela X0: qual é o produto do MVP (curso da FIAP, escola do Ensino Médio, ou os dois). As respostas viram tarefas neste plano.
@@ -136,7 +136,7 @@ Já existem sem login: trilha, aula, quiz com explicação e refazer, histórico
 
 ## 7. Publicação e integrações (🔵 com contas da 🟣, pacote P6)
 
-- [ ] 🟣 Juntar este ramo no `main` (abrir o pull request e revisar)
+- [ ] 🟣 Revisar e juntar o [pull request #1](https://github.com/IsabellaSiqueira/PolitiZ/pull/1) no `main`
 - [ ] 🟣 Contas: Vercel, Resend, domínio (e Sentry, se D8 = sim)
 - [ ] 🟣 Comprar o domínio e apontar para a Vercel (HTTPS automático)
 - [ ] 🟣 Criar o e-mail `leis@` no domínio (encaminhamento para a caixa da equipe), para as correções de resumo
