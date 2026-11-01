@@ -38,20 +38,20 @@ Sem estas respostas, partes grandes não podem começar. Em ordem de urgência. 
 
 ### Mecânicas aprovadas na D12
 
-- [ ] Y3: a próxima aula abre com a anterior lida **e** o quiz dela com 70% ou mais
-- [ ] Y4: questões e alternativas embaralhadas a cada tentativa
-- [ ] Y6: aba de glossário e termo sublinhado que abre a definição (mini-jogos ficam para depois)
-- [ ] Y7: deslizar como atalho no Voto às Cegas, igual para os dois lados; os botões continuam
-- [ ] Y8: tela de entrada com Concordo ou Discordo, sem registrar a resposta
+- [x] Y3: a próxima aula abre com a anterior lida **e** o quiz dela com 70% ou mais (banco e app; resultado no desenho C8, aula bloqueada na gaveta C10)
+- [x] Y4: questões e alternativas embaralhadas a cada tentativa (banco e app)
+- [x] Y6: aba de glossário (`/glossario` e botão no cabeçalho da aula e do quiz) e termo sublinhado que abre a definição; 22 termos **provisórios** em `src/data/glossario.ts`, a revisar pela equipe de conteúdo
+- [x] Y7: deslizar como atalho no Voto às Cegas, igual para os dois lados; os botões continuam
+- [x] Y8: tela de entrada (`/entrada`) com Concordo ou Discordo, sem registrar a resposta
 - [x] Y9: sessão de 15 leis (já era assim)
-- [ ] Y10: links do texto oficial e das votações do autor na revelação, sem registrar clique
-- [ ] Y11: pergunta da TRC no fim da sessão, só com a contagem total por opção
-- [ ] Y12: campo de impacto social (com base na tela D9 "Contexto da lei") e data de apresentação
-- [ ] Y13: PWA instalável, sem modo offline
+- [x] Y10: links do texto oficial e das votações do autor na revelação, sem registrar clique
+- [x] Y11: pergunta da TRC no fim da sessão, só com a contagem total por opção (banco pronto; no app, envia ao banco quando ele estiver ligado)
+- [x] Y12: contexto da lei em cinco partes, como a tela D9, e data de apresentação (banco, sorteio e app; o texto de cada lei é da equipe)
+- [x] Y13: PWA instalável, sem modo offline (ícone provisório com o Q do logo)
 - [ ] Y14: o Visitante do PRD é o usuário gratuito
-- [ ] Y15 a Y17: código da turma com validade e limite de alunos, aceitando as duas formas de digitar, 5 tentativas a cada 10 minutos
+- [x] Y15 a Y17: código da turma com validade e limite de alunos, aceitando as duas formas de digitar, 5 tentativas a cada 10 minutos (banco; a tela do professor espera o desenho do painel)
 - [ ] Y18: excluir conta com anonimização, consentimento e prazo de guarda (a regra exata depende da base legal com o jurídico)
-- [ ] Y19: verificação semanal do status das leis
+- [x] Y19: verificação semanal do status das leis (script e GitHub Actions; liga quando os segredos do Supabase forem cadastrados)
 
 ### Regra das vidas (Isa, 31/10/2026, conforme o protótipo)
 
@@ -82,10 +82,10 @@ O **protótipo v5** (Figma, arquivo `izkGoAQyBueKwjQLeaHRFY`, página "App v5 ·
 ## 3. Banco e Supabase (🔵, pacotes P1 e P2)
 
 - [x] Esquema, funções, RLS, auditoria e rotina diária (`supabase/migrations`)
-- [x] Dados iniciais gerados do app e 153 testes do banco, rodando no GitHub
+- [x] Dados iniciais gerados do app (aulas, leis de exemplo e glossário) e 154 testes do banco, rodando no GitHub
 - [x] Banco ajustado a D1 e D2: lei só vai ao ar com resumo e, se for real, com link oficial
 - [x] Banco ajustado à nova regra das vidas (aulas novas por dia) e à revisão obrigatória das questões (D4)
-- [ ] Ajustar o banco às respostas da D12 (Y3, Y4, Y6, Y11, Y12, Y15 a Y19)
+- [x] Banco ajustado às respostas da D12 (Y3, Y4, Y6, Y10 a Y12, Y15 a Y19), com 154 testes
 - [ ] Revisão de segurança independente (D7) e correções
 - [ ] 🟣 Criar a organização no Supabase e dois projetos: **teste** e **produção**, na região de São Paulo
 - [ ] 🟣 Plano pago no projeto de produção (o gratuito pausa projetos parados e não tem backup diário)
@@ -163,7 +163,7 @@ Já existem sem login: trilha, aula, quiz com explicação e refazer, histórico
 ## 8. Testes (🔵, pacote P7)
 
 - [x] Testes automáticos das telas atuais: regra do voto, sessão de 15, aulas em sequência, quiz, acessibilidade (axe, 44px, 320px, teclado) e nenhuma requisição a terceiros, rodando no GitHub
-- [x] Testes do banco (153 casos)
+- [x] Testes do banco (154 casos)
 - [ ] Testes de ponta a ponta dos fluxos novos contra o Supabase local: cadastro, entrar na turma, quiz, Voto às Cegas, limites do gratuito, painel, CSV, encerrar matrícula
 - [ ] Rodar o Supabase local no GitHub para esses testes
 - [ ] Acessibilidade feita por pessoas: leitor de tela (NVDA no Windows, VoiceOver no iPhone, TalkBack no Android), zoom de 200%, só teclado, e a lista de problemas encontrados

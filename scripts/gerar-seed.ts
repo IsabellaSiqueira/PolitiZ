@@ -4,6 +4,7 @@
 import { writeFileSync } from "node:fs";
 import { modulo } from "../src/data/trilha.ts";
 import { leis } from "../src/data/leis.ts";
+import { glossario } from "../src/data/glossario.ts";
 
 const q = (s: string | null | undefined) => (s == null ? "null" : `'${s.replaceAll("'", "''")}'`);
 const arr = (xs: string[]) => `array[${xs.map(q).join(", ")}]::text[]`;
@@ -44,5 +45,14 @@ linhas.push(
     .join(",\n") + ";",
 );
 
+linhas.push(
+  "",
+  "-- glossário provisório; em produção a revisão é registrada por quem revisou de fato",
+  "insert into public.glossario (termo, definicao, variantes, revisada_por, revisada_em, publicado) values",
+  glossario
+    .map((g) => `  (${q(g.termo)}, ${q(g.definicao)}, ${arr(g.variantes ?? [])}, 'seed de desenvolvimento', now(), true)`)
+    .join(",\n") + ";",
+);
+
 writeFileSync(new URL("../supabase/seed.sql", import.meta.url), linhas.join("\n") + "\n");
-console.log(`seed.sql gerado: ${modulo.aulas.length} aulas, ${leis.length} leis de exemplo`);
+console.log(`seed.sql gerado: ${modulo.aulas.length} aulas, ${leis.length} leis de exemplo, ${glossario.length} termos do glossário`);

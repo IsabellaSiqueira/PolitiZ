@@ -67,3 +67,28 @@ insert into public.leis (fonte, id_externo, rotulo, tema, ementa, resumo, aprese
   ('exemplo', 'exemplo-0461', 'PL 0461', 'Segurança', 'Iluminação pública perto das escolas', 'Determina que ruas num raio de 500 metros de escolas públicas tenham iluminação reforçada, custeada pelos municípios.', '2026-09-13', 'Sen. Marta Modelo', 'PXY', 0, true),
   ('exemplo', 'exemplo-0465', 'PL 0465', 'Cultura', 'Biblioteca aberta aos fins de semana', 'Obriga bibliotecas públicas municipais a abrir aos sábados e domingos em cidades com mais de 50 mil habitantes.', '2026-09-14', 'Dep. Nina Rascunho', 'PQZ', 0, true),
   ('exemplo', 'exemplo-0469', 'PL 0469', 'Saúde', 'Absorvente gratuito nas escolas', 'Garante a distribuição gratuita de absorventes higiênicos em todas as escolas públicas de ensino fundamental e médio.', '2026-09-15', 'Dep. Otávio Caso', 'PWK', 0, true);
+
+-- glossário provisório; em produção a revisão é registrada por quem revisou de fato
+insert into public.glossario (termo, definicao, variantes, revisada_por, revisada_em, publicado) values
+  ('Assembleia Legislativa', 'O lugar onde os deputados estaduais fazem as leis de cada estado.', array['Assembleias Legislativas']::text[], 'seed de desenvolvimento', now(), true),
+  ('Bicameral', 'Um Legislativo com duas casas. No Brasil, o Congresso tem a Câmara dos Deputados e o Senado Federal.', array[]::text[], 'seed de desenvolvimento', now(), true),
+  ('Comissão', 'Um grupo menor de parlamentares que estuda um assunto e dá um parecer sobre os projetos antes da votação geral.', array['comissões']::text[], 'seed de desenvolvimento', now(), true),
+  ('Congresso Nacional', 'O Poder Legislativo do país. Tem duas casas: a Câmara dos Deputados e o Senado Federal.', array[]::text[], 'seed de desenvolvimento', now(), true),
+  ('Constituição', 'A lei mais importante do país. Diz como o Estado se organiza e quais são os direitos de todas as pessoas.', array[]::text[], 'seed de desenvolvimento', now(), true),
+  ('Deputado federal', 'Quem representa a população na Câmara dos Deputados. São 513, eleitos a cada quatro anos.', array['deputados federais', 'deputados']::text[], 'seed de desenvolvimento', now(), true),
+  ('Ementa', 'O resumo oficial de um projeto de lei, escrito pela própria Câmara ou pelo Senado.', array[]::text[], 'seed de desenvolvimento', now(), true),
+  ('Federação', 'Um país em que o poder é repartido entre o governo nacional, os estados e os municípios.', array[]::text[], 'seed de desenvolvimento', now(), true),
+  ('Freios e contrapesos', 'O jeito de cada Poder limitar os outros, para nenhum grupo concentrar todo o poder.', array[]::text[], 'seed de desenvolvimento', now(), true),
+  ('Iniciativa popular', 'Quando os próprios cidadãos apresentam um projeto de lei, juntando assinaturas de pelo menos 1% do eleitorado.', array[]::text[], 'seed de desenvolvimento', now(), true),
+  ('Parecer', 'A opinião por escrito que uma comissão dá sobre um projeto de lei.', array[]::text[], 'seed de desenvolvimento', now(), true),
+  ('Plenário', 'A votação geral, com todos os parlamentares da casa. Também é o nome do salão onde ela acontece.', array[]::text[], 'seed de desenvolvimento', now(), true),
+  ('Poder Executivo', 'O Poder que administra: cuida dos serviços públicos e coloca as leis em prática.', array['Executivo']::text[], 'seed de desenvolvimento', now(), true),
+  ('Poder Judiciário', 'O Poder formado por juízes e tribunais, que resolve conflitos aplicando as leis.', array['Judiciário']::text[], 'seed de desenvolvimento', now(), true),
+  ('Poder Legislativo', 'O Poder que faz as leis e fiscaliza o Executivo.', array['Legislativo']::text[], 'seed de desenvolvimento', now(), true),
+  ('Projeto de lei', 'Uma proposta de lei nova, ou de mudança numa lei que já existe, que ainda está em discussão.', array['projetos de lei']::text[], 'seed de desenvolvimento', now(), true),
+  ('Sanção', 'Quando o presidente concorda com um projeto aprovado e ele vira lei.', array['sancionar']::text[], 'seed de desenvolvimento', now(), true),
+  ('Senador', 'Quem representa um estado no Senado Federal. São 81: três por estado e três pelo Distrito Federal.', array['senadores']::text[], 'seed de desenvolvimento', now(), true),
+  ('Tramitação', 'O caminho de um projeto de lei, da apresentação até a votação final.', array[]::text[], 'seed de desenvolvimento', now(), true),
+  ('União', 'O governo federal: cuida dos assuntos do país inteiro, como a moeda e a defesa.', array[]::text[], 'seed de desenvolvimento', now(), true),
+  ('Vereador', 'Quem faz as leis da cidade, na Câmara Municipal.', array['vereadores']::text[], 'seed de desenvolvimento', now(), true),
+  ('Veto', 'Quando o presidente recusa um projeto aprovado, no todo ou em parte. O Congresso pode derrubar o veto.', array['vetar']::text[], 'seed de desenvolvimento', now(), true);

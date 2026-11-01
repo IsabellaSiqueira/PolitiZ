@@ -8,6 +8,16 @@ export type LeiCartao = {
   resumo: string | null;
 };
 
+/** Contexto da lei escrito pela equipe (tela D9 do protótipo), mostrado depois da decisão. */
+export type Contexto = {
+  problema: string | null;
+  muda: string | null;
+  afetados: string | null;
+  /** sempre os dois lados: a favor e contra */
+  argumentos: string | null;
+  situacao: string | null;
+};
+
 /** O que só é buscado depois do voto. */
 export type Autoria = {
   autoria: string;
@@ -16,4 +26,10 @@ export type Autoria = {
   coautores: number;
   fonte: "camara" | "exemplo";
   link: string | null;
+  /** página do autor no portal oficial, para "Ver votações de ..." (Y10) */
+  linkAutor: string | null;
+  contexto: Contexto | null;
 };
+
+/** Opção da pergunta da TRC no fim da sessão (Y11). */
+export type OpcaoTrc = { id: number; texto: string; intencao: boolean };

@@ -5,16 +5,17 @@
 -- Y6: glossário
 -- ---------------------------------------------------------------------
 insert into public.glossario (termo, definicao, publicado) values ('Rascunho', 'Termo ainda em revisão.', false);
+select teste.igual((select count(*)::int from public.glossario where publicado), 22, 'glossário: o seed traz os termos do app');
 do $$ begin
   insert into public.glossario (termo, definicao, publicado) values ('Sem revisão', 'Definição.', true);
   perform teste.registrar('glossário: não publica termo sem revisão', false, 'publicou');
 exception when check_violation then perform teste.registrar('glossário: não publica termo sem revisão', true);
 end $$;
 insert into public.glossario (termo, definicao, variantes, revisada_por, revisada_em, publicado)
-values ('Constituição', 'A lei mais importante do país.', '{"constituição federal"}', 'Equipe de conteúdo', now(), true);
+values ('Termo de teste', 'Definição revisada.', '{"termos de teste"}', 'Equipe de conteúdo', now(), true);
 
 select set_config('request.jwt.claim.sub', :aluno1, false); set role authenticated;
-select teste.igual((select count(*)::int from public.glossario where termo = 'Constituição'), 1, 'glossário: aluno lê o termo publicado (Y6)');
+select teste.igual((select count(*)::int from public.glossario where termo = 'Termo de teste'), 1, 'glossário: aluno lê o termo publicado (Y6)');
 select teste.igual((select count(*)::int from public.glossario where termo = 'Rascunho'), 0, 'glossário: termo não publicado não aparece');
 select teste.negado($$ insert into public.glossario (termo, definicao) values ('x', 'y') $$, 'glossário: o app não cadastra termo');
 reset role;

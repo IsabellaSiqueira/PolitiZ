@@ -75,7 +75,7 @@ function Busca() {
 /* ---------- Continue de onde parou ---------- */
 
 function Continuar() {
-  const { aulasConcluidas, aulaLiberada } = useProgresso();
+  const { aulasConcluidas, aulaLiberada, linkAula } = useProgresso();
   const total = modulo.aulas.length;
   const feitas = modulo.aulas.filter((a) => aulasConcluidas.includes(a.id)).length;
   const proxima = modulo.aulas.find((a) => !aulasConcluidas.includes(a.id) && aulaLiberada(a.numero));
@@ -104,7 +104,7 @@ function Continuar() {
               <p className="t-subtitulo mt-1">
                 Aula {proxima.numero}: {proxima.titulo}
               </p>
-              <BotaoPrincipal href={`/aula/${proxima.id}`} className="mt-4 w-full">
+              <BotaoPrincipal href={linkAula(proxima)} className="mt-4 w-full">
                 {feitas ? "Continuar" : "Começar a aula"}
                 <Icone nome="seta" tamanho={20} />
               </BotaoPrincipal>

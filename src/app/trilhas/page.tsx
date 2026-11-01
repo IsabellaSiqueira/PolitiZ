@@ -1,14 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { modulo } from "@/data/trilha";
 import { useProgresso } from "@/lib/progresso";
 import { Icone } from "@/components/icones";
-import { Cabecalho, Cartao, Etiqueta, FotoRasgada, Peca, Regua, Tela, Titulo } from "@/components/ui";
+import { BotaoPrincipal, BotaoSecundario, Cabecalho, Cartao, Etiqueta, FotoRasgada, Gaveta, LinkTexto, Peca, Regua, Tela, Titulo } from "@/components/ui";
 import fotoCapa from "@/assets/fotos/candangos-congresso.jpg";
 
 export default function Trilhas() {
-  const { aulasConcluidas, aulaLiberada, tentativas } = useProgresso();
+  const { aulasConcluidas, aulaLiberada, motivoBloqueio, linkAula, tentativas } = useProgresso();
+  // aula bloqueada abre a gaveta do protótipo (C10) explicando o que falta
+  const [bloqueada, setBloqueada] = useState<(typeof modulo.aulas)[number] | null>(null);
+  const motivo = bloqueada ? motivoBloqueio(bloqueada.numero) : null;
   const feitas = modulo.aulas.filter((a) => aulasConcluidas.includes(a.id)).length;
   const proxima = modulo.aulas.find((a) => !aulasConcluidas.includes(a.id) && aulaLiberada(a.numero));
 
@@ -33,6 +37,11 @@ export default function Trilhas() {
           destaque="quê?"
           apoio={modulo.descricao}
         />
+        <p className="px-5">
+          <LinkTexto href="/glossario" azul>
+            Glossário do módulo
+          </LinkTexto>
+        </p>
         <Regua
           total={modulo.aulas.length}
           feitos={feitas}
@@ -63,7 +72,9 @@ export default function Trilhas() {
                     <span className={`text-base leading-tight font-bold ${liberada ? "" : "text-suave"}`}>{a.titulo}</span>
                     <span className="text-sm text-suave">
                       {!liberada
-                        ? `Libera depois da aula ${a.numero - 1}`
+                        ? motivoBloqueio(a.numero)?.tipo === "quiz"
+                          ? `Libera com 70% no quiz da aula ${a.numero - 1}`
+                          : `Libera depois da aula ${a.numero - 1}`
                         : melhor(tentativas[a.id])
                           ? `Melhor quiz: ${melhor(tentativas[a.id])}`
                           : `Leitura + quiz de ${a.perguntas.length} perguntas`}
@@ -72,17 +83,24 @@ export default function Trilhas() {
                 );
                 if (!liberada) {
                   return (
-                    <li key={a.id} className={linha}>
-                      {numero}
-                      {textos}
-                      <Icone nome="cadeado" tamanho={20} className="text-suave" />
-                      <span className="sr-only">Bloqueada</span>
+                    <li key={a.id}>
+                      <button
+                        type="button"
+                        onClick={() => setBloqueada(a)}
+                        aria-haspopup="dialog"
+                        className={`${linha} w-full text-left active:bg-claro`}
+                      >
+                        {numero}
+                        {textos}
+                        <Icone nome="cadeado" tamanho={20} className="text-suave" />
+                        <span className="sr-only">Bloqueada</span>
+                      </button>
                     </li>
                   );
                 }
                 return (
                   <li key={a.id}>
-                    <Link href={`/aula/${a.id}`} className={`${linha} active:bg-claro`}>
+                    <Link href={linkAula(a)} className={`${linha} active:bg-claro`}>
                       {numero}
                       {textos}
                       {feita ? (
@@ -100,6 +118,30 @@ export default function Trilhas() {
           </Cartao>
         </section>
       </main>
+
+      <Gaveta aberta={!!bloqueada} aoFechar={() => setBloqueada(null)} titulo="Essa aula ainda está bloqueada">
+        {bloqueada && motivo && (
+          <>
+            <p className="t-corpo mt-2 text-suave">
+              {motivo.tipo === "leitura"
+                ? `Conclua a aula ${motivo.anterior.numero}, ${motivo.anterior.titulo}, pra liberar ${bloqueada.titulo}.`
+                : `Faça o quiz da aula ${motivo.anterior.numero} com 70% ou mais de acertos pra liberar ${bloqueada.titulo}.`}
+            </p>
+            <div className="flex flex-col gap-3 pt-5">
+              <BotaoPrincipal
+                href={motivo.tipo === "leitura" ? linkAula(motivo.anterior) : `/quiz/${motivo.anterior.id}`}
+                className="w-full"
+              >
+                {motivo.tipo === "leitura" ? `Ir pra aula ${motivo.anterior.numero}` : `Fazer o quiz da aula ${motivo.anterior.numero}`}
+                <Icone nome="seta" tamanho={20} />
+              </BotaoPrincipal>
+              <BotaoSecundario onClick={() => setBloqueada(null)} className="w-full">
+                Agora não
+              </BotaoSecundario>
+            </div>
+          </>
+        )}
+      </Gaveta>
     </Tela>
   );
 }

@@ -25,7 +25,7 @@ test.describe("Voto às Cegas", () => {
 
     await page.getByRole("button", { name: "Aprovo" }).click();
 
-    await expect(page.getByText("Dep. Simulada 9015")).toBeVisible();
+    await expect(page.getByText("Dep. Simulada 9015", { exact: true })).toBeVisible();
     await expect(page.getByText("PSIM-DF")).toBeVisible();
     await expect(page.getByText("e mais 1 coautor")).toBeVisible();
     await expect(page.getByRole("link", { name: /Ler o texto oficial na Câmara/ })).toHaveAttribute("href", /idProposicao=9015/);

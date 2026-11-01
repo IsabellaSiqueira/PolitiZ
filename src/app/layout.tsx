@@ -7,10 +7,13 @@ import "@fontsource/plus-jakarta-sans/800.css";
 import "@fontsource/plus-jakarta-sans/800-italic.css";
 import "./globals.css";
 import { ProgressoProvider } from "@/lib/progresso";
+import { GlossarioProvider } from "@/components/glossario";
 
 export const metadata: Metadata = {
   title: "politiQ",
   description: "Política brasileira do zero: trilhas, quizzes e o Voto às Cegas.",
+  icons: { apple: "/icones/apple-touch-icon.png" },
+  appleWebApp: { capable: true, title: "politiQ", statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = {
@@ -23,7 +26,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-BR">
       <body className="min-h-dvh bg-branco">
-        <ProgressoProvider>{children}</ProgressoProvider>
+        <ProgressoProvider>
+          <GlossarioProvider>{children}</GlossarioProvider>
+        </ProgressoProvider>
       </body>
     </html>
   );

@@ -94,5 +94,8 @@ export async function buscarAutoria(id: string): Promise<Autoria> {
     coautores: Math.max(0, autores.length - 1),
     fonte: "camara",
     link: `https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=${id}`,
+    linkAutor: dep ? `https://www.camara.leg.br/deputados/${dep}` : null,
+    // o contexto é escrito pela equipe e vem do banco; a Câmara não tem esse texto
+    contexto: null,
   };
 }

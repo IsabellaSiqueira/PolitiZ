@@ -12,7 +12,7 @@ Tudo o que o app guarda e todas as regras de negócio ficam aqui. O frontend nã
 | `testes/00_simula_supabase.sql` | Imita o Supabase (papéis, `auth.users`, `auth.uid()`) para testar num PostgreSQL comum |
 | `testes/01_testes.sql` | Regras do MVP, isolamento entre escolas, papéis, limites e painel |
 | `testes/02_mecanicas_d12.sql` | Mecânicas da D12 |
-| `testes/99_resultado.sql` | Resumo dos 153 testes (roda por último) |
+| `testes/99_resultado.sql` | Resumo dos 154 testes (roda por último) |
 
 ## Como aplicar no Supabase
 

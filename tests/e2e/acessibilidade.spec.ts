@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { modulo } from "../../src/data/trilha";
-import { comProgresso } from "./apoio";
+import { comProgresso, fazerQuiz } from "./apoio";
 
 const aula1 = modulo.aulas[0];
 
@@ -10,6 +10,31 @@ const telas: { nome: string; abrir: (page: Page) => Promise<void> }[] = [
   { nome: "Início", abrir: async (p) => void (await p.goto("/")) },
   { nome: "Trilhas", abrir: async (p) => void (await p.goto("/trilhas")) },
   { nome: "Aula", abrir: async (p) => void (await p.goto(`/aula/${aula1.id}`)) },
+  {
+    nome: "Aula com termo do glossário aberto",
+    abrir: async (p) => {
+      await p.goto(`/aula/${aula1.id}`);
+      await p.getByRole("button", { name: "Constituição" }).click();
+      await expect(p.getByRole("dialog")).toBeVisible();
+    },
+  },
+  {
+    nome: "Trilha com aula bloqueada aberta",
+    abrir: async (p) => {
+      await p.goto("/trilhas");
+      await p.getByRole("button", { name: new RegExp(modulo.aulas[1].titulo) }).click();
+      await expect(p.getByRole("dialog")).toBeVisible();
+    },
+  },
+  { nome: "Tela de entrada", abrir: async (p) => void (await p.goto("/entrada")) },
+  { nome: "Glossário", abrir: async (p) => void (await p.goto("/glossario")) },
+  {
+    nome: "Resultado do quiz",
+    abrir: async (p) => {
+      await comProgresso(p, { aulasConcluidas: [aula1.id] });
+      await fazerQuiz(p, aula1, 2);
+    },
+  },
   {
     nome: "Quiz respondido",
     abrir: async (p) => {
@@ -31,6 +56,14 @@ const telas: { nome: string; abrir: (page: Page) => Promise<void> }[] = [
       await p.waitForTimeout(800);
     },
   },
+  {
+    nome: "Voto às Cegas, sessão concluída com a pergunta da TRC",
+    abrir: async (p) => {
+      await comProgresso(p, { decididas: Array.from({ length: 15 }, (_, i) => String(9015 - i)) });
+      await p.goto("/voto");
+      await expect(p.getByRole("button", { name: "Enviar" })).toBeVisible();
+    },
+  },
   { nome: "Critério", abrir: async (p) => void (await p.goto("/criterio")) },
   { nome: "Perfil", abrir: async (p) => void (await p.goto("/perfil")) },
   { nome: "Jogos", abrir: async (p) => void (await p.goto("/jogos")) },
@@ -49,8 +82,10 @@ test.describe("Acessibilidade (WCAG 2.1 AA)", () => {
       const pequenos = await page.evaluate(() =>
         [...document.querySelectorAll<HTMLElement>("a, button, input, select, textarea, [role=button]")]
           .filter((el) => el.offsetParent !== null || getComputedStyle(el).position === "fixed")
-          // links dentro de um parágrafo de texto seguem o tamanho da linha (exceção da WCAG)
-          .filter((el) => !(el.tagName === "A" && el.closest("p")))
+          // links dentro de um parágrafo e termos do glossário seguem o tamanho da linha (exceção da WCAG)
+          .filter((el) => !(el.tagName === "A" && el.closest("p")) && !el.hasAttribute("data-termo"))
+          // caixas de marcar ficam dentro de um rótulo que é o alvo inteiro
+          .filter((el) => !(el.tagName === "INPUT" && (el as HTMLInputElement).type === "checkbox" && el.closest("label")))
           .map((el) => ({ el, r: el.getBoundingClientRect() }))
           .filter(({ r }) => r.width > 0 && (r.height < 44 || r.width < 44))
           .map(({ el, r }) => `${el.tagName} "${el.textContent?.trim() || el.getAttribute("aria-label")}" ${Math.round(r.width)}x${Math.round(r.height)}`),

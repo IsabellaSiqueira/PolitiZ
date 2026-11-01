@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useEffect, useId, useRef } from "react";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import papelAzul from "@/assets/colagem/papel-azul.png";
@@ -10,6 +10,7 @@ import rabiscoPreto from "@/assets/colagem/rabisco-preto.png";
 import coroa from "@/assets/colagem/coroa.png";
 import { usePathname } from "next/navigation";
 import { Icone, type Nome } from "./icones";
+import { BotaoGlossario } from "./glossario";
 
 /* ---------- Estrutura de tela ---------- */
 
@@ -43,14 +44,17 @@ export function Cabecalho({ children }: { children?: React.ReactNode }) {
 }
 
 /** Cabeçalho de tarefa (aula, quiz): voltar à esquerda, onde a pessoa está à direita. */
-export function CabecalhoTarefa({ contexto, voltar = "/trilhas" }: { contexto: string; voltar?: string }) {
+export function CabecalhoTarefa({ contexto, voltar = "/trilhas", glossario = true }: { contexto: string; voltar?: string; glossario?: boolean }) {
   return (
     <header className="flex items-center justify-between px-3 pt-[max(8px,env(safe-area-inset-top))] pb-1">
       <Link href={voltar} className="flex min-h-11 min-w-11 items-center justify-center rounded-full text-tinta">
         <Icone nome="voltar" tamanho={22} />
         <span className="sr-only">Sair</span>
       </Link>
-      <span className="px-2 text-[13px] font-semibold text-tinta">{contexto}</span>
+      <span className="flex items-center gap-1">
+        <span className="px-2 text-[13px] font-semibold text-tinta">{contexto}</span>
+        {glossario && <BotaoGlossario />}
+      </span>
     </header>
   );
 }
@@ -76,7 +80,7 @@ export function Navegacao() {
             a.href === "/"
               ? rota === "/"
               : a.href === "/trilhas"
-                ? ["/trilhas", "/aula", "/quiz"].some((r) => rota.startsWith(r))
+                ? ["/trilhas", "/aula", "/quiz", "/glossario", "/entrada"].some((r) => rota.startsWith(r))
                 : rota.startsWith(a.href);
           return (
             <li key={a.href} className="flex-1">
@@ -415,4 +419,45 @@ export function OpcaoQuiz({
 
 export function AvisoExemplo() {
   return <p className="text-xs text-suave">Exemplo ilustrativo</p>;
+}
+
+/* ---------- Gaveta (sobe do rodapé e escurece o fundo, como no protótipo) ---------- */
+
+/** Diálogo nativo: prende o foco, fecha com Esc e devolve o foco para quem abriu. */
+export function Gaveta({
+  aberta,
+  aoFechar,
+  titulo,
+  children,
+}: {
+  aberta: boolean;
+  aoFechar: () => void;
+  titulo: string;
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLDialogElement>(null);
+  const id = useId();
+  useEffect(() => {
+    const d = ref.current;
+    if (!d) return;
+    if (aberta && !d.open) d.showModal();
+    if (!aberta && d.open) d.close();
+  }, [aberta]);
+  return (
+    <dialog
+      ref={ref}
+      aria-labelledby={id}
+      onClose={aoFechar}
+      onClick={(e) => e.target === ref.current && aoFechar()}
+      className="mx-auto mt-auto mb-0 w-full max-w-[430px] rounded-t-3xl bg-branco p-0 text-tinta backdrop:bg-tinta/40"
+    >
+      <div className="px-5 pt-3 pb-[max(20px,env(safe-area-inset-bottom))]">
+        <div aria-hidden="true" className="mx-auto mb-4 h-1 w-10 rounded-full bg-linha" />
+        <h2 id={id} className="t-subtitulo">
+          {titulo}
+        </h2>
+        {children}
+      </div>
+    </dialog>
+  );
 }
