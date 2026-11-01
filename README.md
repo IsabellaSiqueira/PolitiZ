@@ -11,18 +11,36 @@ npm run dev
 
 Abra http://localhost:3000. O app é pensado para celular (até 430px de largura).
 
+## Banco de dados
+
+O esquema do Supabase está em `supabase/` (tabelas, funções, segurança por linha e rotina diária), com 154 testes. Como aplicar e o que cada função faz: `supabase/README.md`.
+
+```bash
+npm run banco:testar
+```
+
+## Testes
+
+```bash
+npx playwright install chromium
+npm test
+```
+
+A suíte (`tests/e2e`) sobe o app em modo produção ligado a uma Câmara simulada (`tests/camara-simulada.mjs`), então não precisa de internet. Ela confere as regras do MVP, como "o voto nunca é gravado", e a acessibilidade de todas as telas (axe, WCAG 2.1 AA). Roda também no GitHub a cada envio.
+
 ## Telas
 
 | Rota | O que faz |
 | --- | --- |
-| `/` | Trilha do módulo 01, com as aulas liberadas em sequência |
+| `/` | Início: saudação, busca nas aulas, temas e o quiz do dia (ou a primeira aula, para quem está começando) |
+| `/trilhas` | Trilha do módulo 01, com as aulas liberadas em sequência |
 | `/aula/[aula]` | Texto da aula e "marcar como concluída" |
 | `/quiz/[aula]` | Quiz da aula (depois da leitura), com correção e explicação; pode ser refeito |
 | `/voto` | Voto às Cegas: sessão de 15 leis; aprova, rejeita ou pula; autoria e partido só depois da decisão |
 | `/criterio` | Página pública com o critério de seleção das leis |
 | `/api/autoria/[id]` | Revela autor e partido de uma lei, chamada só depois do voto |
 | `/perfil` | Progresso: aulas concluídas, histórico de quizzes e número de decisões (nunca o voto) |
-| `/ferramentas` | Ferramentas liberadas, em breve e bloqueadas |
+| `/jogos` | Jogos liberados, em breve e bloqueados (`/ferramentas` redireciona para cá) |
 
 ## Onde está cada coisa
 
@@ -30,8 +48,8 @@ Abra http://localhost:3000. O app é pensado para celular (até 430px de largura
 - `src/lib/camara.ts`: integração com a API de Dados Abertos da Câmara (leis recentes e autoria, com cache)
 - `src/data/leis.ts`: leis de exemplo, usadas só quando a Câmara não responde (autores fictícios, marcados na tela)
 - `src/lib/progresso.tsx`: aulas concluídas, tentativas de quiz e leis já decididas, salvos no navegador (localStorage) até o Supabase entrar
-- `src/components/ui.tsx`: componentes do sistema visual (manchete, régua, janela, botão, selo, navegação)
-- `src/app/globals.css`: cores, espessuras de borda, foco de teclado e animações
+- `src/components/ui.tsx`: componentes do sistema visual (logo, título, régua, cartão, botões, campo, alternativa do quiz, etiqueta, marca-texto, carimbo, navegação)
+- `src/app/globals.css`: cores, escala tipográfica, foco de teclado e animações
 
 ## Regras do MVP que o código já cumpre
 
@@ -53,9 +71,12 @@ Ainda dependem do Supabase (script SQL e documento de requisitos): login, entrad
 
 ## Sistema visual
 
-- **Cores com papel fixo:** azul é o fundo da marca, amarelo é ação e progresso, limão é estado, rosa é o documento e o que foi revelado, papel e tinta são o conteúdo.
-- **Bordas:** 2,5px com sombra só no que é tocável (e a sombra some ao pressionar), 2px na janela do documento, 1,5px nas linhas de estrutura.
-- **Tipografia:** Archivo para a marca e a leitura, IBM Plex Mono só para metadados (número da lei, contagens, rótulos).
+Segue o Manual de identidade v1 (Figma, outubro de 2026).
+
+- **Fundo branco** e quatro cores com função: azul em ações e destaques, amarelo em etiquetas, marca-texto e no botão principal, tinta nos textos e contornos.
+- **Tipografia:** só Plus Jakarta Sans, servida pelo próprio app. A personalidade vem do peso ExtraBold e do espaçamento apertado.
+- **Componentes:** botão principal amarelo (um por tela), botão secundário com contorno, campo, alternativas do quiz em quatro estados, cartões de cantos arredondados e barra de abas.
+- **Elementos gráficos:** etiqueta inclinada, marca-texto e carimbo. Colagem nas capas e cards: foto documental em preto e branco com a borda rasgada do manual (`FotoRasgada`) e as peças de papel rasgado, rabisco e coroa (`Peca`), exportadas do Figma.
 - **Movimento:** respeita "reduzir movimento" do sistema.
 
 ## Próximos passos

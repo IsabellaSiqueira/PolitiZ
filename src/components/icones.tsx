@@ -1,39 +1,57 @@
 type Props = { nome: Nome; tamanho?: number; className?: string };
-export type Nome = "trilhas" | "voto" | "ferramentas" | "perfil" | "cadeado" | "olho" | "certo" | "errado" | "seta" | "voltar";
+export type Nome =
+  | "inicio"
+  | "trilhas"
+  | "voto"
+  | "jogos"
+  | "busca"
+  | "perfil"
+  | "cadeado"
+  | "certo"
+  | "errado"
+  | "seta"
+  | "voltar"
+  | "externo";
 
+// traço fino e arredondado, como os ícones da barra de abas do manual
 const caminhos: Record<Nome, React.ReactNode> = {
-  trilhas: (
+  inicio: <path d="M4 10.5 12 4l8 6.5V20h-5v-6H9v6H4z" />,
+  trilhas: <path d="M12 6.5C10 5 7 4.5 3.5 5v13.5c3.5-.5 6.5 0 8.5 1.5m0-13.5c2-1.5 5-2 8.5-1.5v13.5c-3.5-.5-6.5 0-8.5 1.5m0-13.5V20" />,
+  voto: (
     <>
-      <circle cx="4.5" cy="6" r="1.5" fill="currentColor" stroke="none" />
-      <circle cx="4.5" cy="12" r="1.5" fill="currentColor" stroke="none" />
-      <circle cx="4.5" cy="18" r="1.5" fill="currentColor" stroke="none" />
-      <path d="M9 6h11M9 12h11M9 18h11" />
+      <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" />
+      <circle cx="12" cy="12" r="3" />
     </>
   ),
-  voto: <path d="M3.5 11.5h17v8.5h-17zM8 11.5V4h8v7.5M10.5 7.5h3" />,
-  ferramentas: <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.6-.6-.6-2.6z" />,
+  jogos: (
+    <>
+      <path d="M7 7.5h10a4.5 4.5 0 0 1 4.4 5.5l-.9 4a2.5 2.5 0 0 1-4.3 1.1L14.5 16h-5l-1.7 2.1a2.5 2.5 0 0 1-4.3-1.1l-.9-4A4.5 4.5 0 0 1 7 7.5z" />
+      <path d="M8 10.5v3M6.5 12h3M15.5 11.5h.01M17.5 13h.01" />
+    </>
+  ),
+  busca: (
+    <>
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="m20 20-4.2-4.2" />
+    </>
+  ),
   perfil: (
     <>
       <circle cx="12" cy="8" r="4" />
-      <path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" />
+      <path d="M4.5 20.5c0-3.8 3.4-5.5 7.5-5.5s7.5 1.7 7.5 5.5" />
     </>
   ),
   cadeado: (
     <>
-      <rect x="5" y="11" width="14" height="10" rx="1.5" />
+      <rect x="5" y="11" width="14" height="10" rx="2" />
       <path d="M8 11V8a4 4 0 0 1 8 0v3" />
     </>
   ),
-  olho: (
-    <>
-      <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" />
-      <circle cx="12" cy="12" r="3" />
-    </>
-  ),
-  certo: <path d="M5 12.5l4.5 4.5L19 7" strokeWidth={2.8} />,
-  errado: <path d="M6.5 6.5l11 11M17.5 6.5l-11 11" strokeWidth={2.8} />,
+  certo: <path d="M5 12.5l4.5 4.5L19 7" strokeWidth={2.4} />,
+  errado: <path d="M6.5 6.5l11 11M17.5 6.5l-11 11" strokeWidth={2.4} />,
   seta: <path d="M5 12h14M13 6l6 6-6 6" />,
   voltar: <path d="M19 12H5M11 6l-6 6 6 6" />,
+  externo: <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />,
 };
 
 export function Icone({ nome, tamanho = 22, className }: Props) {
@@ -44,7 +62,7 @@ export function Icone({ nome, tamanho = 22, className }: Props) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={2.2}
+      strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"

@@ -1,4 +1,4 @@
-import type { Autoria, LeiCartao } from "@/lib/tipos";
+import type { Autoria, Contexto, LeiCartao } from "@/lib/tipos";
 /**
  * Projetos de lei de exemplo para o Voto às Cegas.
  * Autores e partidos são FICTÍCIOS. A interface sempre marca isso como exemplo ilustrativo.
@@ -12,6 +12,8 @@ export type Lei = {
   resumo: string;
   autoria: string;
   partido: string;
+  /** contexto da lei (tela D9 do protótipo), também fictício */
+  contexto?: Contexto;
 };
 
 export const leis: Lei[] = [
@@ -22,6 +24,13 @@ export const leis: Lei[] = [
     resumo: "Inclui educação financeira como conteúdo obrigatório nas escolas públicas de ensino médio a partir do próximo ano letivo.",
     autoria: "Dep. Bruno Modelo",
     partido: "PQZ",
+    contexto: {
+      problema: "Muita gente termina a escola sem saber fazer um orçamento ou entender juros.",
+      muda: "As escolas públicas de ensino médio passariam a ter educação financeira como conteúdo obrigatório.",
+      afetados: "Estudantes, professores e as secretarias de educação, que teriam de preparar o material.",
+      argumentos: "A favor: ajuda a evitar dívidas desde cedo. Contra: tira tempo de outras matérias.",
+      situacao: "Esperando votação na Comissão de Educação da Câmara.",
+    },
   },
   {
     numero: "0420",
@@ -30,6 +39,13 @@ export const leis: Lei[] = [
     resumo: "Garante transporte público gratuito para estudantes de escolas públicas em dias de aula, custeado por um fundo municipal.",
     autoria: "Dep. Carla Teste",
     partido: "PWK",
+    contexto: {
+      problema: "O custo da passagem faz alguns estudantes faltarem às aulas.",
+      muda: "Estudantes de escolas públicas não pagariam ônibus em dias de aula.",
+      afetados: "Estudantes e prefeituras, que bancariam o fundo que paga as passagens.",
+      argumentos: "A favor: menos faltas e mais acesso à escola. Contra: custo alto para cidades com pouco dinheiro.",
+      situacao: "Apresentado e ainda sem parecer de comissão.",
+    },
   },
   {
     numero: "0423",
@@ -38,6 +54,13 @@ export const leis: Lei[] = [
     resumo: "Obriga as unidades básicas de saúde a funcionar em horário estendido nas cidades com mais de 100 mil habitantes.",
     autoria: "Dep. Ana Exemplo",
     partido: "PEX",
+    contexto: {
+      problema: "Quem trabalha de dia quase nunca consegue chegar ao posto antes de ele fechar.",
+      muda: "Postos de cidades com mais de 100 mil habitantes abririam até as 22h nos dias úteis.",
+      afetados: "Quem usa o SUS, as equipes dos postos e as prefeituras, que pagariam boa parte do custo.",
+      argumentos: "A favor: amplia o acesso de quem trabalha. Contra: custa caro para cidades com pouco dinheiro.",
+      situacao: "Esperando votação na Comissão de Saúde da Câmara, o grupo de deputados que analisa o tema primeiro.",
+    },
   },
   {
     numero: "0427",
@@ -156,5 +179,5 @@ export function ehExemplo(id: string) {
 export function autoriaExemplo(id: string): Autoria | null {
   const l = leis.find((x) => PREFIXO + x.numero === id);
   if (!l) return null;
-  return { autoria: l.autoria, partido: l.partido, coautores: 0, fonte: "exemplo", link: null };
+  return { autoria: l.autoria, partido: l.partido, coautores: 0, fonte: "exemplo", link: null, linkAutor: null, contexto: l.contexto ?? null };
 }

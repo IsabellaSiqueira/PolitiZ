@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cabecalho, Janela, LinkSecundario, Manchete, Tela } from "@/components/ui";
+import { Cabecalho, LinkTexto, Tela, Titulo } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Como as leis são escolhidas · politiQ",
@@ -48,20 +48,23 @@ export default function Criterio() {
     <Tela>
       <Cabecalho />
       <main className="flex-1 pb-32">
-        <Manchete sobretitulo="Voto às Cegas" linha1="Como as leis" linha2="são escolhidas" tamanho="media" />
-        <section className="flex flex-col gap-4 px-5 pt-6">
+        <Titulo rotulo="Voto às Cegas" titulo="Como as leis são " destaque="escolhidas" />
+        <div className="flex flex-col gap-7 px-5 pt-6">
           {blocos.map((b) => (
-            <Janela key={b.titulo} rotulo={b.titulo}>
-              <div className="flex max-w-[60ch] flex-col gap-3 px-5 py-4 text-[15px] leading-[1.55]">
-                {b.texto.map((t, i) => (
-                  <p key={i}>{t}</p>
-                ))}
-              </div>
-            </Janela>
+            <section key={b.titulo} className="flex max-w-[60ch] flex-col gap-2">
+              <h2 className="t-subtitulo">{b.titulo}</h2>
+              {b.texto.map((t, i) => (
+                <p key={i} className="t-corpo">
+                  {t}
+                </p>
+              ))}
+            </section>
           ))}
-        </section>
-        <div className="px-5 pt-4">
-          <LinkSecundario href="/voto">Ir pro Voto às Cegas</LinkSecundario>
+        </div>
+        <div className="px-5 pt-6">
+          <LinkTexto href="/voto" azul>
+            Ir pro Voto às Cegas
+          </LinkTexto>
         </div>
       </main>
     </Tela>

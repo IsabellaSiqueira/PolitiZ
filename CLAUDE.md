@@ -9,7 +9,9 @@ Leia também `AGENTS.md` (avisos sobre esta versão do Next.js) e `README.md`.
 ## Documento de referência
 
 Tudo segue o documento **"politiQ · Proposta de desenvolvimento do MVP"**: https://claude.ai/artifact/HgXYneyGd2raPrpqpxEZvG
-Em caso de dúvida entre o código atual e o documento, vale o documento. A Isa ainda vai mandar o **script SQL do Supabase** e o **documento de requisitos** (33 RF, 13 RNF, 33 regras de negócio). Não invente nomes de tabelas ou funções do banco antes de recebê-los.
+Em caso de dúvida entre o código atual e o documento, vale o documento. Também chegaram o **PRD MVP v1.5** e o **Tech Brief v1.6**. A Isa decidiu (D12, 31/10/2026) que **o MVP é o produto da Proposta, para escolas do Ensino Médio**; o curso Política Essencial não faz parte. O PRD vale só pelas mecânicas aprovadas em `docs/divergencias-prd.md` (seção "Respostas da Isa"): 70% no quiz para destravar, embaralhar questões, glossário, deslizar no Voto às Cegas, tela de entrada, pergunta da TRC anônima, impacto social, PWA, regras do código da turma, exclusão de conta e verificação semanal das leis. Nunca implemente uma mecânica do PRD que quebre as regras inegociáveis (analytics de terceiros, voto, razão ou opinião registrados, ranking, perfil público).
+
+**Design das telas:** o protótipo v5 no Figma (arquivo `izkGoAQyBueKwjQLeaHRFY`, página "App v5 · editorial colagem"), descrito tela a tela em https://claude.ai/artifact/D3TYxb1Q1NsVdoevJkEXS1. O painel do professor e da coordenação **ainda não tem desenho**: não invente o layout. Os dados e as rotas já existem (`src/lib/dados/painel.ts`, `/painel`, `/painel/turma/[id]`, com o aviso "Rascunho sem desenho"); quando o desenho chegar, troque só as telas. O **banco do Supabase** foi escrito nesta base a pedido da Isa: `supabase/` (migração, seed e 154 testes; ver `supabase/README.md`, que lista tabelas, funções e as decisões tomadas). O **documento de requisitos** (33 RF, 13 RNF, 33 regras de negócio) ainda não chegou: quando chegar, confira o banco contra ele. Não crie tabela ou função nova sem passar pela migração e pelos testes do banco.
 
 ## Regras inegociáveis (seção 5 do documento)
 
@@ -20,47 +22,58 @@ Em caso de dúvida entre o código atual e o documento, vale o documento. A Isa 
 5. Funciona no celular do aluno e no computador da escola, sem instalação.
 6. Turma de ~35 alunos simultâneos sem lentidão; escola de até 1.250 alunos sem mudar a arquitetura.
 
-**Fora do MVP:** pontos, ranking, resumo de leis por IA, tela de administração de conteúdo, plano pago, app nativo. O design é da Isa.
+**Fora do MVP:** pontos, XP e níveis, ranking, perfil público, timer no quiz, mini-jogos do glossário, resumo de leis por IA, tela de administração de conteúdo, plano completo, Pix e assinatura, app nativo, jogos além do Voto às Cegas, o curso Política Essencial. O design é da Isa.
 
 ## Comportamentos do MVP
 
-- **Aula:** texto da aula, "marcar como concluída", depois o quiz (com explicação após cada resposta, pode ser refeito, histórico de tentativas). Aulas liberam em sequência.
+- **Aula:** texto da aula, "marcar como concluída", depois o quiz (com explicação após cada resposta, pode ser refeito, histórico de tentativas). Aulas liberam em sequência. No quiz o aluno **marca e confirma** com "Responder" (acessibilidade e evitar chute). Toda questão passa por **revisão de conteúdo** antes de chegar a alunos (o banco só entrega questão com `revisada_em`).
 - **Voto às Cegas:** sessão de 15 leis com posição na tela ("3 de 15"). Aprovar, rejeitar ou pular. Pular não conta e a lei volta no fim. Lei decidida não volta. Autor e partido aparecem logo após a decisão, com link para o texto oficial.
 - **Página pública** com o critério de seleção das leis (`/criterio`).
-- **Papéis (ainda não implementados, dependem do Supabase):** aluno escolar (entra na turma com código de 8 caracteres), usuário gratuito (ex-aluno: 5 vidas por dia no quiz, 5 decisões por dia, recarga à meia-noite de Brasília), professor (turmas, código, painel com 4 indicadores, progresso por aula, desempenho por aluno, questões com mais erro, CSV; nunca vê o voto, só a contagem), coordenação (painel de todas as turmas, encerra matrícula), administração (sem tela; cadastro direto no Supabase).
-- O frontend não grava direto nas tabelas: chama funções do banco (RPC) como `entrar_na_turma`, `responder_questao`, `registrar_decisao`, `painel_indicadores`.
+- **Papéis (ainda não implementados, dependem do Supabase):** aluno escolar (entra na turma com código de 8 caracteres), usuário gratuito (ex-aluno: 5 vidas por dia, em que **cada vida é uma aula nova concluída**; errar no quiz não tira vida; 5 decisões por dia; recarga à meia-noite de Brasília; aluno de turma não tem esses limites), professor (turmas, código, painel com 4 indicadores, progresso por aula, desempenho por aluno, questões com mais erro, CSV; nunca vê o voto, só a contagem), coordenação (painel de todas as turmas, encerra matrícula), administração (sem tela; cadastro direto no Supabase).
+- O frontend não grava direto nas tabelas: chama funções do banco (RPC) como `entrar_na_turma`, `responder_questao`, `registrar_decisao`, `painel_indicadores` (lista completa em `supabase/README.md`). O banco nega escrita direta e esconde gabarito e autoria até o momento certo.
+
+- **Piloto:** uma escola, 2 ou 3 turmas, 6 semanas, em fevereiro ou março de 2027, depois do jurídico pronto. A mesma escola testa o kit físico do Plenário.
+- **Logs (D8):** sem Sentry no piloto. Nenhum conteúdo de resposta, alternativa marcada ou voto pode aparecer nos logs da Vercel ou do Supabase: sem `console` no app (o lint barra), funções do banco sempre por POST, erros do banco só com código.
 
 ## Stack e decisões
 
 - **Next.js 16 (App Router) + TypeScript + Tailwind 4**, hospedagem na Vercel. O documento sugeria React + Vite; ficou Next porque a revelação da autoria precisa de uma rota no servidor (ver abaixo). `cacheComponents` está ligado: leia `node_modules/next/dist/docs/` antes de mexer em cache, rotas ou dados.
 - **Supabase** (Auth com e-mail e senha, RLS, pg_cron) entra no lugar do `localStorage` de `src/lib/progresso.tsx`. Hoje o progresso fica só no navegador.
-- **Leis:** hoje vêm da API de Dados Abertos da Câmara (`src/lib/camara.ts`): os 15 PLs mais recentes por id, critério mecânico de propósito. O documento prevê leis cadastradas no Supabase com resumo escrito pela equipe; **pergunte à Isa** antes de trocar a fonte. Se a Câmara falhar, o app usa `src/data/leis.ts` (exemplos fictícios, marcados "Exemplo ilustrativo"). A busca acontece no acesso (`connection()`), não no build.
+- **Módulo de acesso a dados** (`src/lib/dados`): o único lugar onde as telas leem e gravam. Hoje responde com a versão simulada (`simulado.ts`, que segue as regras do banco; códigos de turma de exemplo no topo do arquivo); a versão do Supabase tem as mesmas assinaturas. Erros chegam como `ErroDados` com o código do banco, e `mensagem(codigo)` dá o texto em português. Telas novas usam este módulo, nunca o Supabase direto.
+- **Leis:** decidido (31/10/2026) que vêm do banco, escolhidas pela equipe e com resumo próprio (tabela `leis`; só vai ao ar com resumo e link oficial). O app mostra o resumo; a ementa oficial e o link ficam como apoio. **Enquanto o app não está ligado ao Supabase**, ele ainda busca os 15 PLs mais recentes na API da Câmara (`src/lib/camara.ts`), com `src/data/leis.ts` (fictícios, marcados "Exemplo ilustrativo") se a Câmara falhar. Essa integração sai quando o Voto às Cegas passar a usar o banco. O critério de seleção para a página `/criterio` ainda vai ser definido pela Isa.
 - **Autoria escondida até a decisão:** a lista de leis vai ao aparelho sem autor/partido (`LeiCartao` em `src/lib/tipos.ts`). Autor e partido vêm de `GET /api/autoria/[id]`, chamada só depois da decisão e que recebe apenas o id. O partido mostrado é o atual do deputado, e a tela diz isso.
 - Textos das aulas em `src/data/trilha.ts` são **provisórios**; o conteúdo final é da Isa. Ao escrever conteúdo educacional, explique todo termo técnico na primeira vez que aparecer.
 
-## Sistema visual (já aprovado pela Isa, não redesenhar sem pedido)
+## Sistema visual (Manual de identidade v1, outubro de 2026)
 
-Neobrutalista com direção editorial. Tokens em `src/app/globals.css`, componentes em `src/components/ui.tsx`.
+Fonte da verdade: o manual no Figma, https://www.figma.com/design/izkGoAQyBueKwjQLeaHRFY/politiQ-%C2%B7-Startup-One?node-id=348-17 (14 páginas: essência, combinados, logo, cores, tipografia, elementos gráficos, colagem, componentes, voz e tom, aplicações). Tokens em `src/app/globals.css`, componentes em `src/components/ui.tsx`. Não redesenhar sem pedido da Isa.
 
-- **Cada cor tem um papel:** azul `#3346FF` é o fundo da marca; amarelo `#FFD43B` é ação e progresso; limão `#C6F24E` é estado (aba ativa, selo); rosa `#FF9BD2` é o documento e o que foi revelado; papel `#FFFDF7` e tinta `#17150F` são o conteúdo. Não introduza gradientes nem cores novas.
-- **Três espessuras de borda:** 2,5px com sombra dura de 4px só no que é tocável (a sombra some ao pressionar: `.btn-acao`); 2px na janela do documento; 1,5px em linhas de estrutura.
-- **Tipografia:** Archivo (Black para títulos, SemiBold/Regular para leitura; nunca Black em parágrafo longo) e IBM Plex Mono só para metadados (número da lei, contagens, rótulos).
-- **Peças:** `Manchete` (sobretítulo mono amarelo + título em duas vozes + numeral vazado opcional), `Regua` (progresso segmentado), `Janela` (documento com barra rosa e folhas empilhadas), `BotaoAcao`, `Selo` (carimbo redondo do voto), `Navegacao`.
-- **Foco de teclado:** contorno amarelo dentro de tinta (padrão GOV.UK). Respeitar "reduzir movimento".
-- Aprovo e Rejeito têm sempre o mesmo peso visual: a interface não pode sugerir resposta.
+- **Fundo sempre branco.** Nada de bege, creme ou papel envelhecido.
+- **Quatro cores com função:** azul `#3346FF` em ações, links, o Q do logo e destaques (não em texto corrido); amarelo `#FFD43B` em etiquetas, marca-texto e no botão principal (nunca texto amarelo sobre branco); tinta `#171717` em textos, títulos e contornos; branco `#FFFFFF` no fundo. Apoio: suave `#6B6760` (texto secundário), linha `#E3DFD5` (divisórias e contornos), claro `#F1F3FF` (fundo de destaque), erro `#D92D20`. Não introduza gradientes nem cores novas.
+- **Tipografia:** uma família só, Plus Jakarta Sans (servida por `@fontsource`). Escala em utilitários: `t-display` (ExtraBold 48, -5%), `t-titulo` (ExtraBold 24 a 32, -3%), `t-subtitulo` (Bold 18 a 20), `t-corpo` (Regular 16, entrelinha 150%), `t-rotulo` (ExtraBold 11, maiúsculas, +10%), `t-anotacao` (ExtraBold Italic azul, no lugar da letra de mão).
+- **Logo:** `politiQ` em ExtraBold, espaçamento apertado, Q em azul (`Logo`). Sem acento, p minúsculo, Q maiúsculo, inclusive no começo da frase.
+- **Componentes:** `BotaoPrincipal` (amarelo, pílula, seta; **um por tela**), `BotaoSecundario` (contorno tinta, fundo branco), `LinkTexto`, `Campo` (rótulo em cima, borda fina, foco azul), `OpcaoQuiz` (padrão, marcada, certa, errada; certa e errada sempre com ícone), `Cartao` (contorno linha, cantos de 16px), `Titulo`, `Regua`, barra de abas `Navegacao`.
+- **Elementos gráficos:** `Etiqueta` (maiúsculas, inclinada 2 graus), `MarcaTexto` (uma vez por tela), `Carimbo` (revelação do Voto às Cegas). No máximo três na mesma composição. Colagem: `FotoRasgada` (foto em preto e branco, granulada, com a borda rasgada do manual em `public/colagem/mascara-foto.png`) e `Peca` (papel azul, papel amarelo, rabisco azul, rabisco preto e coroa, exportados do Figma em `src/assets/colagem`). Fotos já tratadas em `src/assets/fotos` (prédios e lugares públicos de Brasília enviados pela Isa; sem rosto de político, símbolo de partido ou manifestação). Hoje a colagem aparece na capa da trilha, no cartão do Início e no card do jogo liberado. Os ícones ainda são redesenhados em `src/components/icones.tsx`, no traço dos ícones do manual. Para exportar do Figma: o download direto de `www.figma.com` é bloqueado no ambiente remoto, mas `get_screenshot` com `enableBase64Response` grava o PNG (com transparência) em disco. Colagem só em abertura, capas, cards de jogos e revelação; nunca em formulários, aulas ou perguntas do quiz.
+- **Aprovo e Rejeito** são dois `BotaoSecundario` lado a lado: mesmo tamanho, mesma cor, mesmo lugar. O carimbo é igual para os dois.
+- **Foco de teclado:** contorno azul de 3px afastado do elemento. Respeitar "reduzir movimento".
+- **Voz:** frases de até 20 palavras, números em algarismos, sem travessão, pessoas e lugares concretos em vez de lados políticos.
 - Telas pensadas para 390px de largura (máx. 430px); conferir também em 320px.
 
 ## Como trabalhar
 
 - Rodar: `npm install` e `npm run dev`. Antes de entregar: `npm run lint` e `npm run build`.
 - Teste local sem internet: `CAMARA_API_URL` aponta a integração para um servidor que imite a API da Câmara.
-- **Testes:** ainda não há suíte no repositório. Nas sessões anteriores os fluxos foram conferidos com Playwright em 390x844, incluindo a checagem de que nenhum "aprov"/"rejeit" aparece em localStorage, sessionStorage ou requisições de rede. Criar essa suíte de verdade (pacote P7 do documento) é um bom próximo passo.
+- **Banco:** `npm run banco:testar` aplica migração e seed num PostgreSQL limpo (`BANCO_URL`, padrão local) e roda os testes de `supabase/testes`. Mudou `src/data`? Rode `npm run banco:seed`. Toda regra nova do banco ganha um teste ali.
+- **Testes:** `npm test` roda a suíte Playwright (`tests/e2e`, 390x844) contra o app em modo produção, apontando para a Câmara simulada de `tests/camara-simulada.mjs`. Cobre: o voto, a reavaliação do contexto e a resposta da tela de entrada nunca são gravados nem enviados (storage, cookies, requisições, console); quiz com 70%, embaralhamento e marcar e confirmar; glossário; deslizar; contexto da lei; pergunta da TRC; PWA, autoria fora do HTML até a decisão, sessão de 15 com pular e lei decidida, mesmo peso visual de Aprovo e Rejeito, sequência de aulas, quiz e histórico, busca, axe WCAG 2.1 AA em todas as telas, alvos de 44px, 320px sem rolagem lateral, voto pelo teclado e nenhuma requisição a terceiros. Roda também no GitHub Actions (`.github/workflows/testes.yml`). Toda tela nova entra na lista `telas` de `tests/e2e/acessibilidade.spec.ts`. `@playwright/test` e `playwright-core` ficam fixos na versão do Chromium da máquina (1.63.0); ao atualizar um, atualize o outro.
 - Commits em português, mensagens descritivas. O repositório é https://github.com/IsabellaSiqueira/PolitiZ (o ramo `versao-antiga` guarda o código anterior).
 
 ## Próximos passos
 
-1. Receber o script SQL e o documento de requisitos; ligar Supabase (Auth, turmas, progresso) usando as funções RPC do banco.
+A lista completa e atualizada do que falta, com quem faz cada item e as decisões pendentes, está em `docs/plano-mvp.md`. Marque os itens ao concluir. Resumo:
+
+
+1. Criar os projetos no Supabase, aplicar `supabase/migrations` e ligar o app (Auth, turmas, progresso) usando as funções RPC do banco. Conferir o banco contra o documento de requisitos quando ele chegar.
 2. Telas do aluno que faltam: cadastro, login, aceite dos termos, entrada na turma, vidas e limites do usuário gratuito.
 3. Painel do professor e da coordenação.
-4. Decidir com a Isa a fonte das leis (Câmara ao vivo ou cadastro no Supabase com resumo da equipe).
-5. Suíte de testes de ponta a ponta e de acessibilidade.
+4. Leis: critério aprovado (`docs/criterio-leis.md`); os lotes são sorteados com `npm run leis` (passo a passo em `leis/README.md`); a equipe escreve os resumos; o app troca a Câmara pelo banco.
+5. Testes de leitor de tela feitos por pessoas (NVDA e VoiceOver) e testes das telas novas conforme forem criadas.
