@@ -65,6 +65,30 @@ const telas: { nome: string; abrir: (page: Page) => Promise<void> }[] = [
     },
   },
   { nome: "Critério", abrir: async (p) => void (await p.goto("/criterio")) },
+  { nome: "Abertura", abrir: async (p) => void (await p.goto("/abertura")) },
+  { nome: "Criar conta", abrir: async (p) => void (await p.goto("/criar-conta")) },
+  {
+    nome: "Entrar com senha incorreta",
+    abrir: async (p) => {
+      await p.goto("/entrar");
+      await p.getByLabel("E-mail", { exact: true }).fill("ninguem@exemplo.com");
+      await p.getByLabel("Senha", { exact: true }).fill("senha-errada");
+      await p.getByRole("button", { name: "Entrar" }).click();
+      await expect(p.getByLabel("Senha", { exact: true })).toHaveAttribute("aria-invalid", "true");
+    },
+  },
+  { nome: "Recuperar senha", abrir: async (p) => void (await p.goto("/recuperar-senha")) },
+  { nome: "Nova senha", abrir: async (p) => void (await p.goto("/nova-senha")) },
+  { nome: "Termos e privacidade", abrir: async (p) => void (await p.goto("/termos-e-privacidade")) },
+  { nome: "Termos de uso", abrir: async (p) => void (await p.goto("/termos")) },
+  { nome: "Política de privacidade", abrir: async (p) => void (await p.goto("/privacidade")) },
+  { nome: "Como vai usar", abrir: async (p) => void (await p.goto("/como-vai-usar")) },
+  { nome: "Código da turma", abrir: async (p) => void (await p.goto("/turma")) },
+  { nome: "Boas-vindas", abrir: async (p) => void (await p.goto("/boas-vindas")) },
+  { nome: "Minha conta", abrir: async (p) => void (await p.goto("/perfil/conta")) },
+  { nome: "Minha turma", abrir: async (p) => void (await p.goto("/perfil/turma")) },
+  { nome: "Privacidade e dados", abrir: async (p) => void (await p.goto("/perfil/privacidade")) },
+  { nome: "Ajuda", abrir: async (p) => void (await p.goto("/perfil/ajuda")) },
   { nome: "Perfil", abrir: async (p) => void (await p.goto("/perfil")) },
   { nome: "Jogos", abrir: async (p) => void (await p.goto("/jogos")) },
 ];

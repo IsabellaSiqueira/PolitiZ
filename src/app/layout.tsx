@@ -8,6 +8,7 @@ import "@fontsource/plus-jakarta-sans/800-italic.css";
 import "./globals.css";
 import { ProgressoProvider } from "@/lib/progresso";
 import { GlossarioProvider } from "@/components/glossario";
+import { ContaProvider } from "@/lib/conta";
 
 export const metadata: Metadata = {
   title: "politiQ",
@@ -26,9 +27,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-BR">
       <body className="min-h-dvh bg-branco">
-        <ProgressoProvider>
-          <GlossarioProvider>{children}</GlossarioProvider>
-        </ProgressoProvider>
+        <ContaProvider>
+          <ProgressoProvider>
+            <GlossarioProvider>{children}</GlossarioProvider>
+          </ProgressoProvider>
+        </ContaProvider>
       </body>
     </html>
   );

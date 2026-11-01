@@ -215,7 +215,7 @@ export function LinkTexto({
   azul?: boolean;
   externo?: boolean;
 }) {
-  const cls = `inline-flex min-h-11 items-center gap-1.5 text-[15px] font-semibold underline underline-offset-4 ${azul ? "text-azul" : "text-tinta"}`;
+  const cls = `inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 text-[15px] font-semibold underline underline-offset-4 ${azul ? "text-azul" : "text-tinta"}`;
   if (href && externo) {
     return (
       <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
@@ -329,13 +329,15 @@ export function Peca({ nome, className }: { nome: keyof typeof pecas; className:
 
 /* ---------- Formulário ---------- */
 
-/** Rótulo em cima, borda fina, foco em azul. */
+/** Rótulo em cima, borda fina, foco em azul; com erro, borda vermelha e a mensagem embaixo (tela A15). */
 export function Campo({
   rotulo,
   ajuda,
+  erro,
   ...input
-}: { rotulo: string; ajuda?: string } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "className">) {
+}: { rotulo: string; ajuda?: string; erro?: string | null } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "className">) {
   const id = useId();
+  const descricao = [ajuda && `${id}-ajuda`, erro && `${id}-erro`].filter(Boolean).join(" ") || undefined;
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor={id} className="text-[13px] font-semibold">
@@ -343,13 +345,22 @@ export function Campo({
       </label>
       <input
         id={id}
-        aria-describedby={ajuda ? `${id}-ajuda` : undefined}
-        className="h-[52px] rounded-[14px] border-[1.5px] border-linha bg-branco px-3.5 text-[15px] placeholder:text-suave focus:border-azul focus:shadow-[0_0_0_1px_var(--color-azul)] focus-visible:outline-none"
+        aria-describedby={descricao}
+        aria-invalid={erro ? true : undefined}
+        className={`h-[52px] rounded-[14px] border-[1.5px] bg-branco px-3.5 text-[15px] placeholder:text-suave focus-visible:outline-none ${
+          erro ? "border-erro focus:shadow-[0_0_0_1px_var(--color-erro)]" : "border-linha focus:border-azul focus:shadow-[0_0_0_1px_var(--color-azul)]"
+        }`}
         {...input}
       />
       {ajuda && (
         <p id={`${id}-ajuda`} className="text-[13px] text-suave">
           {ajuda}
+        </p>
+      )}
+      {erro && (
+        <p id={`${id}-erro`} className="flex items-start gap-1.5 text-[13px] font-semibold text-erro">
+          <Icone nome="errado" tamanho={16} className="mt-px shrink-0" />
+          {erro}
         </p>
       )}
     </div>

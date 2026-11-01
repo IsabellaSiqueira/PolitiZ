@@ -76,7 +76,7 @@ O **protótipo v5** (Figma, arquivo `izkGoAQyBueKwjQLeaHRFY`, página "App v5 ·
 - [ ] Trocar o texto da página `/criterio` pelo da seção 8 de `docs/criterio-leis.md`, com o e-mail `leis@`, quando o Voto às Cegas passar a usar as leis do banco (antes disso, a página descreveria um critério que o app ainda não usa)
 - [ ] Link "Achou um erro neste resumo?" na revelação do Voto às Cegas, abrindo o e-mail com o projeto no assunto (sem guardar nada)
 - [ ] E-mails em português: confirmação de conta e redefinição de senha
-- [ ] Mensagens de erro de cada código do banco (`sem_vidas`, `escola_lotada` etc.; lista em `supabase/README.md`)
+- [ ] Revisar as mensagens de erro de cada código (rascunho em `src/lib/dados/mensagens.ts`)
 - [ ] Guia rápido para o professor (como criar turma, passar o código, ler o painel)
 
 ## 3. Banco e Supabase (🔵, pacotes P1 e P2)
@@ -110,7 +110,8 @@ O **protótipo v5** (Figma, arquivo `izkGoAQyBueKwjQLeaHRFY`, página "App v5 ·
 
 - [ ] Cliente do Supabase no Next 16 com sessão em cookies (ler `node_modules/next/dist/docs/` antes, pelo `AGENTS.md`)
 - [ ] Tipos gerados do banco (`supabase gen types`)
-- [ ] Um módulo de acesso a dados usado por todas as telas, com as mensagens de erro em português
+- [x] Módulo de acesso a dados (`src/lib/dados`) com versão simulada e as mensagens de erro em português; as telas de entrada e o perfil já usam
+- [ ] Passar a trilha, o quiz e o Voto às Cegas para o módulo de acesso a dados (hoje usam `src/lib/progresso.tsx` e a Câmara)
 - [ ] Trocar o `localStorage` de `src/lib/progresso.tsx` pelas funções do banco (trilha, aulas, quiz, histórico, decisões)
 - [ ] Voto às Cegas pela sessão do banco (`sessao_voto`, `pular_lei`, `registrar_decisao`, `revelar_autoria`), mostrando o resumo da equipe e mantendo o voto só na memória da tela
 - [ ] Rotas protegidas por papel (aluno, professor, coordenação) e redirecionamento de quem não está logado
@@ -121,13 +122,15 @@ O **protótipo v5** (Figma, arquivo `izkGoAQyBueKwjQLeaHRFY`, página "App v5 ·
 
 Já existem sem login: trilha, aula, quiz com explicação e refazer, histórico no perfil, Voto às Cegas, critério, início e jogos.
 
-- [ ] Abertura, cadastro, confirmação de e-mail, login, esqueci a senha, nova senha
-- [ ] Aceite dos termos
-- [ ] Entrar na turma
+- [x] Abertura, cadastro, login (com senha incorreta), esqueci a senha, e-mail enviado e reenviado, nova senha (A0 a A4b, A15, A16), com dados simulados
+- [ ] Confirmação de e-mail do cadastro (vem do Supabase Auth, ao ligar)
+- [ ] Data de nascimento e autorização do responsável (A1, A12, A13): esperam a base legal com o jurídico e a decisão de guardar ou não a data de nascimento (a D2 diz que o banco não guarda)
+- [x] Aceite dos termos (A5) e páginas de Termos de uso e Política de privacidade (A17, A18), com texto ilustrativo até a revisão jurídica
+- [x] Como vai usar, código da turma, código inválido e turma encontrada (A6, A7, A14, A8), e boas-vindas (A9 a A11)
 - [ ] Vidas e decisões restantes do usuário gratuito, e as telas de limite atingido
 - [ ] Trilha com vários módulos, vinda do banco
-- [ ] Perfil com nome, turma e sair
-- [ ] Páginas públicas de termos de uso e de privacidade
+- [x] Perfil (F0), minha conta (F10), minha turma (F11), privacidade e dados com apagar conta (F5, F12), ajuda (F6) e sair (F13)
+- [x] Páginas públicas de termos de uso e de privacidade (texto ilustrativo)
 - [ ] Estados de carregando, erro, sem internet e 404
 - [x] Quiz com marcar e confirmar (D10)
 
