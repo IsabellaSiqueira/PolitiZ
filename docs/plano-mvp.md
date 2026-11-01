@@ -137,6 +137,7 @@ Já existem sem login: trilha, aula, quiz com explicação e refazer, histórico
 
 ## 6. Telas do professor e da coordenação (🔵, pacote P5)
 
+- [x] Dados e rotas, sem layout (esperando o desenho da seção 1): `src/lib/dados/painel.ts` (tipos e CSV), versões simulada e do Supabase, rotas `/painel` e `/painel/turma/[id]` com os dados em tabelas simples e o aviso "Rascunho sem desenho", testes em `tests/e2e/painel.spec.ts`. Quando o desenho chegar, só as telas mudam
 - [ ] Lista de turmas; criar, editar e arquivar
 - [ ] Código da turma: mostrar grande, copiar, renovar
 - [ ] Adicionar outro professor da escola à turma
@@ -144,7 +145,7 @@ Já existem sem login: trilha, aula, quiz com explicação e refazer, histórico
 - [ ] Progresso da turma por aula
 - [ ] Desempenho por aluno
 - [ ] Tema com menor acerto, sugestão para a próxima aula e questões com mais erro
-- [ ] Exportar CSV
+- [ ] Exportar CSV (arquivo pronto: separador ";", vírgula decimal e acentos para o Excel em português; falta o botão no desenho)
 - [ ] Coordenação: painel de todas as turmas e encerrar matrícula
 - [ ] Layout para computador (e ainda usável no celular)
 

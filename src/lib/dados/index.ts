@@ -70,5 +70,7 @@ export type Dados = {
   responderTrc(sessao: string | null, opcoes: number[]): Promise<void>;
 };
 
-export { dados } from "./escolha";
+export { dados, painel } from "./escolha";
+export { csvRelatorio } from "./painel";
+export type * from "./painel";
 export { mensagem } from "./mensagens";

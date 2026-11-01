@@ -78,6 +78,14 @@ const telas: { nome: string; abrir: (page: Page) => Promise<void> }[] = [
     },
   },
   { nome: "Recuperar senha", abrir: async (p) => void (await p.goto("/recuperar-senha")) },
+  { nome: "Painel, turmas (sem desenho)", abrir: async (p) => void (await p.goto("/painel")) },
+  {
+    nome: "Painel da turma (sem desenho)",
+    abrir: async (p) => {
+      await p.goto("/painel/turma/turma-exemplo");
+      await expect(p.getByRole("button", { name: "Baixar CSV" })).toBeVisible();
+    },
+  },
   { nome: "Nova senha", abrir: async (p) => void (await p.goto("/nova-senha")) },
   { nome: "Termos e privacidade", abrir: async (p) => void (await p.goto("/termos-e-privacidade")) },
   { nome: "Termos de uso", abrir: async (p) => void (await p.goto("/termos")) },
