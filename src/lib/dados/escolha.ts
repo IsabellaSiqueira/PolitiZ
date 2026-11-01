@@ -1,4 +1,6 @@
+import { usarSupabase } from "@/lib/supabase/config";
 import { simulado } from "./simulado";
+import { supabase } from "./supabase";
 
-/** Hoje só existe a versão simulada; a do Supabase entra quando os projetos forem criados. */
-export const dados = simulado;
+/** Supabase quando NEXT_PUBLIC_DADOS=supabase e as chaves estão definidas; senão, simulado. */
+export const dados = usarSupabase ? supabase : simulado;

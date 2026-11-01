@@ -108,8 +108,9 @@ O **protótipo v5** (Figma, arquivo `izkGoAQyBueKwjQLeaHRFY`, página "App v5 ·
 
 ## 4. Ligar o app ao banco (🔵, pacote P3)
 
-- [ ] Cliente do Supabase no Next 16 com sessão em cookies (ler `node_modules/next/dist/docs/` antes, pelo `AGENTS.md`)
-- [ ] Tipos gerados do banco (`supabase gen types`)
+- [x] Cliente do Supabase no Next 16 com sessão em cookies: `src/lib/supabase` (navegador e servidor), `src/proxy.ts` renovando a sessão e a versão Supabase do módulo de dados (`src/lib/dados/supabase.ts`). Liga com `NEXT_PUBLIC_DADOS=supabase` e as chaves do `.env.example`; ainda não testado contra um projeto real
+- [x] Tipos das funções usadas, escritos à mão (`src/lib/supabase/tipos-banco.ts`)
+- [ ] Trocar pelos tipos gerados (`supabase gen types`) quando o projeto existir
 - [x] Módulo de acesso a dados (`src/lib/dados`) com versão simulada e as mensagens de erro em português; as telas de entrada e o perfil já usam
 - [ ] Passar a trilha, o quiz e o Voto às Cegas para o módulo de acesso a dados (hoje usam `src/lib/progresso.tsx` e a Câmara)
 - [ ] Trocar o `localStorage` de `src/lib/progresso.tsx` pelas funções do banco (trilha, aulas, quiz, histórico, decisões)

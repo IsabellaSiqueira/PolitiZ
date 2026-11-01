@@ -21,6 +21,15 @@ Tudo o que o app guarda e todas as regras de negócio ficam aqui. O frontend nã
 3. Em Authentication, deixe ligado só o login por e-mail e senha, com confirmação de e-mail. No cadastro, o app manda o nome em `options.data.nome`.
 4. Se o `pg_cron` foi ativado depois da migração, agende a rotina: `select cron.schedule('politiq-rotina-diaria', '5 3 * * *', 'select privado.rotina_diaria()');` (00:05 em Brasília).
 
+## Ligar o app
+
+1. Copie `.env.example` para `.env.local` e preencha `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (Project Settings > API).
+2. Defina `NEXT_PUBLIC_DADOS=supabase`. Sem isso, o app continua com os dados simulados de `src/lib/dados/simulado.ts`.
+3. Em Authentication > URL Configuration, cadastre o endereço do site e os de retorno `/termos-e-privacidade` (confirmação de cadastro) e `/nova-senha` (senha nova).
+4. Na Vercel, as mesmas variáveis em cada ambiente. A chave de serviço nunca vai para o app.
+
+O cliente está em `src/lib/supabase` e a sessão fica em cookies, renovada por `src/proxy.ts`. As telas de entrada e o perfil já passam pelo módulo de dados; trilha, quiz e Voto às Cegas ainda usam o progresso local e a Câmara (plano do MVP, seção 4).
+
 ## Como testar
 
 ```bash
