@@ -11,6 +11,7 @@ const alerta = (page: Page) => page.locator("main [role=alert]").filter({ visibl
 async function criarConta(page: Page, nome = "Ana Teste") {
   await page.goto("/abertura");
   await page.getByRole("link", { name: "Começar" }).click();
+  await expect(page).toHaveURL(/\/criar-conta$/);
   await campo(page, "Nome").fill(nome);
   await campo(page, "E-mail").fill("ana@exemplo.com");
   await campo(page, "Senha").fill("senha-forte");
@@ -79,6 +80,7 @@ test.describe("Entrada do aluno", () => {
     await expect(page).toHaveURL(/\/abertura$/);
 
     await page.getByRole("link", { name: "Já tenho uma conta" }).click();
+    await expect(page.getByRole("heading", { name: "Que bom te ver de novo" })).toBeVisible();
     await campo(page, "E-mail").fill("ana@exemplo.com");
     await campo(page, "Senha").fill("curta");
     await page.getByRole("button", { name: "Entrar" }).click();
@@ -87,12 +89,16 @@ test.describe("Entrada do aluno", () => {
     await expect(page.getByText("E-mail ou senha não conferem.", { exact: false })).toBeVisible();
 
     await page.getByRole("link", { name: "Esqueci minha senha" }).click();
+    // espera a tela nova: o campo de e-mail do login ainda fica visível durante a troca
+    await expect(page.getByRole("heading", { name: "Esqueceu a senha?" })).toBeVisible();
+    await expect(page).toHaveURL(/\/recuperar-senha$/);
     await campo(page, "E-mail").fill("ana@exemplo.com");
     await page.getByRole("button", { name: "Enviar link" }).click();
     await expect(page.getByRole("heading", { name: "Confira seu e-mail" })).toBeVisible();
     await page.getByRole("button", { name: "Reenviar e-mail" }).click();
     await expect(page.getByRole("status").filter({ hasText: "E-mail reenviado" })).toBeVisible();
     await page.getByRole("link", { name: "Já abri o link" }).click();
+    await expect(page.getByRole("heading", { name: "Crie uma senha nova" })).toBeVisible();
 
     await campo(page, "Senha nova").fill("nova-senha-1");
     await campo(page, "Repita a senha").fill("nova-senha-2");
@@ -101,6 +107,7 @@ test.describe("Entrada do aluno", () => {
     await expect(page.getByText("As duas senhas são iguais (cumprida)")).toBeAttached();
     await page.getByRole("button", { name: "Salvar senha" }).click();
     await expect(page).toHaveURL(/\/entrar$/);
+    await expect(page.getByRole("heading", { name: "Que bom te ver de novo" })).toBeVisible();
 
     await campo(page, "E-mail").fill("ana@exemplo.com");
     await campo(page, "Senha").fill("nova-senha-1");
